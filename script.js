@@ -2,7 +2,7 @@ const DIMENSIONS = 20;
 const LIVES = 5;
 const SPEED = 7;
 const gameBg = document.querySelector(".game-bg");
-gameBg.innerHTML = `<div class="snake"></div>`;
+gameBg.innerHTML = `<div class="snake"></div><div class="time2">00:00</div>`;
 const snakeHead = document.querySelector(".snake");
 const text = document.querySelector(".text");
 const maxTime = 60;

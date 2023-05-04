@@ -21,6 +21,7 @@ body {
 .time {
   font-family: "Orbitron";
   color: white;
+  display: block;
   font-size: 20px;
 }
 
@@ -76,6 +77,9 @@ body {
   font-weight: 100;
 }
 
+.time2 {
+  display: none;
+}
 .snake-body {
   background-color: rgba(52, 238, 126, 0.803);
   position: absolute;
@@ -111,8 +115,12 @@ body {
 
 @media only screen and (max-width: 600px) {
   .game-bg {
+    position: relative;
     width: 320px;
     height: 320px;
+  }
+  .game {
+    padding: 100px 0px 0px 0px;
   }
 
   .arrows {
@@ -131,10 +139,21 @@ body {
     height: 75px;
     /* font-size: 20px; */
   }
+
   .time {
+    display: none;
+  }
+  .time2 {
+    font-family: "Orbitron";
+    color: white;
+    display: block;
+    font-size: 20px;
+    display: block;
     position: absolute;
     margin-top: 25px;
+    top: -70px;
     left: 50%;
+    transform: translateX(-50%);
     transform: translateX(-50%);
     font-size: 25px;
   }
