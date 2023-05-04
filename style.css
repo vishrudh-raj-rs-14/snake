@@ -1,0 +1,139 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  width: 100vw;
+  height: 100vh;
+  background-color: #041e42;
+  overflow: hidden;
+  font-family: "Roboto", sans-serif;
+}
+
+.food {
+  background-color: rgb(230, 154, 47);
+  border-radius: 100%;
+  position: absolute;
+  /* z-index: 5; */
+}
+
+.time {
+  font-family: "Orbitron";
+  color: white;
+  font-size: 20px;
+}
+
+.colorTextGreen {
+  color: #24b515;
+}
+
+.colorTextRed {
+  color: #f40009;
+}
+
+.scores {
+  position: absolute;
+  top: 10px;
+  width: 100vw;
+  padding: 5px 20px;
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  font-weight: 100;
+  letter-spacing: 3px;
+}
+
+.word {
+  color: white;
+  position: absolute;
+  font-size: 16px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: blueviolet; */
+}
+
+.score-text {
+  width: 160px;
+}
+
+.text {
+  width: 600px;
+  height: 100px;
+  border-radius: 20px;
+  background-color: black;
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-family: "Roboto";
+  font-size: 30px;
+  letter-spacing: 5px;
+  font-weight: 100;
+}
+
+.snake-body {
+  background-color: rgba(52, 238, 126, 0.803);
+  position: absolute;
+  /* transition: all 100ms ease; */
+}
+
+.game {
+  width: 100vw;
+  height: 100vh;
+  background-color: #041e42;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-bg {
+  width: 600px;
+  height: 600px;
+  background-color: black;
+  position: relative;
+}
+.arrows {
+  display: none;
+}
+.snake {
+  position: absolute;
+  background-color: green;
+  z-index: 5;
+  /* transition: all 100ms ease;s */
+}
+
+@media only screen and (max-width: 600px) {
+  .game-bg {
+    width: 350px;
+    height: 350px;
+  }
+
+  .arrows {
+    display: block;
+  }
+  .text {
+    width: 350px;
+    height: 75px;
+    /* font-size: 20px; */
+  }
+  .time {
+    position: absolute;
+    margin-top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 25px;
+  }
+  .score-text {
+    font-size: 14px;
+    width: auto;
+  }
+  .word {
+    font-size: 12px !important;
+  }
+}
