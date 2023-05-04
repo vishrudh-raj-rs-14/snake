@@ -8,7 +8,12 @@ const text = document.querySelector(".text");
 const maxTime = 60;
 let curTime = 0;
 const time = document.querySelector(".time");
+const time2 = document.querySelector(".time2");
 time.textContent = `${String(Math.floor(maxTime / 60)).padStart(
+  2,
+  "0"
+)}:${String(Math.floor(maxTime % 60)).padStart(2, "0")}`;
+time2.textContent = `${String(Math.floor(maxTime / 60)).padStart(
   2,
   "0"
 )}:${String(Math.floor(maxTime % 60)).padStart(2, "0")}`;
@@ -79,7 +84,13 @@ window.addEventListener("keypress", (e) => {
       ).padStart(2, "0")}:${String(
         Math.floor((maxTime - curTime) % 60)
       ).padStart(2, "0")}`;
+      time2.textContent = `${String(
+        Math.floor((maxTime - curTime) / 60)
+      ).padStart(2, "0")}:${String(
+        Math.floor((maxTime - curTime) % 60)
+      ).padStart(2, "0")}`;
     }, 1000);
+
     started = true;
   }
   if (e.key == "w" && dirY != -1 && moved) {
@@ -114,6 +125,11 @@ document.querySelector(".top").addEventListener("click", (e) => {
       ).padStart(2, "0")}:${String(
         Math.floor((maxTime - curTime) % 60)
       ).padStart(2, "0")}`;
+      time2.textContent = `${String(
+        Math.floor((maxTime - curTime) / 60)
+      ).padStart(2, "0")}:${String(
+        Math.floor((maxTime - curTime) % 60)
+      ).padStart(2, "0")}`;
     }, 1000);
     started = true;
   }
@@ -132,6 +148,11 @@ document.querySelector(".left").addEventListener("click", (e) => {
         speed += 1;
       }
       time.textContent = `${String(
+        Math.floor((maxTime - curTime) / 60)
+      ).padStart(2, "0")}:${String(
+        Math.floor((maxTime - curTime) % 60)
+      ).padStart(2, "0")}`;
+      time2.textContent = `${String(
         Math.floor((maxTime - curTime) / 60)
       ).padStart(2, "0")}:${String(
         Math.floor((maxTime - curTime) % 60)
@@ -158,6 +179,11 @@ document.querySelector(".right").addEventListener("click", (e) => {
       ).padStart(2, "0")}:${String(
         Math.floor((maxTime - curTime) % 60)
       ).padStart(2, "0")}`;
+      time2.textContent = `${String(
+        Math.floor((maxTime - curTime) / 60)
+      ).padStart(2, "0")}:${String(
+        Math.floor((maxTime - curTime) % 60)
+      ).padStart(2, "0")}`;
     }, 1000);
     started = true;
   }
@@ -176,6 +202,11 @@ document.querySelector(".bottom").addEventListener("click", (e) => {
         speed += 1;
       }
       time.textContent = `${String(
+        Math.floor((maxTime - curTime) / 60)
+      ).padStart(2, "0")}:${String(
+        Math.floor((maxTime - curTime) % 60)
+      ).padStart(2, "0")}`;
+      time2.textContent = `${String(
         Math.floor((maxTime - curTime) / 60)
       ).padStart(2, "0")}:${String(
         Math.floor((maxTime - curTime) % 60)
@@ -294,8 +325,10 @@ function gameLoop() {
   // }
   if (maxTime - curTime <= 15) {
     time.style.color = `#f40009`;
+    time2.style.color = `#f40009`;
   } else {
     time.style.color = `white`;
+    time2.style.color = `white`;
   }
   if (!wordCreated) {
     let word = wordList[Math.floor(Math.random() * wordList.length)];
@@ -364,6 +397,8 @@ function gameLoop() {
     startTime = 0;
     // started = false;
     time.textContent = `00:00`;
+    time2.textContent = `00:00`;
+
     clearInterval(interval);
     return;
   }
