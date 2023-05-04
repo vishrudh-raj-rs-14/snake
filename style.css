@@ -85,6 +85,7 @@ body {
 .game {
   width: 100vw;
   height: 100vh;
+  padding-top: 50px;
   background-color: #041e42;
   display: flex;
   flex-direction: column;
@@ -116,13 +117,14 @@ body {
 
   .arrows {
     display: block;
-    position: absolute;
+    position: relative;
     bottom: 10px;
     width: 100vw;
     height: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 25px;
   }
   .text {
     width: 350px;
