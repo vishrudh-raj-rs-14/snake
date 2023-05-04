@@ -110,12 +110,19 @@ body {
 
 @media only screen and (max-width: 600px) {
   .game-bg {
-    width: 350px;
-    height: 350px;
+    width: 320px;
+    height: 320px;
   }
 
   .arrows {
     display: block;
+    position: absolute;
+    bottom: 10px;
+    width: 100vw;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .text {
     width: 350px;
@@ -129,11 +136,50 @@ body {
     transform: translateX(-50%);
     font-size: 25px;
   }
+  .controls img {
+    width: 50px;
+  }
+
+  .controls {
+    display: flex;
+    height: 40px;
+    width: 40px;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    transform: translateX(-50%);
+  }
+
   .score-text {
     font-size: 14px;
     width: auto;
   }
+  .top {
+    bottom: 75%;
+    left: 50%;
+  }
+  .bottom {
+    bottom: 15%;
+    left: 50%;
+  }
+  .left {
+    left: 25%;
+    bottom: 45%;
+  }
+  .right {
+    left: 75%;
+    bottom: 45%;
+  }
+  .top img {
+    transform: rotate(-90deg);
+  }
+  .bottom img {
+    transform: rotate(90deg);
+  }
+  .left img {
+    transform: rotate(180deg);
+  }
   .word {
-    font-size: 12px !important;
+    font-size: 11px !important;
   }
 }

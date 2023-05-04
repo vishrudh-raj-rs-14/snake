@@ -1,4 +1,4 @@
-const DIMENSIONS = 40;
+const DIMENSIONS = 20;
 const LIVES = 5;
 const SPEED = 7;
 const gameBg = document.querySelector(".game-bg");
@@ -98,6 +98,95 @@ window.addEventListener("keypress", (e) => {
     moved = false;
     dirX = 1;
     dirY = 0;
+  }
+});
+
+document.querySelector(".top").addEventListener("click", (e) => {
+  if (!started) {
+    startTime = Date.now();
+    interval = setInterval(() => {
+      curTime = Math.floor((Date.now() - startTime) / 1000);
+      if (curTime % 5 == 0) {
+        speed += 1;
+      }
+      time.textContent = `${String(
+        Math.floor((maxTime - curTime) / 60)
+      ).padStart(2, "0")}:${String(
+        Math.floor((maxTime - curTime) % 60)
+      ).padStart(2, "0")}`;
+    }, 1000);
+    started = true;
+  }
+  if (dirY != -1 && moved) {
+    moved = false;
+    dirX = 0;
+    dirY = 1;
+  }
+});
+document.querySelector(".left").addEventListener("click", (e) => {
+  if (!started) {
+    startTime = Date.now();
+    interval = setInterval(() => {
+      curTime = Math.floor((Date.now() - startTime) / 1000);
+      if (curTime % 5 == 0) {
+        speed += 1;
+      }
+      time.textContent = `${String(
+        Math.floor((maxTime - curTime) / 60)
+      ).padStart(2, "0")}:${String(
+        Math.floor((maxTime - curTime) % 60)
+      ).padStart(2, "0")}`;
+    }, 1000);
+    started = true;
+  }
+  if (dirX != 1 && moved) {
+    moved = false;
+    dirX = -1;
+    dirY = 0;
+  }
+});
+document.querySelector(".right").addEventListener("click", (e) => {
+  if (!started) {
+    startTime = Date.now();
+    interval = setInterval(() => {
+      curTime = Math.floor((Date.now() - startTime) / 1000);
+      if (curTime % 5 == 0) {
+        speed += 1;
+      }
+      time.textContent = `${String(
+        Math.floor((maxTime - curTime) / 60)
+      ).padStart(2, "0")}:${String(
+        Math.floor((maxTime - curTime) % 60)
+      ).padStart(2, "0")}`;
+    }, 1000);
+    started = true;
+  }
+  if (dirX != -1 && moved) {
+    moved = false;
+    dirX = 1;
+    dirY = 0;
+  }
+});
+document.querySelector(".bottom").addEventListener("click", (e) => {
+  if (!started) {
+    startTime = Date.now();
+    interval = setInterval(() => {
+      curTime = Math.floor((Date.now() - startTime) / 1000);
+      if (curTime % 5 == 0) {
+        speed += 1;
+      }
+      time.textContent = `${String(
+        Math.floor((maxTime - curTime) / 60)
+      ).padStart(2, "0")}:${String(
+        Math.floor((maxTime - curTime) % 60)
+      ).padStart(2, "0")}`;
+    }, 1000);
+    started = true;
+  }
+  if (dirY != 1 && moved) {
+    moved = false;
+    dirX = 0;
+    dirY = -1;
   }
 });
 
@@ -283,11 +372,17 @@ function gameLoop() {
 
 window.onresize = () => {
   pixelSize = gameBg.getBoundingClientRect().height / DIMENSIONS;
-  snakeHead.style.height = `${pixelSize}px`;
-  snakeHead.style.width = `${pixelSize}px`;
+  for (let i = 0; i < snake.length; i++) {
+    snake[i].style.height = `${pixelSize}px`;
+    snake[i].style.width = `${pixelSize}px`;
+  }
+  height = gameBg.getBoundingClientRect().height;
+  for (let i = 0; i < letters.length; i++) {
+    letters[i].style.height = `${pixelSize}px`;
+    letters[i].style.width = `${pixelSize}px`;
+  }
   //   snakeHead.style.top = `${curPosY * pixelSize}px`;
   //   snakeHead.style.left = `${curPosX * pixelSize}px`;
-  height = gameBg.getBoundingClientRect().height;
 };
 
 gameLoop();
