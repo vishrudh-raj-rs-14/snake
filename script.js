@@ -1,4 +1,4 @@
-let DIMENSIONS = 40;
+let DIMENSIONS = 30;
 const LIVES = 3;
 const SPEED = 7;
 const gameBg = document.querySelector(".game-bg");
@@ -10,13 +10,18 @@ let snakeHead = document.querySelector(".snake");
 const text = document.querySelector(".textContent");
 const maxTime = 60;
 let lives = LIVES;
+let delayed = true;
+let eat = new Audio("./assets/eat.mp3");
+let power = new Audio("./assets/power.mp3");
+let goAudio = new Audio("./assets/go.mp3");
+let hiss = new Audio("./assets/hiss.mp3");
 let curTime = 0;
 let paused = false;
 let waitingToRestart = false;
 const time = document.querySelector(".time");
 let time2 = document.querySelector(".time2");
 const heart = document.querySelector(".heart");
-const powers = [];
+let powers = [];
 for (let i = 0; i < lives; i++) {
   let heartC = document.createElement("div");
   heartC.classList.add("heartContent");
@@ -65,15 +70,16 @@ const wordList = [
 const powerUp = [
   {
     name: "speedDecrease",
-    color: "#318CE7",
+    color: "#32de84",
     do: () => {
-      if (DIMENSIONS == 20) speed -= 0.5;
+      if (DIMENSIONS == 20) speed -= 1;
       else speed -= 1;
     },
+    img: "./assets/turtle.png",
   },
   {
     name: "lengthDec",
-    color: "#FF033E",
+    color: "#318CE7",
     do: () => {
       if (snake.length <= 2) return;
       for (let i = 0; i < 2; i++) {
@@ -81,13 +87,23 @@ const powerUp = [
         body.parentNode.removeChild(body);
       }
     },
+    img: "./assets/snake.png",
   },
   {
     name: "increaseTime",
-    color: "#32de84",
+    color: "#FEBE10",
     do: () => {
-      startTime += 15000;
+      curTime -= 10;
     },
+    img: "./assets/clock.png",
+  },
+  {
+    name: "increaseSpeed",
+    color: "#FF033E",
+    do: () => {
+      speed += 2;
+    },
+    img: "./assets/lightning.png",
   },
 ];
 let letters = [];
@@ -122,14 +138,9 @@ optionSelect.forEach((ele) => {
   });
 });
 
-setting.addEventListener("touchstart", (e) => {
-  console.log("Touching");
-});
-
 setting.addEventListener("click", (e) => {
   let gear = setting.querySelector("img");
   paused = true;
-  console.log(gear);
   gear.classList.remove("onclick");
   gear.classList.add("onclick");
   menu.classList.remove("hide");
@@ -150,10 +161,19 @@ let dirX = 0;
 let dirY = 0;
 let moved = false;
 
+document.querySelector(".mob").addEventListener("click", () => {
+  if (waitingToRestart) {
+    waitingToRestart = false;
+    reset(true);
+    gameLoop();
+  }
+});
+
 window.addEventListener("keypress", (e) => {
   if (!paused) {
-    if (!started) {
+    if (!started && delayed) {
       curTime = 0;
+      if (interval) clearInterval(interval);
       interval = setInterval(() => {
         if (!paused) {
           curTime += 1;
@@ -175,28 +195,31 @@ window.addEventListener("keypress", (e) => {
           Math.floor((maxTime - curTime) % 60)
         ).padStart(2, "0")}`;
       }, 1000);
-
-      started = true;
     }
     if (e.key == "r" && waitingToRestart) {
       waitingToRestart = false;
+      curTime = 0;
       reset(true);
       gameLoop();
     }
-    if (e.key == "w" && dirY != -1 && moved) {
+    if (e.key == "w" && dirY != -1 && moved && delayed) {
       moved = false;
+      started = true;
       dirX = 0;
       dirY = 1;
-    } else if (e.key == "a" && dirX != 1 && moved) {
+    } else if (e.key == "a" && dirX != 1 && moved && delayed) {
       moved = false;
+      started = true;
       dirX = -1;
       dirY = 0;
-    } else if (e.key == "s" && dirY != 1 && moved) {
+    } else if (e.key == "s" && dirY != 1 && moved && delayed) {
       moved = false;
+      started = true;
       dirX = 0;
       dirY = -1;
-    } else if (e.key == "d" && dirX != -1 && moved) {
+    } else if (e.key == "d" && dirX != -1 && moved && delayed) {
       moved = false;
+      started = true;
       dirX = 1;
       dirY = 0;
     }
@@ -230,7 +253,7 @@ document.querySelector(".top").addEventListener("click", (e) => {
       }, 1000);
       started = true;
     }
-    if (dirY != -1 && moved) {
+    if (dirY != -1 && moved && delayed) {
       moved = false;
       dirX = 0;
       dirY = 1;
@@ -264,7 +287,7 @@ document.querySelector(".left").addEventListener("click", (e) => {
       }, 1000);
       started = true;
     }
-    if (dirX != 1 && moved) {
+    if (dirX != 1 && moved && delayed) {
       moved = false;
       dirX = -1;
       dirY = 0;
@@ -298,7 +321,7 @@ document.querySelector(".right").addEventListener("click", (e) => {
       }, 1000);
       started = true;
     }
-    if (dirX != -1 && moved) {
+    if (dirX != -1 && moved && delayed) {
       moved = false;
       dirX = 1;
       dirY = 0;
@@ -332,7 +355,7 @@ document.querySelector(".bottom").addEventListener("click", (e) => {
       }, 1000);
       started = true;
     }
-    if (dirY != 1 && moved) {
+    if (dirY != 1 && moved && delayed) {
       moved = false;
       dirX = 0;
       dirY = -1;
@@ -386,11 +409,12 @@ function increaseSnakeSize(n = 1) {
 
 function createPower() {
   if (!paused && powers.length < 3) {
-    console.log(powers);
     curPosX = Math.floor(Math.random() * DIMENSIONS);
     curPosY = Math.floor(Math.random() * DIMENSIONS);
     powerUpEle = powerUp[Math.floor(Math.random() * powerUp.length)];
     const power = document.createElement("div");
+    power.classList.add("pow");
+    power.innerHTML = `<img src="${powerUpEle.img}">`;
     power.style.position = "absolute";
     power.style.top = `${curPosY * pixelSize}px`;
     power.style.left = `${curPosX * pixelSize}px`;
@@ -400,11 +424,30 @@ function createPower() {
         return createPower();
       }
     }
+    for (let i = 0; i < letters.length; i++) {
+      if (elementsOverlap(letters[i], power)) {
+        return createPower();
+      }
+    }
+
     power.style.backgroundColor = powerUpEle.color;
     power.style.height = `${pixelSize}px`;
     power.style.width = `${pixelSize}px`;
     power.style.borderRadius = `100%`;
-    console.log(power);
+    setTimeout(
+      (power, index) => {
+        if (
+          power.getBoundingClientRect().x != 0 &&
+          power.getBoundingClientRect().y != 0
+        ) {
+          powers[index][0].parentNode.removeChild(powers[index][0]);
+          powers.splice(index, 1);
+        }
+      },
+      8000,
+      power,
+      powers.length
+    );
     powers.push([power, powerUpEle]);
     gameBg.append(power);
   }
@@ -412,8 +455,13 @@ function createPower() {
 
 function reset(all = false) {
   go.classList.add("hide");
+  delayed = false;
+  setTimeout(() => {
+    delayed = true;
+  }, 500);
   paused = false;
   letters = [];
+  powers = [];
   dirX = 0;
   dirY = 0;
   speed = SPEED;
@@ -512,6 +560,7 @@ function gameLoop() {
       if (elementsOverlap(snakeHead, powers[i][0])) {
         powers[i][1].do();
         powers[i][0].parentNode.removeChild(powers[i][0]);
+        power.play();
         powers.splice(i, 1);
       }
     }
@@ -540,6 +589,7 @@ function gameLoop() {
               .slice(index + 1, currentWord.length)}`;
             letters.splice(i, 1);
             score += 10;
+            eat.play();
             increaseSnakeSize();
             index++;
           } else {
@@ -550,8 +600,9 @@ function gameLoop() {
               .slice(index, index + 1)}</span>${currentWord
               .toUpperCase()
               .slice(index + 1, currentWord.length)}`;
+            hiss.play();
             increaseSnakeSize(2);
-            startTime -= 3000;
+            curTime -= 3;
             score -= 5;
           }
           scoreEle.textContent = score;
@@ -562,7 +613,7 @@ function gameLoop() {
       wordCreated = false;
       let word = wordList[Math.floor(Math.random() * wordList.length)];
       currentWord = word;
-      startTime += 15000;
+      curTime += 15;
       text.innerHTML = currentWord.toUpperCase();
       index = 0;
       createWord(word.toUpperCase());
@@ -594,8 +645,10 @@ function gameLoop() {
       let hearts = Array.from(heart.querySelectorAll(".heartContent"));
       hearts[lives].classList.add("blinking");
       if (lives > 0) {
+        hiss.play();
         reset();
       } else {
+        goAudio.play();
         go.classList.remove("hide");
         waitingToRestart = true;
         return;

@@ -49,6 +49,16 @@ body {
   font-family: "Orbitron";
 }
 
+.pow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pow img {
+  height: 95%;
+}
+
 .options-head {
   color: white;
   text-align: center;
@@ -305,6 +315,12 @@ body {
   opacity: 0;
   animation: blink 1s ease;
 }
+.pc {
+  display: block;
+}
+.mob {
+  display: none;
+}
 
 .onclick {
   animation: rotate 1s ease;
@@ -341,6 +357,12 @@ body {
 }
 
 @media only screen and (max-width: 600px) {
+  .pc {
+    display: none;
+  }
+  .mob {
+    display: block;
+  }
   .game-bg {
     position: relative;
     width: 360px !important;
@@ -356,7 +378,7 @@ body {
     position: relative;
     bottom: 10px;
     width: 100vw;
-    height: 150px;
+    height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -425,8 +447,21 @@ body {
   }
   .go-modal {
     padding: 15px;
+    height: auto;
     width: 75vw;
   }
+  .go-text {
+    flex-direction: row;
+  }
+
+  .go-text span {
+    margin: 0px 5px;
+  }
+
+  .icon {
+    font-size: 25px;
+  }
+
   .go-text {
     font-size: 35px;
   }
@@ -435,11 +470,11 @@ body {
   }
 
   .left {
-    left: 25%;
+    left: 35%;
     bottom: 45%;
   }
   .right {
-    left: 75%;
+    left: 65%;
     bottom: 45%;
   }
   .top img {
@@ -452,6 +487,6 @@ body {
     transform: rotate(180deg);
   }
   .word {
-    font-size: 9px !important;
+    font-size: 10px !important;
   }
 }
