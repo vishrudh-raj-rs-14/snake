@@ -155,9 +155,111 @@ setting.addEventListener("click", (e) => {
   menu.classList.remove("hide");
 });
 
-ball.addEventListener("touchstart", (e) => {
+document.querySelector(".arrows").addEventListener("touchstart", (e) => {
   clickedEle = ball;
   oldPos = ball.getBoundingClientRect();
+  if (clickedEle) {
+    let evt = typeof e.originalEvent === "undefined" ? e : e.originalEvent;
+    let touch = evt.touches[0] || evt.changedTouches[0];
+    x = touch.pageX;
+    y = touch.pageY;
+    console.log(x, y);
+    [x, y] = [
+      x - oldPos.x - oldPos.width / 2,
+      y - oldPos.y - oldPos.height / 2,
+    ];
+    let r = parseInt(
+      parseInt(
+        document.querySelector("#joystick").getBoundingClientRect().width
+      ) / 2
+    );
+    let newX, newY;
+    let theta = Math.atan(Math.abs(y / x));
+    if (Math.sqrt(x ** 2 + y ** 2) <= r) {
+      newX = x;
+      newY = y;
+    } else {
+      newY = r * Math.sign(y) * Math.sin(theta);
+      newX = r * Math.sign(x) * Math.cos(theta);
+    }
+    clickedEle.style.transform = `translate(${newX}px,${newY}px)`;
+    if (!paused && (x != 0 || y != 0)) {
+      if (!started && delayed) {
+        //   gameBgm.loop = true;
+        gameBgm.volume = 0.18;
+        gameBgm.play();
+        curTime = 0;
+        if (interval) clearInterval(interval);
+        interval = setInterval(() => {
+          if (!paused) {
+            curTime += 1;
+          }
+          if (curTime % 5 == 0 && !paused) {
+            speed += DIMENSIONS == 30 ? 0.5 : 1;
+          }
+          if (curTime % 15 == 0 && !paused) {
+            createPower();
+          }
+          time.textContent = `${String(
+            Math.floor((maxTime - curTime) / 60)
+          ).padStart(2, "0")}:${String(
+            Math.floor((maxTime - curTime) % 60)
+          ).padStart(2, "0")}`;
+          time2.textContent = `${String(
+            Math.floor((maxTime - curTime) / 60)
+          ).padStart(2, "0")}:${String(
+            Math.floor((maxTime - curTime) % 60)
+          ).padStart(2, "0")}`;
+        }, 1000);
+      }
+      if (e.key == "r" && waitingToRestart) {
+        waitingToRestart = false;
+        curTime = 0;
+        reset(true);
+        gameLoop();
+      }
+      if (theta >= Math.PI / 4 && newY < 0 && dirY != -1 && moved && delayed) {
+        moved = false;
+        started = true;
+        dirX = 0;
+        dirY = 1;
+      } else if (
+        theta <= Math.PI / 4 &&
+        newX < 0 &&
+        dirX != 1 &&
+        moved &&
+        delayed
+      ) {
+        moved = false;
+        started = true;
+        dirX = -1;
+        dirY = 0;
+      } else if (
+        theta >= Math.PI / 4 &&
+        newY > 0 &&
+        dirY != 1 &&
+        moved &&
+        delayed
+      ) {
+        moved = false;
+        started = true;
+        dirX = 0;
+        dirY = -1;
+      } else if (
+        theta <= Math.PI / 4 &&
+        newX > 0 &&
+        dirX != -1 &&
+        moved &&
+        delayed
+      ) {
+        moved = false;
+        started = true;
+        dirX = 1;
+        dirY = 0;
+      }
+    }
+  }
+  //   ball.transform
 });
 
 window.addEventListener("touchmove", (e) => {
@@ -178,8 +280,6 @@ window.addEventListener("touchmove", (e) => {
     );
     let newX, newY;
     let theta = Math.atan(Math.abs(y / x));
-
-    console.log(x, y);
     if (Math.sqrt(x ** 2 + y ** 2) <= r) {
       newX = x;
       newY = y;
@@ -266,9 +366,15 @@ window.addEventListener("touchmove", (e) => {
   }
 });
 
-ball.addEventListener("touchend", (e) => {
+document.querySelector(".arrows").addEventListener("touchend", (e) => {
   if (clickedEle) {
-    clickedEle.style.transform = `translate(${0}px,${0}px)`;
+    ball.style.transform = `translate(${0}px,${0}px)`;
+    clickedEle = undefined;
+  }
+});
+document.querySelector("#joystick").addEventListener("touchcancel", (e) => {
+  if (clickedEle) {
+    ball.style.transform = `translate(${0}px,${0}px)`;
     clickedEle = undefined;
   }
 });
