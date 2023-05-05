@@ -334,6 +334,7 @@ body {
   border-radius: 10px;
   bottom: 10px;
   right: 10px;
+  cursor: pointer;
   z-index: 2;
 }
 
@@ -343,7 +344,7 @@ body {
 
 .blinking {
   opacity: 0;
-  animation: blink 1s ease;
+  animation: blink 1.5s ease;
 }
 .pc {
   display: block;
@@ -354,6 +355,76 @@ body {
 
 .onclick {
   animation: rotate 1s ease;
+}
+
+#joystick {
+  position: relative;
+  background-color: #210124;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 50px;
+  grid-row: 2;
+}
+
+#joystick-head {
+  position: relative;
+  background-color: #f06449;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: grab;
+}
+
+.joystick-arrow:nth-of-type(1) {
+  position: absolute;
+  bottom: 75px;
+
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+
+  border-bottom: 10px solid #210124;
+}
+
+.joystick-arrow:nth-of-type(2) {
+  position: absolute;
+  top: 75px;
+
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+
+  border-top: 10px solid #210124;
+}
+
+.joystick-arrow:nth-of-type(3) {
+  position: absolute;
+  left: 75px;
+
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+
+  border-left: 10px solid #210124;
+}
+
+.joystick-arrow:nth-of-type(4) {
+  position: absolute;
+  right: 75px;
+
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+
+  border-right: 10px solid #210124;
 }
 
 @keyframes rotate {
@@ -369,17 +440,32 @@ body {
   0% {
     opacity: 1;
   }
-  20% {
+  10% {
     opacity: 0.4;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  30% {
+    opacity: 0.2;
   }
   40% {
     opacity: 0.8;
   }
-  60% {
+  50% {
     opacity: 0.2;
   }
+  60% {
+    opacity: 0.9;
+  }
+  70% {
+    opacity: 0.1;
+  }
   80% {
-    opacity: 0.6;
+    opacity: 0.5;
+  }
+  90% {
+    opacity: 0.8;
   }
   100% {
     opacity: 0;
@@ -403,19 +489,17 @@ body {
     padding: 20px 0 0 0;
     height: 95vh;
   }
-  .scores {
-    height: 5vh;
-  }
+
   .arrows {
     display: block;
     position: relative;
     bottom: 10px;
     width: 100vw;
-    height: 100px;
+    height: 120px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 25px;
+    margin-bottom: 25px;
   }
   .text {
     width: 350px;

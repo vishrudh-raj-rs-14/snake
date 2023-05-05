@@ -8,12 +8,19 @@ const setting = document.querySelector(".menu");
 const menu = document.querySelector(".settings-modal");
 let snakeHead = document.querySelector(".snake");
 const text = document.querySelector(".textContent");
+const ball = document.querySelector("#joystick-head");
+console.log(ball);
+let clickedEle;
+let oldPos;
 const maxTime = 60;
 let lives = LIVES;
 let delayed = true;
 let eat = new Audio("./assets/eat.mp3");
 let power = new Audio("./assets/power.mp3");
 let goAudio = new Audio("./assets/go.mp3");
+let gameBgm = new Audio("./assets/bgm.mp3");
+gameBgm.loop = true;
+let click = new Audio("./assets/click.mp3");
 let hiss = new Audio("./assets/hiss.mp3");
 let curTime = 0;
 let paused = false;
@@ -127,6 +134,7 @@ optionSelect.forEach((ele) => {
     ele.classList.remove("selected");
   }
   ele.addEventListener("click", (e) => {
+    click.play();
     optionSelect.forEach((ele) => {
       ele.classList.remove("selected");
     });
@@ -139,10 +147,130 @@ optionSelect.forEach((ele) => {
 });
 
 setting.addEventListener("click", (e) => {
+  click.play();
+  gameBgm.pause();
   let gear = setting.querySelector("img");
   paused = true;
   gear.classList.add("onclick");
   menu.classList.remove("hide");
+});
+
+ball.addEventListener("touchstart", (e) => {
+  clickedEle = ball;
+  oldPos = ball.getBoundingClientRect();
+});
+
+window.addEventListener("touchmove", (e) => {
+  if (clickedEle) {
+    let evt = typeof e.originalEvent === "undefined" ? e : e.originalEvent;
+    let touch = evt.touches[0] || evt.changedTouches[0];
+    x = touch.pageX;
+    y = touch.pageY;
+    console.log(x, y);
+    [x, y] = [
+      x - oldPos.x - oldPos.width / 2,
+      y - oldPos.y - oldPos.height / 2,
+    ];
+    let r = parseInt(
+      parseInt(
+        document.querySelector("#joystick").getBoundingClientRect().width
+      ) / 2
+    );
+    let newX, newY;
+    let theta = Math.atan(Math.abs(y / x));
+
+    console.log(x, y);
+    if (Math.sqrt(x ** 2 + y ** 2) <= r) {
+      newX = x;
+      newY = y;
+    } else {
+      newY = r * Math.sign(y) * Math.sin(theta);
+      newX = r * Math.sign(x) * Math.cos(theta);
+    }
+    clickedEle.style.transform = `translate(${newX}px,${newY}px)`;
+    if (!paused) {
+      if (!started && delayed) {
+        //   gameBgm.loop = true;
+        gameBgm.volume = 0.18;
+        gameBgm.play();
+        curTime = 0;
+        if (interval) clearInterval(interval);
+        interval = setInterval(() => {
+          if (!paused) {
+            curTime += 1;
+          }
+          if (curTime % 5 == 0 && !paused) {
+            speed += DIMENSIONS == 30 ? 0.5 : 1;
+          }
+          if (curTime % 15 == 0 && !paused) {
+            createPower();
+          }
+          time.textContent = `${String(
+            Math.floor((maxTime - curTime) / 60)
+          ).padStart(2, "0")}:${String(
+            Math.floor((maxTime - curTime) % 60)
+          ).padStart(2, "0")}`;
+          time2.textContent = `${String(
+            Math.floor((maxTime - curTime) / 60)
+          ).padStart(2, "0")}:${String(
+            Math.floor((maxTime - curTime) % 60)
+          ).padStart(2, "0")}`;
+        }, 1000);
+      }
+      if (e.key == "r" && waitingToRestart) {
+        waitingToRestart = false;
+        curTime = 0;
+        reset(true);
+        gameLoop();
+      }
+      if (theta >= Math.PI / 4 && newY < 0 && dirY != -1 && moved && delayed) {
+        moved = false;
+        started = true;
+        dirX = 0;
+        dirY = 1;
+      } else if (
+        theta <= Math.PI / 4 &&
+        newX < 0 &&
+        dirX != 1 &&
+        moved &&
+        delayed
+      ) {
+        moved = false;
+        started = true;
+        dirX = -1;
+        dirY = 0;
+      } else if (
+        theta >= Math.PI / 4 &&
+        newY > 0 &&
+        dirY != 1 &&
+        moved &&
+        delayed
+      ) {
+        moved = false;
+        started = true;
+        dirX = 0;
+        dirY = -1;
+      } else if (
+        theta <= Math.PI / 4 &&
+        newX > 0 &&
+        dirX != -1 &&
+        moved &&
+        delayed
+      ) {
+        moved = false;
+        started = true;
+        dirX = 1;
+        dirY = 0;
+      }
+    }
+  }
+});
+
+ball.addEventListener("touchend", (e) => {
+  if (clickedEle) {
+    clickedEle.style.transform = `translate(${0}px,${0}px)`;
+    clickedEle = undefined;
+  }
 });
 
 function elementsOverlap(el1, el2) {
@@ -162,6 +290,7 @@ let moved = false;
 
 document.querySelector(".mob").addEventListener("click", () => {
   if (waitingToRestart) {
+    click.play();
     waitingToRestart = false;
     reset(true);
     gameLoop();
@@ -171,6 +300,9 @@ document.querySelector(".mob").addEventListener("click", () => {
 window.addEventListener("keypress", (e) => {
   if (!paused) {
     if (!started && delayed) {
+      //   gameBgm.loop = true;
+      gameBgm.volume = 0.18;
+      gameBgm.play();
       curTime = 0;
       if (interval) clearInterval(interval);
       interval = setInterval(() => {
@@ -225,142 +357,142 @@ window.addEventListener("keypress", (e) => {
   }
 });
 
-document.querySelector(".top").addEventListener("click", (e) => {
-  if (!paused) {
-    if (!started) {
-      startTime = Date.now();
-      interval = setInterval(() => {
-        if (!paused) {
-          curTime += 1;
-        }
-        if (curTime % 5 == 0 && !paused) {
-          speed += DIMENSIONS == 30 ? 0.5 : 1;
-        }
-        if (curTime % 15 == 0 && !paused) {
-          createPower();
-        }
-        time.textContent = `${String(
-          Math.floor((maxTime - curTime) / 60)
-        ).padStart(2, "0")}:${String(
-          Math.floor((maxTime - curTime) % 60)
-        ).padStart(2, "0")}`;
-        time2.textContent = `${String(
-          Math.floor((maxTime - curTime) / 60)
-        ).padStart(2, "0")}:${String(
-          Math.floor((maxTime - curTime) % 60)
-        ).padStart(2, "0")}`;
-      }, 1000);
-      started = true;
-    }
-    if (dirY != -1 && moved && delayed) {
-      moved = false;
-      dirX = 0;
-      dirY = 1;
-    }
-  }
-});
-document.querySelector(".left").addEventListener("click", (e) => {
-  if (!paused) {
-    if (!started) {
-      startTime = Date.now();
-      interval = setInterval(() => {
-        if (!paused) {
-          curTime += 1;
-        }
-        if (curTime % 5 == 0 && !paused) {
-          speed += DIMENSIONS == 30 ? 0.5 : 1;
-        }
-        if (curTime % 15 == 0 && !paused) {
-          createPower();
-        }
-        time.textContent = `${String(
-          Math.floor((maxTime - curTime) / 60)
-        ).padStart(2, "0")}:${String(
-          Math.floor((maxTime - curTime) % 60)
-        ).padStart(2, "0")}`;
-        time2.textContent = `${String(
-          Math.floor((maxTime - curTime) / 60)
-        ).padStart(2, "0")}:${String(
-          Math.floor((maxTime - curTime) % 60)
-        ).padStart(2, "0")}`;
-      }, 1000);
-      started = true;
-    }
-    if (dirX != 1 && moved && delayed) {
-      moved = false;
-      dirX = -1;
-      dirY = 0;
-    }
-  }
-});
-document.querySelector(".right").addEventListener("click", (e) => {
-  if (!paused) {
-    if (!started) {
-      startTime = Date.now();
-      interval = setInterval(() => {
-        if (!paused) {
-          curTime += 1;
-        }
-        if (curTime % 5 == 0 && !paused) {
-          speed += DIMENSIONS == 30 ? 0.5 : 1;
-        }
-        if (curTime % 15 == 0 && !paused) {
-          createPower();
-        }
-        time.textContent = `${String(
-          Math.floor((maxTime - curTime) / 60)
-        ).padStart(2, "0")}:${String(
-          Math.floor((maxTime - curTime) % 60)
-        ).padStart(2, "0")}`;
-        time2.textContent = `${String(
-          Math.floor((maxTime - curTime) / 60)
-        ).padStart(2, "0")}:${String(
-          Math.floor((maxTime - curTime) % 60)
-        ).padStart(2, "0")}`;
-      }, 1000);
-      started = true;
-    }
-    if (dirX != -1 && moved && delayed) {
-      moved = false;
-      dirX = 1;
-      dirY = 0;
-    }
-  }
-});
-document.querySelector(".bottom").addEventListener("click", (e) => {
-  if (!paused) {
-    if (!started) {
-      startTime = Date.now();
-      interval = setInterval(() => {
-        if (!paused) {
-          curTime += 1;
-        }
-        if (curTime % 5 == 0 && !paused) {
-          speed += DIMENSIONS == 30 ? 0.5 : 1;
-        }
-        if (curTime % 15 == 0 && !paused) {
-          createPower();
-        }
-        time.textContent = `${String(
-          Math.floor((maxTime - curTime) / 60)
-        ).padStart(2, "0")}:${String(
-          Math.floor((maxTime - curTime) % 60)
-        ).padStart(2, "0")}`;
-        time2.textContent = `${String(
-          Math.floor((maxTime - curTime) / 60)
-        ).padStart(2, "0")}:${String(
-          Math.floor((maxTime - curTime) % 60)
-        ).padStart(2, "0")}`;
-      }, 1000);
-      started = true;
-    }
-    if (dirY != 1 && moved && delayed) {
-      moved = false;
-      dirX = 0;
-      dirY = -1;
-    }
-  }
-});
+// document.querySelector(".top").addEventListener("click", (e) => {
+//   if (!paused) {
+//     if (!started) {
+//       startTime = Date.now();
+//       interval = setInterval(() => {
+//         if (!paused) {
+//           curTime += 1;
+//         }
+//         if (curTime % 5 == 0 && !paused) {
+//           speed += DIMENSIONS == 30 ? 0.5 : 1;
+//         }
+//         if (curTime % 15 == 0 && !paused) {
+//           createPower();
+//         }
+//         time.textContent = `${String(
+//           Math.floor((maxTime - curTime) / 60)
+//         ).padStart(2, "0")}:${String(
+//           Math.floor((maxTime - curTime) % 60)
+//         ).padStart(2, "0")}`;
+//         time2.textContent = `${String(
+//           Math.floor((maxTime - curTime) / 60)
+//         ).padStart(2, "0")}:${String(
+//           Math.floor((maxTime - curTime) % 60)
+//         ).padStart(2, "0")}`;
+//       }, 1000);
+//       started = true;
+//     }
+//     if (dirY != -1 && moved && delayed) {
+//       moved = false;
+//       dirX = 0;
+//       dirY = 1;
+//     }
+//   }
+// });
+// document.querySelector(".left").addEventListener("click", (e) => {
+//   if (!paused) {
+//     if (!started) {
+//       startTime = Date.now();
+//       interval = setInterval(() => {
+//         if (!paused) {
+//           curTime += 1;
+//         }
+//         if (curTime % 5 == 0 && !paused) {
+//           speed += DIMENSIONS == 30 ? 0.5 : 1;
+//         }
+//         if (curTime % 15 == 0 && !paused) {
+//           createPower();
+//         }
+//         time.textContent = `${String(
+//           Math.floor((maxTime - curTime) / 60)
+//         ).padStart(2, "0")}:${String(
+//           Math.floor((maxTime - curTime) % 60)
+//         ).padStart(2, "0")}`;
+//         time2.textContent = `${String(
+//           Math.floor((maxTime - curTime) / 60)
+//         ).padStart(2, "0")}:${String(
+//           Math.floor((maxTime - curTime) % 60)
+//         ).padStart(2, "0")}`;
+//       }, 1000);
+//       started = true;
+//     }
+//     if (dirX != 1 && moved && delayed) {
+//       moved = false;
+//       dirX = -1;
+//       dirY = 0;
+//     }
+//   }
+// });
+// document.querySelector(".right").addEventListener("click", (e) => {
+//   if (!paused) {
+//     if (!started) {
+//       startTime = Date.now();
+//       interval = setInterval(() => {
+//         if (!paused) {
+//           curTime += 1;
+//         }
+//         if (curTime % 5 == 0 && !paused) {
+//           speed += DIMENSIONS == 30 ? 0.5 : 1;
+//         }
+//         if (curTime % 15 == 0 && !paused) {
+//           createPower();
+//         }
+//         time.textContent = `${String(
+//           Math.floor((maxTime - curTime) / 60)
+//         ).padStart(2, "0")}:${String(
+//           Math.floor((maxTime - curTime) % 60)
+//         ).padStart(2, "0")}`;
+//         time2.textContent = `${String(
+//           Math.floor((maxTime - curTime) / 60)
+//         ).padStart(2, "0")}:${String(
+//           Math.floor((maxTime - curTime) % 60)
+//         ).padStart(2, "0")}`;
+//       }, 1000);
+//       started = true;
+//     }
+//     if (dirX != -1 && moved && delayed) {
+//       moved = false;
+//       dirX = 1;
+//       dirY = 0;
+//     }
+//   }
+// });
+// document.querySelector(".bottom").addEventListener("click", (e) => {
+//   if (!paused) {
+//     if (!started) {
+//       startTime = Date.now();
+//       interval = setInterval(() => {
+//         if (!paused) {
+//           curTime += 1;
+//         }
+//         if (curTime % 5 == 0 && !paused) {
+//           speed += DIMENSIONS == 30 ? 0.5 : 1;
+//         }
+//         if (curTime % 15 == 0 && !paused) {
+//           createPower();
+//         }
+//         time.textContent = `${String(
+//           Math.floor((maxTime - curTime) / 60)
+//         ).padStart(2, "0")}:${String(
+//           Math.floor((maxTime - curTime) % 60)
+//         ).padStart(2, "0")}`;
+//         time2.textContent = `${String(
+//           Math.floor((maxTime - curTime) / 60)
+//         ).padStart(2, "0")}:${String(
+//           Math.floor((maxTime - curTime) % 60)
+//         ).padStart(2, "0")}`;
+//       }, 1000);
+//       started = true;
+//     }
+//     if (dirY != 1 && moved && delayed) {
+//       moved = false;
+//       dirX = 0;
+//       dirY = -1;
+//     }
+//   }
+// });
 
 function createWord(word) {
   wordCreated = true;
@@ -508,6 +640,8 @@ function reset(all = false) {
 
 resume.addEventListener("click", (e) => {
   if (!resume.classList.contains("disabled")) {
+    click.play();
+    gameBgm.play();
     paused = false;
     setting.querySelector("img").classList.remove("onclick");
     menu.classList.add("hide");
@@ -515,6 +649,8 @@ resume.addEventListener("click", (e) => {
 });
 
 restart.addEventListener("click", (e) => {
+  click.play();
+  gameBgm.currentTime = 0;
   menu.classList.add("hide");
   resume.classList.remove("disabled");
   setting.querySelector("img").classList.remove("onclick");
@@ -649,6 +785,8 @@ function gameLoop() {
         hiss.play();
         reset();
       } else {
+        gameBgm.pause();
+        gameBgm.currentTime = 0;
         goAudio.play();
         go.classList.remove("hide");
         waitingToRestart = true;
@@ -658,5 +796,4 @@ function gameLoop() {
   }
   setTimeout(() => window.requestAnimationFrame(gameLoop), 1000 / speed);
 }
-
 gameLoop();
