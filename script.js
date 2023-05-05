@@ -7,6 +7,8 @@ gameBg.innerHTML = `<div class="snake"></div><div class="time2">00:00</div>`;
 const setting = document.querySelector(".menu");
 const menu = document.querySelector(".settings-modal");
 let snakeHead = document.querySelector(".snake");
+let soundEffect = document.querySelector(".soundEffect");
+let muteMusic = document.querySelector(".music");
 const text = document.querySelector(".textContent");
 const ball = document.querySelector("#joystick-head");
 console.log(ball);
@@ -113,6 +115,33 @@ const powerUp = [
     img: "./assets/lightning.png",
   },
 ];
+
+soundEffect.addEventListener("click", () => {
+  if (soundEffect.classList.contains("after-class")) {
+    hiss.volume = 1;
+    eat.volume = 1;
+    click.volume = 1;
+    powerUp.volume = 1;
+    soundEffect.classList.remove("after-class");
+  } else {
+    hiss.volume = 0;
+    eat.volume = 0;
+    click.volume = 0;
+    powerUp.volume = 0;
+    soundEffect.classList.add("after-class");
+  }
+});
+
+muteMusic.addEventListener("click", () => {
+  if (muteMusic.classList.contains("after-class")) {
+    gameBgm.volume = 0.18;
+    muteMusic.classList.remove("after-class");
+  } else {
+    gameBgm.volume = 0;
+    muteMusic.classList.add("after-class");
+  }
+});
+
 let letters = [];
 let height = gameBg.getBoundingClientRect().height;
 let pixelSize = gameBg.getBoundingClientRect().height / DIMENSIONS;
@@ -746,7 +775,9 @@ function reset(all = false) {
 resume.addEventListener("click", (e) => {
   if (!resume.classList.contains("disabled")) {
     click.play();
-    gameBgm.play();
+    if (started) {
+      gameBgm.play();
+    }
     paused = false;
     setting.querySelector("img").classList.remove("onclick");
     menu.classList.add("hide");
