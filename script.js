@@ -406,7 +406,6 @@ document.querySelector(".mob").addEventListener("click", () => {
 window.addEventListener("keypress", (e) => {
   if (!paused) {
     if (!started && delayed) {
-      //   gameBgm.loop = true;
       gameBgm.volume = 0.18;
       gameBgm.play();
       curTime = 0;

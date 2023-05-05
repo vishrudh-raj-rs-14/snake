@@ -305,7 +305,6 @@ body {
   width: 600px;
   height: 600px;
   background-color: rgba(0, 0, 0, 0.8);
-  overflow: hidden;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
     rgba(0, 0, 0, 0.22) 0px 15px 12px;
   border-radius: 10px;
@@ -612,30 +611,30 @@ body {
 
 @media only screen and (min-height: 700px) {
   #joystick {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
   }
   #joystick-head {
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
   }
   .joystick-arrow:nth-of-type(1) {
-    bottom: 90px;
-    transform: scale(1.6);
+    bottom: 80px;
+    transform: scale(1.5);
   }
   .joystick-arrow:nth-of-type(2) {
-    top: 90px;
-    transform: scale(1.6);
+    top: 80px;
+    transform: scale(1.5);
   }
   .joystick-arrow:nth-of-type(3) {
-    left: 90px;
-    transform: scale(1.6);
+    left: 80px;
+    transform: scale(1.5);
   }
   .joystick-arrow:nth-of-type(4) {
-    right: 90px;
-    transform: scale(1.6);
+    right: 80px;
+    transform: scale(1.5);
   }
   .arrows {
-    margin-top: 20px;
+    margin-top: 10px;
   }
 }
