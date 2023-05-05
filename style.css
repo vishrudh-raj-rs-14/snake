@@ -10,6 +10,156 @@ body {
   overflow: hidden;
   font-family: "Roboto", sans-serif;
 }
+.hide {
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+}
+.go {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+  transition: all 500ms ease;
+}
+
+.go-text {
+  font-size: 65px;
+  display: flex;
+  flex-direction: column;
+}
+
+.go-text span:nth-child(1) {
+  color: #f40009;
+}
+
+.option-modal {
+  width: 30vw;
+  padding: 20px;
+  /* height: 30vh; */
+  background-color: #0e568a;
+  font-family: "Orbitron";
+}
+
+.options-head {
+  color: white;
+  text-align: center;
+  font-size: 25px;
+  margin-bottom: 15px;
+}
+
+.options-select {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.options-select button {
+  font-family: "Orbitron";
+  width: 85%;
+  padding: 10px;
+  background-color: rgb(214, 64, 13);
+  outline: none;
+  border: 2px solid rgb(180, 68, 31);
+  color: white;
+  transition: all 200ms ease;
+  margin: 5px 0px;
+}
+
+.options-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px 0px;
+  padding: 0 6.25%;
+  /* width: 85%; */
+}
+.option-type {
+  color: white;
+  background-color: rgb(214, 64, 13);
+  width: 32%;
+  padding: 5px 0px;
+  text-align: center;
+  border-left: 1px solid black;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  transition: all 200ms ease;
+}
+
+.option-type:hover {
+  background-color: rgb(239, 76, 22);
+  cursor: pointer;
+}
+
+.selected {
+  background-color: rgb(246, 92, 40) !important;
+}
+
+.disabled button {
+  background-color: rgb(177, 76, 42);
+  color: rgb(198, 198, 198);
+  cursor: not-allowed;
+}
+.disabled button:hover {
+  background-color: rgb(177, 76, 42) !important;
+  color: rgb(198, 198, 198) !important;
+  cursor: not-allowed !important;
+  transform: scale(1) !important;
+}
+
+.option-type:last-child {
+  border-right: 1px solid black;
+}
+
+.option-modal hr {
+  border: 0.5px solid rgba(199, 199, 199, 0.645);
+  margin: 10px 0px;
+}
+
+.option-modal .info {
+  color: white;
+  font-size: 10px;
+  text-align: center;
+}
+
+.options-select button:hover {
+  background-color: rgb(231, 77, 26);
+  transform: scale(1.05);
+  cursor: pointer;
+}
+.options-select button:active {
+  background-color: rgb(199, 78, 37);
+  transform: scale(0.95);
+}
+
+.go-modal {
+  width: 30vw;
+  color: white;
+  font-family: "Orbitron";
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #041e42;
+}
+.go-options {
+  margin-top: 15px;
+  opacity: 0.8;
+  font-size: 15px;
+}
+
+.go-options span {
+  color: #24b515;
+}
 
 .food {
   background-color: rgb(230, 154, 47);
@@ -77,6 +227,25 @@ body {
   font-weight: 100;
 }
 
+.heart {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.heartContent {
+  margin: 5px;
+}
+.heartContent img {
+  height: 30px;
+}
+.textContent {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .time2 {
   display: none;
 }
@@ -108,16 +277,75 @@ body {
 }
 .snake {
   position: absolute;
+  box-sizing: content-box;
   background-color: green;
-  z-index: 5;
+  z-index: 2;
   /* transition: all 100ms ease;s */
+}
+
+.menu {
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0e568a;
+  border-radius: 10px;
+  bottom: 10px;
+  right: 10px;
+  z-index: 2;
+}
+
+.menu img {
+  height: 100%;
+}
+
+.blinking {
+  opacity: 0;
+  animation: blink 1s ease;
+}
+
+.onclick {
+  animation: rotate 1s ease;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0.4;
+  }
+  40% {
+    opacity: 0.8;
+  }
+  60% {
+    opacity: 0.2;
+  }
+  80% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 @media only screen and (max-width: 600px) {
   .game-bg {
     position: relative;
-    width: 320px;
-    height: 320px;
+    width: 360px !important;
+    height: 360px !important;
+    margin-bottom: 10px;
   }
   .game {
     padding: 100px 0px 0px 0px;
@@ -136,8 +364,17 @@ body {
   }
   .text {
     width: 350px;
-    height: 75px;
+    height: auto;
+    margin-top: 0px;
     /* font-size: 20px; */
+  }
+
+  .heart img {
+    height: 18px;
+  }
+
+  .textContent {
+    font-size: 16px;
   }
 
   .time {
@@ -183,6 +420,20 @@ body {
     bottom: 15%;
     left: 50%;
   }
+  .option-modal {
+    width: 80vw;
+  }
+  .go-modal {
+    padding: 15px;
+    width: 75vw;
+  }
+  .go-text {
+    font-size: 35px;
+  }
+  .go-options {
+    font-size: 15px;
+  }
+
   .left {
     left: 25%;
     bottom: 45%;
@@ -201,6 +452,6 @@ body {
     transform: rotate(180deg);
   }
   .word {
-    font-size: 11px !important;
+    font-size: 9px !important;
   }
 }
