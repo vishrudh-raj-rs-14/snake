@@ -6,9 +6,13 @@
 body {
   width: 100vw;
   height: 100vh;
-  background-color: #041e42;
   overflow: hidden;
+  background-color: rgb(7 166 110);
   font-family: "Roboto", sans-serif;
+}
+.textContent {
+  width: 50%;
+  text-align: center;
 }
 .hide {
   opacity: 0;
@@ -23,7 +27,7 @@ body {
   right: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.622);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -45,7 +49,7 @@ body {
   width: 30vw;
   padding: 20px;
   /* height: 30vh; */
-  background-color: #0e568a;
+  background-color: rgb(7 166 110);
   font-family: "Orbitron";
 }
 
@@ -76,9 +80,9 @@ body {
   font-family: "Orbitron";
   width: 85%;
   padding: 10px;
-  background-color: rgb(214, 64, 13);
+  background-color: rgb(182 65 65);
   outline: none;
-  border: 2px solid rgb(180, 68, 31);
+  border: none;
   color: white;
   transition: all 200ms ease;
   margin: 5px 0px;
@@ -94,7 +98,7 @@ body {
 }
 .option-type {
   color: white;
-  background-color: rgb(214, 64, 13);
+  background-color: rgb(182 65 65);
   width: 32%;
   padding: 5px 0px;
   text-align: center;
@@ -105,21 +109,21 @@ body {
 }
 
 .option-type:hover {
-  background-color: rgb(239, 76, 22);
+  background-color: rgb(210, 84, 84);
   cursor: pointer;
 }
 
 .selected {
-  background-color: rgb(246, 92, 40) !important;
+  background-color: rgb(212, 72, 72) !important;
 }
 
 .disabled button {
-  background-color: rgb(177, 76, 42);
+  background-color: rgb(123, 55, 33);
   color: rgb(198, 198, 198);
   cursor: not-allowed;
 }
 .disabled button:hover {
-  background-color: rgb(177, 76, 42) !important;
+  background-color: rgb(123, 55, 33) !important;
   color: rgb(198, 198, 198) !important;
   cursor: not-allowed !important;
   transform: scale(1) !important;
@@ -141,12 +145,12 @@ body {
 }
 
 .options-select button:hover {
-  background-color: rgb(231, 77, 26);
+  background-color: rgb(210, 84, 84);
   transform: scale(1.05);
   cursor: pointer;
 }
 .options-select button:active {
-  background-color: rgb(199, 78, 37);
+  background-color: rgb(145, 80, 58);
   transform: scale(0.95);
 }
 
@@ -182,7 +186,7 @@ body {
   font-family: "Orbitron";
   color: white;
   display: block;
-  font-size: 20px;
+  font-size: 25px;
 }
 
 .colorTextGreen {
@@ -194,11 +198,12 @@ body {
 }
 
 .scores {
-  position: absolute;
-  top: 10px;
+  top: 0px;
+  height: 10vh;
   width: 100vw;
-  padding: 5px 20px;
   display: flex;
+  align-items: center;
+  padding: 0 10px;
   justify-content: space-between;
   color: white;
   font-weight: 100;
@@ -207,6 +212,7 @@ body {
 
 .word {
   color: white;
+  border-radius: 3px;
   position: absolute;
   font-size: 16px;
   font-family: "Roboto", sans-serif;
@@ -214,26 +220,36 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-color: blueviolet; */
+  background-color: rgba(59, 59, 59, 0.568);
 }
 
 .score-text {
+  color: black;
+  font-family: "Poppins";
+  font-weight: 400;
+  letter-spacing: 0px;
   width: 160px;
+}
+
+.score-text span:first-child {
+  font-size: 25px;
 }
 
 .text {
   width: 600px;
   height: 100px;
-  border-radius: 20px;
-  background-color: black;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.8);
   margin: 20px 0;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   color: white;
   font-family: "Roboto";
   font-size: 30px;
   letter-spacing: 5px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
   font-weight: 100;
 }
 
@@ -249,7 +265,7 @@ body {
 .heartContent img {
   height: 30px;
 }
-.textContent {
+.Content {
   width: 50%;
   display: flex;
   justify-content: center;
@@ -261,15 +277,24 @@ body {
 }
 .snake-body {
   background-color: rgba(52, 238, 126, 0.803);
+  border-radius: 5px;
   position: absolute;
   /* transition: all 100ms ease; */
 }
 
+.bg-delta {
+  position: absolute;
+  opacity: 0.05;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .game {
   width: 100vw;
-  height: 100vh;
-  padding-top: 50px;
-  background-color: #041e42;
+  padding-top: 10px;
+  height: 90vh;
+  background-color: rgb(7 166 110);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -279,7 +304,11 @@ body {
 .game-bg {
   width: 600px;
   height: 600px;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  border-radius: 10px;
   position: relative;
 }
 .arrows {
@@ -288,19 +317,20 @@ body {
 .snake {
   position: absolute;
   box-sizing: content-box;
+  border-radius: 30%;
   background-color: green;
   z-index: 2;
   /* transition: all 100ms ease;s */
 }
 
 .menu {
-  position: absolute;
+  /* position: absolute; */
   height: 50px;
-  width: 50px;
+  width: 160px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
-  background-color: #0e568a;
+  /* background-color: #0e568a; */
   border-radius: 10px;
   bottom: 10px;
   right: 10px;
@@ -370,9 +400,12 @@ body {
     margin-bottom: 10px;
   }
   .game {
-    padding: 100px 0px 0px 0px;
+    padding: 20px 0 0 0;
+    height: 95vh;
   }
-
+  .scores {
+    height: 5vh;
+  }
   .arrows {
     display: block;
     position: relative;
@@ -388,6 +421,7 @@ body {
     width: 350px;
     height: auto;
     margin-top: 0px;
+
     /* font-size: 20px; */
   }
 

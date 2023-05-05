@@ -141,7 +141,6 @@ optionSelect.forEach((ele) => {
 setting.addEventListener("click", (e) => {
   let gear = setting.querySelector("img");
   paused = true;
-  gear.classList.remove("onclick");
   gear.classList.add("onclick");
   menu.classList.remove("hide");
 });
@@ -510,6 +509,7 @@ function reset(all = false) {
 resume.addEventListener("click", (e) => {
   if (!resume.classList.contains("disabled")) {
     paused = false;
+    setting.querySelector("img").classList.remove("onclick");
     menu.classList.add("hide");
   }
 });
@@ -517,6 +517,7 @@ resume.addEventListener("click", (e) => {
 restart.addEventListener("click", (e) => {
   menu.classList.add("hide");
   resume.classList.remove("disabled");
+  setting.querySelector("img").classList.remove("onclick");
   reset(true);
 });
 
@@ -602,7 +603,7 @@ function gameLoop() {
               .slice(index + 1, currentWord.length)}`;
             hiss.play();
             increaseSnakeSize(2);
-            curTime -= 3;
+            curTime += 3;
             score -= 5;
           }
           scoreEle.textContent = score;
@@ -613,7 +614,7 @@ function gameLoop() {
       wordCreated = false;
       let word = wordList[Math.floor(Math.random() * wordList.length)];
       currentWord = word;
-      curTime += 15;
+      curTime -= 15;
       text.innerHTML = currentWord.toUpperCase();
       index = 0;
       createWord(word.toUpperCase());
@@ -657,20 +658,5 @@ function gameLoop() {
   }
   setTimeout(() => window.requestAnimationFrame(gameLoop), 1000 / speed);
 }
-
-window.onresize = () => {
-  pixelSize = gameBg.getBoundingClientRect().height / DIMENSIONS;
-  for (let i = 0; i < snake.length; i++) {
-    snake[i].style.height = `${pixelSize}px`;
-    snake[i].style.width = `${pixelSize}px`;
-  }
-  height = gameBg.getBoundingClientRect().height;
-  for (let i = 0; i < letters.length; i++) {
-    letters[i].style.height = `${pixelSize}px`;
-    letters[i].style.width = `${pixelSize}px`;
-  }
-  //   snakeHead.style.top = `${curPosY * pixelSize}px`;
-  //   snakeHead.style.left = `${curPosX * pixelSize}px`;
-};
 
 gameLoop();
