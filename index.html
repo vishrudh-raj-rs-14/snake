@@ -36,9 +36,15 @@
       </div>
     </div>
     <div class="go settings-modal hide">
-      <div class="option-modal">
+      <div class="option-modal main-menu">
         <div class="options-head">MENU</div>
         <div class="options-select" id="resume"><button>RESUME</button></div>
+        <div class="options-select disabled" id="save">
+          <button>Save State</button>
+        </div>
+        <div class="options-select" id="load">
+          <button>Load State</button>
+        </div>
         <div class="options-select" id="restart"><button>RESTART</button></div>
         <div class="sound">
           <div>Sound Effects</div>
@@ -58,6 +64,30 @@
           <div class="option-type" data-val="30">30</div>
           <div class="option-type" data-val="40">40</div>
           <div class="option-type" data-val="60">60</div>
+        </div>
+      </div>
+      <div class="option-modal v2 hide">
+        <div class="options-head">Save Slots</div>
+        <div class="options-select free slot">
+          <button>Slot 1</button>
+        </div>
+        <div class="options-select free slot">
+          <button>Slot 2</button>
+        </div>
+        <div class="options-select free slot">
+          <button>Slot 3</button>
+        </div>
+      </div>
+      <div class="option-modal v2 hide load-menu">
+        <div class="options-head">Load Slots</div>
+        <div class="options-select load">
+          <button>Slot 1</button>
+        </div>
+        <div class="options-select load">
+          <button>Slot 2</button>
+        </div>
+        <div class="options-select load">
+          <button>Slot 3</button>
         </div>
       </div>
     </div>

@@ -55,10 +55,29 @@ body {
 
 .option-modal {
   width: 30vw;
+  height: 450px;
+  position: absolute;
   padding: 20px;
+  transition: all 1s ease;
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  flex-direction: column;
   /* height: 30vh; */
   background-color: rgb(7 166 110);
   font-family: "Orbitron";
+}
+
+.v1 {
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.v2 {
+  z-index: 6;
+  height: 250px;
+  padding: 50px;
 }
 
 .pow {
@@ -75,13 +94,18 @@ body {
   color: white;
   text-align: center;
   font-size: 25px;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
 }
 
 .options-select {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.free button {
+  background-color: rgb(116, 48, 48) !important;
+  border: 3px solid rgb(182 65 65) !important;
 }
 
 .options-select button {
