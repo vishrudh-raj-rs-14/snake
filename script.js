@@ -1,6 +1,7 @@
 let DIMENSIONS = 30;
 const LIVES = 3;
 const SPEED = 7;
+let PercentOfObstacles = 20;
 const gameBg = document.querySelector(".game-bg");
 const go = document.querySelector(".go");
 gameBg.innerHTML = `<div class="snake"></div><div class="time2">00:00</div>`;
@@ -11,11 +12,17 @@ let soundEffect = document.querySelector(".soundEffect");
 let muteMusic = document.querySelector(".music");
 const text = document.querySelector(".textContent");
 const ball = document.querySelector("#joystick-head");
-console.log(ball);
+let portals = [];
+let root = document.querySelector(":root");
 let clickedEle;
 let oldPos;
+let obstacles = [];
 const maxTime = 60;
+let oldDirX;
+let oldDirY;
+let oldSnake = [];
 let lives = LIVES;
+let portaled = false;
 let delayed = true;
 let eat = new Audio("./assets/eat.mp3");
 let power = new Audio("./assets/power.mp3");
@@ -47,7 +54,6 @@ time2.textContent = `${String(Math.floor(maxTime / 60)).padStart(
 )}:${String(Math.floor(maxTime % 60)).padStart(2, "0")}`;
 let started = false;
 let score = 0;
-let startTime;
 let highScore = localStorage.getItem("highScore")
   ? localStorage.getItem("highScore")
   : 0;
@@ -192,7 +198,6 @@ document.querySelector(".arrows").addEventListener("touchstart", (e) => {
     let touch = evt.touches[0] || evt.changedTouches[0];
     x = touch.pageX;
     y = touch.pageY;
-    console.log(x, y);
     [x, y] = [
       x - oldPos.x - oldPos.width / 2,
       y - oldPos.y - oldPos.height / 2,
@@ -297,7 +302,6 @@ window.addEventListener("touchmove", (e) => {
     let touch = evt.touches[0] || evt.changedTouches[0];
     x = touch.pageX;
     y = touch.pageY;
-    console.log(x, y);
     [x, y] = [
       x - oldPos.x - oldPos.width / 2,
       y - oldPos.y - oldPos.height / 2,
@@ -631,6 +635,12 @@ window.addEventListener("keypress", (e) => {
 function createWord(word) {
   wordCreated = true;
   let lst = [];
+  for (let i = 0; i < obstacles.length; i++) {
+    lst.push(`${obstacles[i].dataset.x},${obstacles[i].dataset.y}`);
+  }
+  for (let i = 0; i < portals.length; i++) {
+    lst.push(`${portals[i].dataset.x},${portals[i].dataset.y}`);
+  }
   for (let i = 0; i < word.length; i++) {
     const ele = document.createElement("div");
     ele.classList.add("word");
@@ -694,6 +704,14 @@ function createPower() {
         return createPower();
       }
     }
+    for (let i = 0; i < obstacles.length; i++) {
+      if (
+        parseInt(obstacles[i].dataset.x) == curPosX &&
+        parseInt(obstacles[i].dataset.y) == curPosY
+      ) {
+        return createPower();
+      }
+    }
 
     power.style.backgroundColor = powerUpEle.color;
     power.style.height = `${pixelSize}px`;
@@ -718,7 +736,81 @@ function createPower() {
   }
 }
 
+function createObstacle() {
+  obstacles.splice(0, obstacles.length);
+  let noOFObsatcles = (PercentOfObstacles * DIMENSIONS) / 100;
+  let obs = [];
+  for (let i = 0; i < noOFObsatcles; i++) {
+    let x = Math.floor(Math.random() * DIMENSIONS);
+    let y = Math.floor(Math.random() * DIMENSIONS);
+
+    while (obs.includes(`${x},${y}`)) {
+      x = Math.floor(Math.random() * DIMENSIONS);
+      y = Math.floor(Math.random() * DIMENSIONS);
+    }
+    let obstacle = document.createElement("div");
+    obstacle.classList.add("obstacle");
+    obstacle.style.height = `${pixelSize}px`;
+    obstacle.style.width = `${pixelSize}px`;
+    obstacle.style.top = `${y * pixelSize}px`;
+    obstacle.style.left = `${x * pixelSize}px`;
+    obstacle.dataset.x = x;
+    obstacle.dataset.y = y;
+
+    obs.push(`${x},${y}`);
+
+    obstacles.push(obstacle);
+    gameBg.append(obstacle);
+  }
+}
+
+function createPortal() {
+  let portal1 = document.createElement("div");
+  let portal2 = document.createElement("div");
+  let obs = [];
+  for (let i = 0; i < obstacles.length; i++) {
+    obs.push(`${obstacles[i].dataset.x},${obstacles[i].dataset.y}`);
+  }
+  let x = Math.floor(Math.random() * DIMENSIONS);
+  let y = Math.floor(Math.random() * DIMENSIONS);
+  while (obs.includes(`${x},${y}`)) {
+    x = Math.floor(Math.random() * DIMENSIONS);
+    y = Math.floor(Math.random() * DIMENSIONS);
+  }
+  obs.push(`${x},${y}`);
+  let a = Math.floor(Math.random() * DIMENSIONS);
+  let b = Math.floor(Math.random() * DIMENSIONS);
+  while (obs.includes(`${a},${b}`)) {
+    a = Math.floor(Math.random() * DIMENSIONS);
+    b = Math.floor(Math.random() * DIMENSIONS);
+  }
+  portal1.classList.add("portal");
+  portal2.classList.add("portal");
+  portal1.style.width = `${pixelSize}px`;
+  portal1.style.height = `${pixelSize}px`;
+  portal1.style.top = `${y * pixelSize}px`;
+  portal1.style.left = `${x * pixelSize}px`;
+  portal1.dataset.x = x;
+  portal1.dataset.y = y;
+  portal1.dataset.teleportX = a;
+  portal1.dataset.teleportY = b;
+  portal2.style.width = `${pixelSize}px`;
+  portal2.style.height = `${pixelSize}px`;
+  portal2.style.top = `${b * pixelSize}px`;
+  portal2.style.left = `${a * pixelSize}px`;
+  portal2.dataset.teleportX = x;
+  portal2.dataset.teleportY = y;
+  portal2.dataset.x = a;
+  portal2.dataset.y = b;
+  console.log(portal1, portal2);
+  gameBg.append(portal1);
+  gameBg.append(portal2);
+  portals.push(portal1);
+  portals.push(portal2);
+}
+
 function reset(all = false) {
+  console.log("caller");
   go.classList.add("hide");
   delayed = false;
   setTimeout(() => {
@@ -729,6 +821,9 @@ function reset(all = false) {
   powers = [];
   dirX = 0;
   dirY = 0;
+  oldDirX = 0;
+  oldDirY = 0;
+  oldSnake = [];
   speed = SPEED;
   gameBg.innerHTML = `<div class="snake"></div><div class="time2">00:00</div>`;
   snakeHead = document.querySelector(".snake");
@@ -737,7 +832,9 @@ function reset(all = false) {
   time2 = document.querySelector(".time2");
   started = false;
   moved = false;
-  startTime = 0;
+  portals.splice(0, portals.length);
+  createObstacle();
+  createPortal();
   clearInterval(interval);
   curTime = 0;
   time.textContent = `${String(Math.floor(maxTime / 60)).padStart(
@@ -810,19 +907,29 @@ function CheckGameOver() {
     snakeHead.style.left = `${height - height / DIMENSIONS}px`;
     return true;
   }
+
   if (curTime >= maxTime) return true;
   let game = gameBg.getBoundingClientRect();
   let snakeHeadRect = snake[0].getBoundingClientRect();
+  for (let i = 0; i < obstacles.length; i++) {
+    if (elementsOverlap(snakeHead, obstacles[i])) {
+      console.log(dirX, dirY);
+      snakeHead.style.top = `${
+        parseInt(snakeHead.style.top) + 1 * dirY * pixelSize
+      }px`;
+      snakeHead.style.left = `${
+        parseInt(snakeHead.style.left) + -1 * dirX * pixelSize
+      }px`;
+      dirX = 0;
+      dirY = 0;
+      return true;
+    }
+  }
   for (let i = 3; i < snake.length; i++) {
-    let bx = Math.floor(
-      (snake[i].getBoundingClientRect().left - game.left + 1) / pixelSize
-    );
-    let by = Math.floor(
-      (snake[i].getBoundingClientRect().top - game.top + 1) / pixelSize
-    );
-    let sx = Math.floor((snakeHeadRect.left - game.left + 1) / pixelSize);
-    let sy = Math.floor((snakeHeadRect.top - game.top + 1) / pixelSize);
-    if (sx == bx && sy == by) return true;
+    if (elementsOverlap(snake[i], snakeHead)) return true;
+  }
+  for (let i = 0; i < oldSnake.length; i++) {
+    if (elementsOverlap(snakeHead, oldSnake[i])) return true;
   }
   return false;
 }
@@ -843,6 +950,14 @@ function gameLoop() {
     } else {
       time.style.color = `white`;
       time2.style.color = `white`;
+    }
+
+    if (obstacles.length == 0) {
+      createObstacle();
+    }
+
+    if (portals.length == 0) {
+      createPortal();
     }
     if (!wordCreated) {
       let word = wordList[Math.floor(Math.random() * wordList.length)];
@@ -882,6 +997,7 @@ function gameLoop() {
         }
       }
     }
+
     if (letters.length == 0) {
       wordCreated = false;
       let word = wordList[Math.floor(Math.random() * wordList.length)];
@@ -891,9 +1007,101 @@ function gameLoop() {
       index = 0;
       createWord(word.toUpperCase());
     }
+    if (oldSnake.length != 0) {
+      for (let i = oldSnake.length - 1; i > 0; i--) {
+        oldSnake[i].style.top = `${parseInt(oldSnake[i - 1].style.top)}px`;
+        oldSnake[i].style.left = `${parseInt(oldSnake[i - 1].style.left)}px`;
+      }
+      let clone = [
+        snake[snake.length - 1].style.top,
+        snake[snake.length - 1].style.left,
+      ];
+      oldSnake[0].parentElement.removeChild(oldSnake[0]);
+      oldSnake.shift();
+      let ele = document.createElement("div");
+      ele.style.height = `${pixelSize}px`;
+      ele.style.width = `${pixelSize}px`;
+      ele.style.top = clone[0];
+      ele.style.left = clone[1];
+      ele.classList.add("snake-body");
+      gameBg.append(ele);
+      snake.push(ele);
+    }
+    for (let i = 0; i < portals.length; i++) {
+      if (elementsOverlap(snakeHead, portals[i])) {
+        if (oldSnake.length != 0) {
+          if (score > highScore) {
+            highScore = score;
+            highScoreEle.textContent = highScore;
+            localStorage.setItem("highScore", highScore);
+          }
+          // started = false;
+          time.textContent = `00:00`;
+          time2.textContent = `00:00`;
+          clearInterval(interval);
+          lives--;
+          let hearts = Array.from(heart.querySelectorAll(".heartContent"));
+          hearts[lives].classList.add("blinking");
+          if (lives > 0) {
+            hiss.play();
+            reset();
+          } else {
+            gameBgm.pause();
+            gameBgm.currentTime = 0;
+            goAudio.play();
+            go.classList.remove("hide");
+            waitingToRestart = true;
+            return;
+          }
+        }
+        oldDirX = dirX;
+        oldDirY = dirY;
+        oldSnake = [...snake.slice(1)];
+        snakeHead.parentElement.removeChild(snakeHead);
+        snake.splice(0, 1);
+        let ele = document.createElement("div");
+        ele.classList.add("snake");
+        // ele.classList.add("snakeMove");
+        ele.style.height = `${pixelSize}px`;
+        ele.style.width = `${pixelSize}px`;
+        ele.style.top = `${
+          parseInt(portals[i].dataset.teleportY) * pixelSize
+        }px`;
+        ele.style.left = `${
+          parseInt(portals[i].dataset.teleportX) * pixelSize
+        }px`;
+        root.style.setProperty(
+          "--fromX",
+          `${parseInt(portals[i].dataset.teleportX) * pixelSize}px`
+        );
+        root.style.setProperty(
+          "--fromY",
+          `${parseInt(portals[i].dataset.teleportY) * pixelSize}px`
+        );
+        gameBg.append(ele);
+        snake = [ele];
+        snakeHead = ele;
+        portaled = true;
+        break;
+      }
+    }
     for (let i = snake.length - 1; i > 0; i--) {
       snake[i].style.top = `${parseInt(snake[i - 1].style.top)}px`;
       snake[i].style.left = `${parseInt(snake[i - 1].style.left)}px`;
+    }
+    root.style.setProperty(
+      "--toX",
+      `${parseInt(snakeHead.style.left) + 1 * pixelSize * dirX}px`
+    );
+    root.style.setProperty(
+      "--toY",
+      `${parseInt(snakeHead.style.top) + 1 * pixelSize * dirY * -1}px`
+    );
+    if (portaled) {
+      snakeHead.classList.add("moveSnake");
+      portaled = false;
+    } else {
+      //   snakeHead.classList.remove("snakeMove");
     }
     snakeHead.style.top = `${
       parseInt(snakeHead.style.top) + 1 * pixelSize * dirY * -1
@@ -902,14 +1110,12 @@ function gameLoop() {
       parseInt(snakeHead.style.left) + 1 * pixelSize * dirX
     }px`;
     moved = true;
-
     if (CheckGameOver()) {
       if (score > highScore) {
         highScore = score;
         highScoreEle.textContent = highScore;
         localStorage.setItem("highScore", highScore);
       }
-      startTime = 0;
       // started = false;
       time.textContent = `00:00`;
       time2.textContent = `00:00`;
@@ -933,3 +1139,5 @@ function gameLoop() {
   setTimeout(() => window.requestAnimationFrame(gameLoop), 1000 / speed);
 }
 gameLoop();
+
+window.onresize = () => reset(true);

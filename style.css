@@ -1,3 +1,11 @@
+:root {
+  --fromX: 0px;
+  --fromY: 0px;
+
+  --toX: 0px;
+  --toY: 0px;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -163,7 +171,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #041e42;
+  background-color: rgb(7 166 110);
 }
 .go-options {
   margin-top: 15px;
@@ -172,7 +180,7 @@ body {
 }
 
 .go-options span {
-  color: #24b515;
+  color: #f40009;
 }
 
 .food {
@@ -277,9 +285,23 @@ body {
 }
 .snake-body {
   background-color: rgba(52, 238, 126, 0.803);
-  border-radius: 5px;
+  border-radius: 30%;
   position: absolute;
+  transition: all 100ms linear;
+
   /* transition: all 100ms ease; */
+}
+
+.portal {
+  background-color: #114895;
+  position: absolute;
+  border-radius: 30%;
+}
+
+.obstacle {
+  position: absolute;
+  border-radius: 30%;
+  background-color: rgb(235, 127, 119);
 }
 
 .bg-delta {
@@ -362,11 +384,26 @@ body {
 }
 .snake {
   position: absolute;
-  box-sizing: content-box;
   border-radius: 30%;
   background-color: green;
+  transition: all 100ms linear;
   z-index: 2;
   /* transition: all 100ms ease;s */
+}
+
+.moveSnake {
+  animation: snakeStart 100ms linear;
+}
+
+@keyframes snakeStart {
+  0% {
+    top: var(--fromY);
+    left: var(--fromX);
+  }
+  100% {
+    top: var(--toY);
+    left: var(--toX);
+  }
 }
 
 .menu {
@@ -554,6 +591,10 @@ body {
     margin-top: 0px;
 
     /* font-size: 20px; */
+  }
+
+  body {
+    overflow: scroll;
   }
 
   .heart img {
