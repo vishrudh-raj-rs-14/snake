@@ -436,7 +436,7 @@ document.querySelector(".mob").addEventListener("click", () => {
   }
 });
 
-window.addEventListener("keypress", (e) => {
+window.addEventListener("keydown", (e) => {
   if (!paused) {
     if (!started && delayed) {
       gameBgm.volume = 0.18;
@@ -471,22 +471,42 @@ window.addEventListener("keypress", (e) => {
       reset(true);
       gameLoop();
     }
-    if (e.key == "w" && dirY != -1 && moved && delayed) {
+    if (
+      (e.key == "w" || e.key == "ArrowUp") &&
+      dirY != -1 &&
+      moved &&
+      delayed
+    ) {
       moved = false;
       started = true;
       dirX = 0;
       dirY = 1;
-    } else if (e.key == "a" && dirX != 1 && moved && delayed) {
+    } else if (
+      (e.key == "a" || e.key == "ArrowLeft") &&
+      dirX != 1 &&
+      moved &&
+      delayed
+    ) {
       moved = false;
       started = true;
       dirX = -1;
       dirY = 0;
-    } else if (e.key == "s" && dirY != 1 && moved && delayed) {
+    } else if (
+      (e.key == "s" || e.key == "ArrowDown") &&
+      dirY != 1 &&
+      moved &&
+      delayed
+    ) {
       moved = false;
       started = true;
       dirX = 0;
       dirY = -1;
-    } else if (e.key == "d" && dirX != -1 && moved && delayed) {
+    } else if (
+      (e.key == "d" || e.key == "ArrowRight") &&
+      dirX != -1 &&
+      moved &&
+      delayed
+    ) {
       moved = false;
       started = true;
       dirX = 1;
