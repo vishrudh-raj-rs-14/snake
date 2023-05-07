@@ -1,6 +1,28 @@
 let DIMENSIONS = 30;
 const LIVES = 3;
+
 const SPEED = 7;
+let gameState = (state = {
+  dimension: DIMENSIONS,
+  snake: [],
+  oldSnake: [],
+  dirX: 0,
+  dirY: 0,
+  obstacles: [],
+  letters: [],
+  speed: SPEED,
+  curTime: 0,
+  portals: [],
+  score: 0,
+  index: 0,
+  curPosX: Math.floor(Math.random() * DIMENSIONS),
+  curPosY: Math.floor(Math.random() * DIMENSIONS),
+  snakeHead: undefined,
+  lives: LIVES,
+  oldDirX: 0,
+  oldDirY: 0,
+  load: false,
+});
 let PercentOfObstacles = 20;
 let PercentOfMovingObstacles = 10;
 const gameBg = document.querySelector(".game-bg");
@@ -9,7 +31,11 @@ gameBg.innerHTML = `<div class="snake"></div><div class="time2">00:00</div>`;
 const setting = document.querySelector(".menu");
 const save = document.querySelector("#save");
 let gameoverCollide = false;
-const load = document.querySelector("#load");
+const newGame = document.querySelector("#new");
+const loadGame = document.querySelector("#load");
+const coop = document.querySelector("#coop");
+const load = document.querySelector("#load2");
+console.log(load);
 const menu = document.querySelector(".settings-modal");
 let snakeHead = document.querySelector(".snake");
 let soundEffect = document.querySelector(".soundEffect");
@@ -187,7 +213,6 @@ optionSelect.forEach((ele) => {
     DIMENSIONS = parseInt(ele.dataset.val);
   });
 });
-
 document.addEventListener("keydown", (e) => {
   if (e.key == "Escape") {
     click.play();
@@ -439,7 +464,6 @@ document.querySelector("#joystick").addEventListener("touchcancel", (e) => {
 });
 
 function elementsOverlap(el1, el2) {
-  //   console.log(el1, el2);
   const domRect1 = el1.getBoundingClientRect();
   const domRect2 = el2.getBoundingClientRect();
   let game = gameBg.getBoundingClientRect();
@@ -849,6 +873,29 @@ function createObstacle() {
   }
 }
 
+function placeMovingObstacle(arr) {
+  movingObstacle = [];
+  for (let i = 0; i < arr.length; i++) {
+    let obs = document.createElement("div");
+    obs.classList.add("moving-obstacle");
+    obs.innerHTML = `<img src="./assets/saw.png">`;
+    obs.style.width = `${pixelSize}px`;
+    obs.style.height = `${pixelSize}px`;
+    obs.dataset.x = arr[i].x;
+    obs.dataset.y = arr[i].y;
+    obs.style.top = `${parseInt(arr[i].y) * pixelSize}px`;
+    obs.style.left = `${parseInt(arr[i].x) * pixelSize}px`;
+    obs.dataset.orgX = arr[i].orgX;
+    obs.dataset.orgY = arr[i].orgY;
+    obs.dataset.dir = arr[i].dir;
+    obs.dataset.movDir = arr[i].movDir;
+    obs.dataset.blocks = arr[i].blocks;
+    obs.dataset.travelled = arr[i].travelled;
+    movingObstacle.push(obs);
+    gameBg.append(obs);
+  }
+}
+
 function createMovingObstacle() {
   movingObstacle = [];
   let noOfMovingObsatcles = (PercentOfMovingObstacles / 100) * DIMENSIONS;
@@ -905,7 +952,6 @@ function createMovingObstacle() {
         newobs.push(`${obstacles[j].dataset.x},${k}`);
       }
     }
-    console.log(minX, minY, maxX, maxY, newobs, i);
     let x = Math.floor(Math.random() * DIMENSIONS);
     let y = Math.floor(Math.random() * DIMENSIONS);
 
@@ -921,7 +967,6 @@ function createMovingObstacle() {
       y < minY ||
       y > maxY
     ) {
-      console.log("looping");
       x = Math.floor(Math.random() * DIMENSIONS);
       y = Math.floor(Math.random() * DIMENSIONS);
     }
@@ -1101,7 +1146,7 @@ function reset(
     wordCreated = true;
   }
   powers = [];
-  save.classList.add("disabled");
+  //   save.classList.add("disabled");
   speed = SPEED;
   dirX = state.dirX;
   dirY = state.dirY;
@@ -1120,9 +1165,15 @@ function reset(
   started = false;
   moved = false;
   portals.splice(0, portals.length);
+  for (let i = 0; i < movingObstacle.length; i++) {
+    if (movingObstacle[i].parentNode)
+      movingObstacle[i].parentNode.removeChild(movingObstacle[i]);
+  }
+  movingObstacle = [];
   if (state.load) {
     placeObstacle(state.obstacles);
     placePortal(state.portals);
+    placeMovingObstacle(state.movingObstacle);
   } else {
     createObstacle();
     createPortal();
@@ -1167,7 +1218,7 @@ function reset(
   if (all) {
     score = state.score;
     scoreEle.textContent = score;
-    save.classList.add("disabled");
+    // save.classList.add("disabled");
     lives = state.lives;
     snakeHead.style.height = `${pixelSize}px`;
     snakeHead.style.width = `${pixelSize}px`;
@@ -1196,48 +1247,48 @@ resume.addEventListener("click", (e) => {
 });
 
 save.addEventListener("click", (e) => {
-  if (started) {
-    document.querySelector(".v2").classList.remove("hide");
-    document.querySelector(".main-menu").classList.add("hide");
-    // let gameState = {
-    //   snake: snake.map((ele) => [
-    //     parseInt(ele.dataset.x),
-    //     parseInt(ele.dataset.y),
-    //   ]),
-    //   oldSnake: oldSnake.map((ele) => [
-    //     parseInt(ele.dataset.x),
-    //     parseInt(ele.dataset.y),
-    //   ]),
-    //   dirX,
-    //   dirY,
-    //   obstacles: obstacles.map((ele) => [
-    //     parseInt(ele.dataset.x),
-    //     parseInt(ele.dataset.y),
-    //   ]),
-    //   letters: letters.map((ele) => [
-    //     parseInt(ele.dataset.x),
-    //     parseInt(ele.dataset.y),
-    //   ]),
-    //   speed,
-    //   portals: portals.map((ele) => [
-    //     parseInt(ele.dataset.x),
-    //     parseInt(ele.dataset.y),
-    //   ]),
-    //   curTime,
-    //   score,
-    //   word: currentWord,
-    //   curPosX: parseInt(snakeHead.dataset.x),
-    //   curPosY: parseInt(snakeHead.dataset.y),
-    //   snakeHead: [parseInt(snakeHead.dataset.x), parseInt(snakeHead.dataset.y)],
-    //   lives: lives,
-    //   index,
-    //   oldDirX,
-    //   oldDirY,
-    //   load: true,
-    // };
-    // console.log(gameState);
-    // localStorage.setItem("state", JSON.stringify(gameState));
-  }
+  //   if (started) {
+  document.querySelector(".v2").classList.remove("hide");
+  document.querySelector(".main-menu").classList.add("hide");
+  // let gameState = {
+  //   snake: snake.map((ele) => [
+  //     parseInt(ele.dataset.x),
+  //     parseInt(ele.dataset.y),
+  //   ]),
+  //   oldSnake: oldSnake.map((ele) => [
+  //     parseInt(ele.dataset.x),
+  //     parseInt(ele.dataset.y),
+  //   ]),
+  //   dirX,
+  //   dirY,
+  //   obstacles: obstacles.map((ele) => [
+  //     parseInt(ele.dataset.x),
+  //     parseInt(ele.dataset.y),
+  //   ]),
+  //   letters: letters.map((ele) => [
+  //     parseInt(ele.dataset.x),
+  //     parseInt(ele.dataset.y),
+  //   ]),
+  //   speed,
+  //   portals: portals.map((ele) => [
+  //     parseInt(ele.dataset.x),
+  //     parseInt(ele.dataset.y),
+  //   ]),
+  //   curTime,
+  //   score,
+  //   word: currentWord,
+  //   curPosX: parseInt(snakeHead.dataset.x),
+  //   curPosY: parseInt(snakeHead.dataset.y),
+  //   snakeHead: [parseInt(snakeHead.dataset.x), parseInt(snakeHead.dataset.y)],
+  //   lives: lives,
+  //   index,
+  //   oldDirX,
+  //   oldDirY,
+  //   load: true,
+  // };
+  // console.log(gameState);
+  // localStorage.setItem("state", JSON.stringify(gameState));
+  //   }
 });
 
 Array.from(document.querySelectorAll(".slot")).forEach((ele, i_) => {
@@ -1274,6 +1325,22 @@ Array.from(document.querySelectorAll(".slot")).forEach((ele, i_) => {
         parseInt(ele.dataset.y),
       ]),
       curTime,
+      movingObstacle: movingObstacle.map((ele) => {
+        return {
+          x: ele.dataset.x,
+          y: ele.dataset.y,
+          height: ele.dataset.height,
+          width: ele.dataset.width,
+          top: ele.dataset.top,
+          left: ele.dataset.left,
+          orgX: ele.dataset.orgX,
+          orgY: ele.dataset.orgY,
+          dir: ele.dataset.dir,
+          movDir: ele.dataset.movDir,
+          blocks: ele.dataset.blocks,
+          travelled: ele.dataset.travelled,
+        };
+      }),
       score,
       word: currentWord,
       curPosX: parseInt(snakeHead.dataset.x),
@@ -1303,19 +1370,20 @@ Array.from(document.querySelectorAll(".slot")).forEach((ele, i_) => {
 });
 
 Array.from(document.querySelectorAll(".load")).forEach((ele, i_) => {
-  let state = JSON.parse(localStorage.getItem(`state${i_}`));
+  let state = JSON.parse(localStorage.getItem(`state${i_ - 3}`));
   if (!state) {
     ele.classList.add("disabled");
   } else {
     ele.classList.remove("disabled");
   }
   return ele.addEventListener("click", (e) => {
-    let state = JSON.parse(localStorage.getItem(`state${i_}`));
+    let state = JSON.parse(localStorage.getItem(`state${i_ - 3}`));
     if (state) reset(true, state);
     document.querySelector(".load-menu").classList.add("hide");
     document.querySelector(".main-menu").classList.remove("hide");
     menu.classList.add("hide");
     click.play();
+    console.log("he");
     if (started) {
       gameBgm.play();
     }
@@ -1327,6 +1395,7 @@ Array.from(document.querySelectorAll(".load")).forEach((ele, i_) => {
 load.addEventListener("click", (e) => {
   document.querySelector(".load-menu").classList.remove("hide");
   document.querySelector(".main-menu").classList.add("hide");
+  console.log("here");
 });
 
 restart.addEventListener("click", (e) => {
@@ -1372,13 +1441,6 @@ function CheckGameOver() {
       return true;
     }
   }
-  console.log(
-    snakeHead.dataset.x,
-    movingObstacle[0].dataset.x,
-    snakeHead.dataset.y,
-    movingObstacle[0].dataset.y
-  );
-  console.log();
 
   for (let i = 3; i < snake.length; i++) {
     if (elementsOverlap(snake[i], snakeHead)) return true;
@@ -1404,7 +1466,6 @@ function spikeCollide() {
         object_1.top < object_2.top + object_2.height &&
         object_1.top + object_1.height > object_2.top
       ) {
-        console.log("here");
         gameoverCollide = true;
         return;
       }
@@ -1689,6 +1750,7 @@ function gameLoop() {
   }
   setTimeout(() => window.requestAnimationFrame(gameLoop), 1000 / speed);
 }
+reset(true, gameState);
 gameLoop();
 spikeCollide();
 window.onresize = () =>
@@ -1704,6 +1766,22 @@ window.onresize = () =>
     dimension: DIMENSIONS,
     dirX,
     dirY,
+    movingObstacle: movingObstacle.map((ele) => {
+      return {
+        x: ele.dataset.x,
+        y: ele.dataset.y,
+        height: ele.dataset.height,
+        width: ele.dataset.width,
+        top: ele.dataset.top,
+        left: ele.dataset.left,
+        orgX: ele.dataset.orgX,
+        orgY: ele.dataset.orgY,
+        dir: ele.dataset.dir,
+        movDir: ele.dataset.movDir,
+        blocks: ele.dataset.blocks,
+        travelled: ele.dataset.travelled,
+      };
+    }),
     obstacles: obstacles.map((ele) => [
       parseInt(ele.dataset.x),
       parseInt(ele.dataset.y),
@@ -1729,3 +1807,45 @@ window.onresize = () =>
     oldDirY,
     load: true,
   });
+
+document.querySelector("#exit").addEventListener("click", () => {
+  click.play();
+  reset(true);
+  menu.classList.add("hide");
+  document.querySelector(".bg").classList.remove("hide");
+});
+
+document.querySelector("#new").addEventListener("click", () => {
+  click.play();
+  click.play();
+  console.log("here");
+  if (started) {
+    gameBgm.play();
+  }
+  paused = false;
+  setting.querySelector("img").classList.remove("onclick");
+  menu.classList.add("hide");
+  document.querySelector(".bg").classList.add("hide");
+});
+
+loadGame.addEventListener("click", () => {
+  click.play();
+  document.querySelector(".menu-main").classList.add("hide");
+  document.querySelector(".second").classList.remove("hide");
+});
+Array.from(document.querySelectorAll(".sec")).forEach((ele, index) => {
+  if (!localStorage.getItem(`state${index}`)) {
+    ele.classList.add("disabled");
+  } else {
+    ele.classList.remove("disabled");
+  }
+  ele.addEventListener("click", () => {
+    if (JSON.parse(localStorage.getItem(`state${index}`))) {
+      click.play();
+      reset(true, JSON.parse(localStorage.getItem(`state${index}`)));
+    }
+    document.querySelector(".menu-main").classList.remove("hide");
+    document.querySelector(".second").classList.add("hide");
+    document.querySelector(".bg").classList.add("hide");
+  });
+});

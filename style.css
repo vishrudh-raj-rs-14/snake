@@ -55,7 +55,7 @@ body {
 
 .option-modal {
   width: 30vw;
-  height: 450px;
+  /* height: 450px; */
   position: absolute;
   padding: 20px;
   transition: all 1s ease;

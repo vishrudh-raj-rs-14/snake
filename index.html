@@ -23,6 +23,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./main.css" />
     <title>Snake</title>
   </head>
   <body>
@@ -35,14 +36,32 @@
         </div>
       </div>
     </div>
+    <div class="bg">
+      <div class="menu-main">
+        <div class="menu-options-1"><button id="new">New Game</button></div>
+        <div class="menu-options-1"><button id="load">Load Game</button></div>
+        <div class="menu-options-1"><button id="coop">Co-op</button></div>
+      </div>
+      <div class="menu-main hide second">
+        <div class="menu-options-1 load sec">
+          <button id="new">Slot 1</button>
+        </div>
+        <div class="menu-options-1 load sec">
+          <button id="load">Slot 2</button>
+        </div>
+        <div class="menu-options-1 load sec">
+          <button id="coop">Slot 3</button>
+        </div>
+      </div>
+    </div>
     <div class="go settings-modal hide">
       <div class="option-modal main-menu">
         <div class="options-head">MENU</div>
         <div class="options-select" id="resume"><button>RESUME</button></div>
-        <div class="options-select disabled" id="save">
+        <div class="options-select" id="save">
           <button>Save State</button>
         </div>
-        <div class="options-select" id="load">
+        <div class="options-select" id="load2">
           <button>Load State</button>
         </div>
         <div class="options-select" id="restart"><button>RESTART</button></div>
@@ -57,6 +76,9 @@
           <div class="icon music">
             <img src="./assets/music.png" class="icon" />
           </div>
+        </div>
+        <div class="options-select" id="exit">
+          <button>Main Menu</button>
         </div>
         <hr />
         <div class="info">Grid Size</div>
