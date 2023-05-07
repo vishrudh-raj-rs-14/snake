@@ -2326,77 +2326,139 @@ reset(true, gameState);
 gameLoop();
 spikeCollide();
 window.onresize = () => {
-  console.log(snake2);
-  console.log(
-    snake2.map((ele) => [parseInt(ele.dataset.x), parseInt(ele.dataset.y)])
-  );
-  reset(
-    true,
-    {
-      snake: snake.map((ele) => [
-        parseInt(ele.dataset.x),
-        parseInt(ele.dataset.y),
-      ]),
-      snake2: snake2.map((ele) => [
-        parseInt(ele.dataset.x),
-        parseInt(ele.dataset.y),
-      ]),
-      oldSnake: oldSnake.map((ele) => [
-        parseInt(ele.dataset.x),
-        parseInt(ele.dataset.y),
-      ]),
-      oldSnake2: oldSnake2.map((ele) => [
-        parseInt(ele.dataset.x),
-        parseInt(ele.dataset.y),
-      ]),
-      dimension: DIMENSIONS,
-      dirX,
-      dirY,
-      movingObstacle: movingObstacle.map((ele) => {
-        return {
-          x: ele.dataset.x,
-          y: ele.dataset.y,
-          height: ele.dataset.height,
-          width: ele.dataset.width,
-          top: ele.dataset.top,
-          left: ele.dataset.left,
-          orgX: ele.dataset.orgX,
-          orgY: ele.dataset.orgY,
-          dir: ele.dataset.dir,
-          movDir: ele.dataset.movDir,
-          blocks: ele.dataset.blocks,
-          travelled: ele.dataset.travelled,
-        };
-      }),
-      obstacles: obstacles.map((ele) => [
-        parseInt(ele.dataset.x),
-        parseInt(ele.dataset.y),
-      ]),
-      letters: letters.map((ele) => [
-        parseInt(ele.dataset.x),
-        parseInt(ele.dataset.y),
-      ]),
-      speed,
-      portals: portals.map((ele) => [
-        parseInt(ele.dataset.x),
-        parseInt(ele.dataset.y),
-      ]),
-      curTime,
-      score,
-      word: currentWord,
-      curPosX: parseInt(snakeHead.dataset.x),
-      curPosY: parseInt(snakeHead.dataset.y),
-      curPosX2: parseInt(snakeHead2.dataset.x),
-      curPosY2: parseInt(snakeHead2.dataset.y),
-      snakeHead: [parseInt(snakeHead.dataset.x), parseInt(snakeHead.dataset.y)],
-      lives: lives,
-      index,
-      oldDirX,
-      oldDirY,
-      load: true,
-    },
-    coopPlay
-  );
+  if (coopPlay) {
+    reset(
+      true,
+      {
+        snake: snake.map((ele) => [
+          parseInt(ele.dataset.x),
+          parseInt(ele.dataset.y),
+        ]),
+        snake2: snake2.map((ele) => [
+          parseInt(ele.dataset.x),
+          parseInt(ele.dataset.y),
+        ]),
+        oldSnake: oldSnake.map((ele) => [
+          parseInt(ele.dataset.x),
+          parseInt(ele.dataset.y),
+        ]),
+        oldSnake2: oldSnake2.map((ele) => [
+          parseInt(ele.dataset.x),
+          parseInt(ele.dataset.y),
+        ]),
+        dimension: DIMENSIONS,
+        dirX,
+        dirY,
+        movingObstacle: movingObstacle.map((ele) => {
+          return {
+            x: ele.dataset.x,
+            y: ele.dataset.y,
+            height: ele.dataset.height,
+            width: ele.dataset.width,
+            top: ele.dataset.top,
+            left: ele.dataset.left,
+            orgX: ele.dataset.orgX,
+            orgY: ele.dataset.orgY,
+            dir: ele.dataset.dir,
+            movDir: ele.dataset.movDir,
+            blocks: ele.dataset.blocks,
+            travelled: ele.dataset.travelled,
+          };
+        }),
+        obstacles: obstacles.map((ele) => [
+          parseInt(ele.dataset.x),
+          parseInt(ele.dataset.y),
+        ]),
+        letters: letters.map((ele) => [
+          parseInt(ele.dataset.x),
+          parseInt(ele.dataset.y),
+        ]),
+        speed,
+        portals: portals.map((ele) => [
+          parseInt(ele.dataset.x),
+          parseInt(ele.dataset.y),
+        ]),
+        curTime,
+        score,
+        word: currentWord,
+        curPosX: parseInt(snakeHead.dataset.x),
+        curPosY: parseInt(snakeHead.dataset.y),
+        curPosX2: parseInt(snakeHead2.dataset.x),
+        curPosY2: parseInt(snakeHead2.dataset.y),
+        snakeHead: [
+          parseInt(snakeHead.dataset.x),
+          parseInt(snakeHead.dataset.y),
+        ],
+        lives: lives,
+        index,
+        oldDirX,
+        oldDirY,
+        load: true,
+      },
+      coopPlay
+    );
+  } else {
+    reset(
+      true,
+      {
+        snake: snake.map((ele) => [
+          parseInt(ele.dataset.x),
+          parseInt(ele.dataset.y),
+        ]),
+        oldSnake: oldSnake.map((ele) => [
+          parseInt(ele.dataset.x),
+          parseInt(ele.dataset.y),
+        ]),
+        dimension: DIMENSIONS,
+        dirX,
+        dirY,
+        movingObstacle: movingObstacle.map((ele) => {
+          return {
+            x: ele.dataset.x,
+            y: ele.dataset.y,
+            height: ele.dataset.height,
+            width: ele.dataset.width,
+            top: ele.dataset.top,
+            left: ele.dataset.left,
+            orgX: ele.dataset.orgX,
+            orgY: ele.dataset.orgY,
+            dir: ele.dataset.dir,
+            movDir: ele.dataset.movDir,
+            blocks: ele.dataset.blocks,
+            travelled: ele.dataset.travelled,
+          };
+        }),
+        obstacles: obstacles.map((ele) => [
+          parseInt(ele.dataset.x),
+          parseInt(ele.dataset.y),
+        ]),
+        letters: letters.map((ele) => [
+          parseInt(ele.dataset.x),
+          parseInt(ele.dataset.y),
+        ]),
+        speed,
+        portals: portals.map((ele) => [
+          parseInt(ele.dataset.x),
+          parseInt(ele.dataset.y),
+        ]),
+        curTime,
+        score,
+        word: currentWord,
+        curPosX: parseInt(snakeHead.dataset.x),
+        curPosY: parseInt(snakeHead.dataset.y),
+        snakeHead: [
+          parseInt(snakeHead.dataset.x),
+          parseInt(snakeHead.dataset.y),
+        ],
+        lives: lives,
+        index,
+        oldDirX,
+        oldDirY,
+        load: true,
+      },
+      false
+    );
+  }
 };
 
 document.querySelector("#exit").addEventListener("click", () => {
