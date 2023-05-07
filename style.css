@@ -629,8 +629,9 @@ body {
 
 @media only screen and (max-width: 930px) {
   .pc {
-    display: none;
+    display: none !important;
   }
+
   .mob {
     display: block;
   }
@@ -644,7 +645,9 @@ body {
     padding: 20px 0 0 0;
     height: 95vh;
   }
-
+  .menu-main {
+    width: 70vw !important;
+  }
   .arrows {
     display: block;
     position: relative;
