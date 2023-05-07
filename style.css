@@ -316,8 +316,23 @@ body {
   /* transition: all 100ms ease; */
 }
 
+.moving-obstacle {
+  position: absolute;
+  background-color: transparent;
+  transition: all 100ms linear;
+}
+.moving-obstacle img {
+  height: 100%;
+  width: 100%;
+  animation: rotate 500ms linear 0s infinite;
+}
+
 .portal {
-  background-color: #114895;
+  /* background-color: rgba(41, 87, 212, 0.4); */
+  background-color: transparent;
+  box-shadow: inset 0 0 2px 1px rgba(255, 255, 255, 0.397),
+    /* inner white */ inset 0 0 4px 2px rgb(38, 183, 255, 0.5),
+    /* middle magenta */ inset 0 0 7px 3px rgba(0, 255, 255, 0.411); /* outer cyan */
   position: absolute;
   border-radius: 30%;
 }
@@ -325,7 +340,8 @@ body {
 .obstacle {
   position: absolute;
   border-radius: 30%;
-  background-color: rgb(235, 127, 119);
+  /* background: url(./assets/brick.png) no-repeat center center fixed; */
+  background-color: #857973;
 }
 
 .bg-delta {
