@@ -1871,7 +1871,7 @@ function gameLoop() {
         powers.splice(i, 1);
       }
     }
-    if (coop) {
+    if (coopPlay) {
       for (let i = 0; i < powers.length; i++) {
         if (elementsOverlap(snakeHead2, powers[i][0])) {
           powers[i][1].do(1);
