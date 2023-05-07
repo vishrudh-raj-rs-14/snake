@@ -4,6 +4,11 @@
 
   --toX: 0px;
   --toY: 0px;
+  --fromX2: 0px;
+  --fromY2: 0px;
+
+  --toX2: 0px;
+  --toY2: 0px;
 }
 
 * {
@@ -422,6 +427,20 @@ body {
 .arrows {
   display: none;
 }
+
+.snake2 {
+  position: absolute;
+  border-radius: 30%;
+  transition: all 100ms linear;
+  z-index: 2;
+  background-color: rgb(37, 78, 225);
+}
+.snake-body2 {
+  background-color: rgb(50, 93, 247);
+  border-radius: 30%;
+  position: absolute;
+  transition: all 100ms linear;
+}
 .snake {
   position: absolute;
   border-radius: 30%;
@@ -434,7 +453,19 @@ body {
 .moveSnake {
   animation: snakeStart 100ms linear;
 }
-
+.moveSnake2 {
+  animation: snakeStart2 100ms linear;
+}
+@keyframes snakeStart2 {
+  0% {
+    top: var(--fromY2);
+    left: var(--fromX2);
+  }
+  100% {
+    top: var(--toY2);
+    left: var(--toX2);
+  }
+}
 @keyframes snakeStart {
   0% {
     top: var(--fromY);

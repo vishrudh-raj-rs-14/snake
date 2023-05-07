@@ -23,7 +23,8 @@ let gameState = (state = {
   oldDirY: 0,
   load: false,
 });
-let PercentOfObstacles = 20;
+let PercentOfObstacles = 15;
+let coopPlay = false;
 let PercentOfMovingObstacles = 10;
 const gameBg = document.querySelector(".game-bg");
 const go = document.querySelector(".go");
@@ -38,6 +39,7 @@ const load = document.querySelector("#load2");
 console.log(load);
 const menu = document.querySelector(".settings-modal");
 let snakeHead = document.querySelector(".snake");
+let snakeHead2;
 let soundEffect = document.querySelector(".soundEffect");
 let muteMusic = document.querySelector(".music");
 const text = document.querySelector(".textContent");
@@ -50,10 +52,14 @@ let obstacles = [];
 let movingObstacle = [];
 const maxTime = 60;
 let oldDirX;
+let oldDirX2;
 let oldDirY;
+let oldDirY2;
 let oldSnake = [];
+let oldSnake2 = [];
 let lives = LIVES;
 let portaled = false;
+let portaled2 = false;
 let delayed = true;
 let eat = new Audio("./assets/eat.mp3");
 let power = new Audio("./assets/power.mp3");
@@ -117,7 +123,7 @@ const powerUp = [
   {
     name: "speedDecrease",
     color: "#32de84",
-    do: () => {
+    do: (n = 0) => {
       if (DIMENSIONS == 20) speed -= 1;
       else speed -= 1;
     },
@@ -126,11 +132,19 @@ const powerUp = [
   {
     name: "lengthDec",
     color: "#318CE7",
-    do: () => {
-      if (snake.length <= 2) return;
-      for (let i = 0; i < 2; i++) {
-        let body = snake.pop();
-        body.parentNode.removeChild(body);
+    do: (n = 0) => {
+      if (n == 0) {
+        if (snake.length <= 2) return;
+        for (let i = 0; i < 2; i++) {
+          let body = snake.pop();
+          body.parentNode.removeChild(body);
+        }
+      } else {
+        if (snake2.length <= 2) return;
+        for (let i = 0; i < 2; i++) {
+          let body = snake2.pop();
+          body.parentNode.removeChild(body);
+        }
       }
     },
     img: "./assets/snake.png",
@@ -138,7 +152,7 @@ const powerUp = [
   {
     name: "increaseTime",
     color: "#FEBE10",
-    do: () => {
+    do: (n = 0) => {
       curTime -= 10;
     },
     img: "./assets/clock.png",
@@ -146,7 +160,7 @@ const powerUp = [
   {
     name: "increaseSpeed",
     color: "#FF033E",
-    do: () => {
+    do: (n = 0) => {
       speed += 2;
     },
     img: "./assets/lightning.png",
@@ -183,6 +197,7 @@ let letters = [];
 let height = gameBg.getBoundingClientRect().height;
 let pixelSize = gameBg.getBoundingClientRect().height / DIMENSIONS;
 let snake = [snakeHead];
+let snake2 = [snakeHead2];
 const resume = document.querySelector("#resume");
 const restart = document.querySelector("#restart");
 snakeHead.style.height = `${pixelSize}px`;
@@ -475,8 +490,10 @@ function elementsOverlap(el1, el2) {
 }
 
 let dirX = 0;
+let dirX2 = 0;
 let dirY = 0;
-let moved = false;
+let dirY2 = 0;
+let moved = true;
 
 document.querySelector(".mob").addEventListener("click", () => {
   if (waitingToRestart) {
@@ -525,6 +542,7 @@ window.addEventListener("keydown", (e) => {
     }
     if (
       (e.key == "w" || e.key == "ArrowUp") &&
+      !coopPlay &&
       dirY != -1 &&
       moved &&
       delayed
@@ -536,6 +554,7 @@ window.addEventListener("keydown", (e) => {
       dirY = 1;
     } else if (
       (e.key == "a" || e.key == "ArrowLeft") &&
+      !coopPlay &&
       dirX != 1 &&
       moved &&
       delayed
@@ -547,6 +566,7 @@ window.addEventListener("keydown", (e) => {
       dirY = 0;
     } else if (
       (e.key == "s" || e.key == "ArrowDown") &&
+      !coopPlay &&
       dirY != 1 &&
       moved &&
       delayed
@@ -558,6 +578,7 @@ window.addEventListener("keydown", (e) => {
       dirY = -1;
     } else if (
       (e.key == "d" || e.key == "ArrowRight") &&
+      !coopPlay &&
       dirX != -1 &&
       moved &&
       delayed
@@ -567,6 +588,141 @@ window.addEventListener("keydown", (e) => {
       save.classList.remove("disabled");
       dirX = 1;
       dirY = 0;
+    }
+  }
+});
+
+window.addEventListener("keydown", (e) => {
+  if (coopPlay) {
+    if (!paused) {
+      if (!started && delayed) {
+        gameBgm.volume = 0.18;
+        gameBgm.play();
+        //   curTime = 0;
+
+        if (interval) clearInterval(interval);
+        interval = setInterval(() => {
+          if (!paused) {
+            curTime += 1;
+          }
+          if (curTime % 5 == 0 && !paused) {
+            speed += DIMENSIONS == 30 ? 0.5 : 1;
+          }
+          if (curTime % 15 == 0 && !paused) {
+            createPower();
+          }
+          time.textContent = `${String(
+            Math.floor((maxTime - curTime) / 60)
+          ).padStart(2, "0")}:${String(
+            Math.floor((maxTime - curTime) % 60)
+          ).padStart(2, "0")}`;
+          time2.textContent = `${String(
+            Math.floor((maxTime - curTime) / 60)
+          ).padStart(2, "0")}:${String(
+            Math.floor((maxTime - curTime) % 60)
+          ).padStart(2, "0")}`;
+        }, 1000);
+      }
+      if (e.key == "r" && waitingToRestart) {
+        waitingToRestart = false;
+        curTime = 0;
+        reset(true);
+        gameLoop();
+      }
+      // console.log(e.key, moved);
+
+      if (e.key == "w" && dirY != -1 && moved && delayed) {
+        moved = false;
+        started = true;
+        save.classList.remove("disabled");
+        dirX = 0;
+        dirY = 1;
+      } else if (e.key == "a" && dirX != 1 && moved && delayed) {
+        moved = false;
+        started = true;
+        save.classList.remove("disabled");
+        dirX = -1;
+        dirY = 0;
+      } else if (e.key == "s" && dirY != 1 && moved && delayed) {
+        moved = false;
+        started = true;
+        save.classList.remove("disabled");
+        dirX = 0;
+        dirY = -1;
+      } else if (e.key == "d" && dirX != -1 && moved && delayed) {
+        moved = false;
+        started = true;
+        save.classList.remove("disabled");
+        dirX = 1;
+        dirY = 0;
+      }
+    }
+  }
+});
+window.addEventListener("keydown", (e) => {
+  if (coopPlay) {
+    if (!paused) {
+      if (!started && delayed) {
+        gameBgm.volume = 0.18;
+        gameBgm.play();
+        //   curTime = 0;
+
+        if (interval) clearInterval(interval);
+        interval = setInterval(() => {
+          if (!paused) {
+            curTime += 1;
+          }
+          if (curTime % 5 == 0 && !paused) {
+            speed += DIMENSIONS == 30 ? 0.5 : 1;
+          }
+          if (curTime % 15 == 0 && !paused) {
+            createPower();
+          }
+          time.textContent = `${String(
+            Math.floor((maxTime - curTime) / 60)
+          ).padStart(2, "0")}:${String(
+            Math.floor((maxTime - curTime) % 60)
+          ).padStart(2, "0")}`;
+          time2.textContent = `${String(
+            Math.floor((maxTime - curTime) / 60)
+          ).padStart(2, "0")}:${String(
+            Math.floor((maxTime - curTime) % 60)
+          ).padStart(2, "0")}`;
+        }, 1000);
+      }
+      if (e.key == "r" && waitingToRestart) {
+        waitingToRestart = false;
+        curTime = 0;
+        reset(true);
+        gameLoop();
+      }
+      console.log(e.key, moved2);
+
+      if (e.key == "ArrowUp" && dirY2 != -1 && moved2 && delayed) {
+        moved2 = false;
+        started = true;
+        save.classList.remove("disabled");
+        dirX2 = 0;
+        dirY2 = 1;
+      } else if (e.key == "ArrowLeft" && dirX2 != 1 && moved2 && delayed) {
+        moved2 = false;
+        started = true;
+        save.classList.remove("disabled");
+        dirX2 = -1;
+        dirY2 = 0;
+      } else if (e.key == "ArrowDown" && dirY2 != 1 && moved2 && delayed) {
+        moved2 = false;
+        started = true;
+        save.classList.remove("disabled");
+        dirX2 = 0;
+        dirY2 = -1;
+      } else if (e.key == "ArrowRight" && dirX2 != -1 && moved2 && delayed) {
+        moved2 = false;
+        started = true;
+        save.classList.remove("disabled");
+        dirX2 = 1;
+        dirY2 = 0;
+      }
     }
   }
 });
@@ -756,6 +912,25 @@ function createSnakeBody(arr) {
     body.style.top = `${parseInt(arr[i][1]) * pixelSize}px`;
     body.style.left = `${parseInt(arr[i][0]) * pixelSize}px`;
     body.classList.add("snake-body");
+    body.dataset.x = parseInt(arr[i][0]);
+    body.dataset.y = parseInt(arr[i][1]);
+    snakeNew.push(body);
+    gameBg.append(body);
+  }
+  return snakeNew;
+}
+
+function createSnakeBody2(arr) {
+  let snakeNew = [];
+  for (let i = 0; i < arr.length; i++) {
+    const body = document.createElement("div");
+    body.style.width = `${pixelSize}px`;
+    body.style.height = `${pixelSize}px`;
+    body.style.top = `${parseInt(arr[i][1]) * pixelSize}px`;
+    body.style.left = `${parseInt(arr[i][0]) * pixelSize}px`;
+    body.dataset.x = parseInt(arr[i][0]);
+    body.dataset.y = parseInt(arr[i][1]);
+    body.classList.add("snake-body2");
     snakeNew.push(body);
     gameBg.append(body);
   }
@@ -771,6 +946,19 @@ function increaseSnakeSize(n = 1) {
     body.style.left = `${parseInt(snake[snake.length - 1].style.left)}px`;
     body.classList.add("snake-body");
     snake.push(body);
+    gameBg.append(body);
+  }
+}
+function increaseSnakeSize2(n = 1) {
+  for (let i = 0; i < n; i++) {
+    const body = document.createElement("div");
+    body.style.width = `${pixelSize}px`;
+    body.style.height = `${pixelSize}px`;
+    body.style.top = `${parseInt(snake2[snake2.length - 1].style.top)}px`;
+    body.style.left = `${parseInt(snake2[snake2.length - 1].style.left)}px`;
+    body.classList.add("snake-body2");
+    console.log(body);
+    snake2.push(body);
     gameBg.append(body);
   }
 }
@@ -848,7 +1036,10 @@ function placeObstacle(arr) {
 function createObstacle() {
   obstacles.splice(0, obstacles.length);
   let noOFObsatcles = (PercentOfObstacles * DIMENSIONS) / 100;
-  let obs = [];
+  let obs = [`${snakeHead.dataset.x},${snakeHead.dataset.y}`];
+  if (coopPlay) {
+    obs.push(`${snakeHead2.dataset.x},${snakeHead2.dataset.y}`);
+  }
   for (let i = 0; i < noOFObsatcles; i++) {
     let x = Math.floor(Math.random() * DIMENSIONS);
     let y = Math.floor(Math.random() * DIMENSIONS);
@@ -899,7 +1090,11 @@ function placeMovingObstacle(arr) {
 function createMovingObstacle() {
   movingObstacle = [];
   let noOfMovingObsatcles = (PercentOfMovingObstacles / 100) * DIMENSIONS;
-  let obs = [];
+  let noOFObsatcles = (PercentOfObstacles * DIMENSIONS) / 100;
+  let obs = [`${snakeHead.dataset.x},${snakeHead.dataset.y}`];
+  if (coopPlay) {
+    obs.push(`${snakeHead2.dataset.x},${snakeHead2.dataset.y}`);
+  }
   let newobs = [];
   let restrict = [];
   restrict.push(parseInt(snakeHead.dataset.x));
@@ -938,15 +1133,15 @@ function createMovingObstacle() {
     }
     for (let j = 0; j < obstacles.length; j++) {
       for (
-        k = parseInt(obstacles[j].dataset.x) - block;
-        k < parseInt(obstacles[j].dataset.x) + block + 1;
+        k = parseInt(obstacles[j].dataset.x) - block - 1;
+        k < parseInt(obstacles[j].dataset.x) + block + 2;
         k++
       ) {
         newobs.push(`${k},${obstacles[j].dataset.y}`);
       }
       for (
-        k = parseInt(obstacles[j].dataset.y) - block;
-        k < parseInt(obstacles[j].dataset.y) + block + 1;
+        k = parseInt(obstacles[j].dataset.y) - block - 1;
+        k < parseInt(obstacles[j].dataset.y) + block + 2;
         k++
       ) {
         newobs.push(`${obstacles[j].dataset.x},${k}`);
@@ -1025,7 +1220,11 @@ function placePortal(arr) {
 function createPortal() {
   let portal1 = document.createElement("div");
   let portal2 = document.createElement("div");
-  let obs = [];
+  let noOFObsatcles = (PercentOfObstacles * DIMENSIONS) / 100;
+  let obs = [`${snakeHead.dataset.x},${snakeHead.dataset.y}`];
+  if (coopPlay) {
+    obs.push(`${snakeHead2.dataset.x},${snakeHead2.dataset.y}`);
+  }
   for (let i = 0; i < obstacles.length; i++) {
     obs.push(`${obstacles[i].dataset.x},${obstacles[i].dataset.y}`);
   }
@@ -1100,12 +1299,20 @@ function reset(
     oldDirX: 0,
     oldDirY: 0,
     load: false,
-  }
+  },
+  coop = false
 ) {
+  // console.log(state);
   DIMENSIONS = state.dimension;
   go.classList.add("hide");
   delayed = false;
-  gameBg.innerHTML = `<div class="snake"></div><div class="time2">00:00</div>`;
+  if (coop) {
+    coopPlay = true;
+    gameBg.innerHTML = `<div class="snake"></div><div class="snake2"></div><div class="time2">00:00</div>`;
+  } else {
+    coopPlay = false;
+    gameBg.innerHTML = `<div class="snake"></div><div class="time2">00:00</div>`;
+  }
   setTimeout(() => {
     delayed = true;
   }, 500);
@@ -1150,26 +1357,99 @@ function reset(
   speed = SPEED;
   dirX = state.dirX;
   dirY = state.dirY;
+  if (coop) {
+    dirX2 = 0;
+    dirY2 = 0;
+  }
   oldDirX = 0;
   oldDirY = 0;
+  oldDirX2 = 0;
+  oldDirY2 = 0;
   for (let i = 0; i < oldSnake.length; i++) {
     if (oldSnake[i].parentNode) {
       oldSnake[i].parentNode.removeChild(oldSnake[i]);
     }
   }
+  for (let i = 0; i < oldSnake2.length; i++) {
+    if (oldSnake2[i].parentNode) {
+      oldSnake2[i].parentNode.removeChild(oldSnake2[i]);
+    }
+  }
   oldSnake = createSnakeBody(state.oldSnake);
+  if (state.oldSnake2 && coop) {
+    oldSnake2 = createSnakeBody2(state.oldSnake2);
+  } else if (coop) {
+    oldSnake2 = [];
+  }
   snakeHead = document.querySelector(".snake");
   snakeHead.style.height = `${pixelSize}px`;
   snakeHead.style.width = `${pixelSize}px`;
+  if (coop) {
+    snakeHead2 = document.querySelector(".snake2");
+    snakeHead2.style.height = `${pixelSize}px`;
+    snakeHead2.style.width = `${pixelSize}px`;
+  }
   time2 = document.querySelector(".time2");
   started = false;
   moved = false;
+  moved2 = false;
   portals.splice(0, portals.length);
   for (let i = 0; i < movingObstacle.length; i++) {
     if (movingObstacle[i].parentNode)
       movingObstacle[i].parentNode.removeChild(movingObstacle[i]);
   }
+  for (let i = 0; i < snake.length; i++) {
+    if (snake[i]?.parentNode) {
+      snake[i].parentNode.removeChild(snake[i]);
+    }
+  }
+  if (coop) {
+    for (let i = 0; i < snake2.length; i++) {
+      console.log(snake2[i]);
+      if (snake2[i]) {
+        if (snake2[i].parentNode) {
+          snake2[i].parentNode.removeChild(snake2[i]);
+        }
+      }
+    }
+  }
   movingObstacle = [];
+  snake = [
+    snakeHead,
+    ...createSnakeBody(state.snake.slice(1, state.snake.length)),
+  ];
+  if (coop && state.snake2) {
+    snake2 = [
+      snakeHead2,
+      ...createSnakeBody2(state.snake2.slice(1, state.snake2.length)),
+    ];
+  } else if (coop) {
+    snake2 = [snakeHead2];
+  }
+  let curPosX = state.curPosX;
+  let curPosY = state.curPosY;
+  snakeHead.dataset.x = curPosX;
+  snakeHead.dataset.y = curPosY;
+  snakeHead.style.top = `${curPosY * pixelSize}px`;
+  snakeHead.style.left = `${curPosX * pixelSize}px`;
+  console.log(state.curPosX2, state.curPosY2);
+  if (state.curPosX2 && state.curPosY2) {
+    snakeHead2.dataset.x = parseInt(state.curPosX2);
+    snakeHead2.dataset.y = parseInt(state.curPosY2);
+    snakeHead2.style.top = `${parseInt(state.curPosY2) * pixelSize}px`;
+    snakeHead2.style.left = `${parseInt(state.curPosX2) * pixelSize}px`;
+  } else if (coop) {
+    let x = Math.floor(Math.random() * DIMENSIONS);
+    let y = Math.floor(Math.random() * DIMENSIONS);
+    while (x == curPosX && y == curPosY) {
+      x = Math.floor(Math.random() * DIMENSIONS);
+      y = Math.floor(Math.random() * DIMENSIONS);
+    }
+    snakeHead2.dataset.x = x;
+    snakeHead2.dataset.y = y;
+    snakeHead2.style.top = `${y * pixelSize}px`;
+    snakeHead2.style.left = `${x * pixelSize}px`;
+  }
   if (state.load) {
     placeObstacle(state.obstacles);
     placePortal(state.portals);
@@ -1192,27 +1472,13 @@ function reset(
   ).padStart(2, "0")}:${String(
     Math.floor((maxTime - state.curTime) % 60)
   ).padStart(2, "0")}`;
-  for (let i = 0; i < snake.length; i++) {
-    if (snake[i].parentNode) {
-      snake[i].parentNode.removeChild(snake[i]);
-    }
-  }
 
-  snake = [
-    snakeHead,
-    ...createSnakeBody(state.snake.slice(1, state.snake.length)),
-  ];
   //   Array.from(document.querySelectorAll(".snake-body")).forEach((ele) => {
   //     if (!snake.includes(ele)) {
   //       ele.parentElement.removeChild(ele);
   //     }
   //   });
-  let curPosX = state.curPosX;
-  let curPosY = state.curPosY;
-  snakeHead.dataset.x = curPosX;
-  snakeHead.dataset.y = curPosY;
-  snakeHead.style.top = `${curPosY * pixelSize}px`;
-  snakeHead.style.left = `${curPosX * pixelSize}px`;
+
   gameoverCollide = false;
   spikeCollide();
   if (all) {
@@ -1404,7 +1670,31 @@ restart.addEventListener("click", (e) => {
   menu.classList.add("hide");
   resume.classList.remove("disabled");
   setting.querySelector("img").classList.remove("onclick");
-  reset(true);
+  reset(
+    true,
+    {
+      dimension: DIMENSIONS,
+      snake: [],
+      oldSnake: [],
+      dirX: 0,
+      dirY: 0,
+      obstacles: [],
+      letters: [],
+      speed: SPEED,
+      curTime: 0,
+      portals: [],
+      score: 0,
+      index: 0,
+      curPosX: Math.floor(Math.random() * DIMENSIONS),
+      curPosY: Math.floor(Math.random() * DIMENSIONS),
+      snakeHead: undefined,
+      lives: LIVES,
+      oldDirX: 0,
+      oldDirY: 0,
+      load: false,
+    },
+    coopPlay
+  );
 });
 
 function CheckGameOver() {
@@ -1424,10 +1714,27 @@ function CheckGameOver() {
     snakeHead.style.left = `${height - height / DIMENSIONS}px`;
     return true;
   }
+  if (coopPlay) {
+    let top = parseInt(snakeHead2.style.top);
+    let left = parseInt(snakeHead2.style.left);
+    if (top < 0) {
+      snakeHead2.style.top = 0;
+      return true;
+    } else if (top > height - height / DIMENSIONS) {
+      snakeHead2.style.top = `${height - height / DIMENSIONS}px`;
+      return true;
+    }
+    if (left < 0) {
+      snakeHead2.style.left = 0;
+      return true;
+    } else if (left > height - height / DIMENSIONS) {
+      snakeHead2.style.left = `${height - height / DIMENSIONS}px`;
+      return true;
+    }
+  }
 
   if (curTime >= maxTime) return true;
   let game = gameBg.getBoundingClientRect();
-  let snakeHeadRect = snake[0].getBoundingClientRect();
   for (let i = 0; i < obstacles.length; i++) {
     if (elementsOverlap(snakeHead, obstacles[i])) {
       snakeHead.style.top = `${
@@ -1438,6 +1745,21 @@ function CheckGameOver() {
       }px`;
       dirX = 0;
       dirY = 0;
+      dirX2 = 0;
+      dirY2 = 0;
+      return true;
+    }
+    if (coopPlay && elementsOverlap(snakeHead2, obstacles[i])) {
+      snakeHead2.style.top = `${
+        parseInt(snakeHead2.style.top) + 1 * dirY * pixelSize
+      }px`;
+      snakeHead2.style.left = `${
+        parseInt(snakeHead2.style.left) + -1 * dirX * pixelSize
+      }px`;
+      dirX = 0;
+      dirY = 0;
+      dirX2 = 0;
+      dirY2 = 0;
       return true;
     }
   }
@@ -1445,10 +1767,28 @@ function CheckGameOver() {
   for (let i = 3; i < snake.length; i++) {
     if (elementsOverlap(snake[i], snakeHead)) return true;
   }
+  if (coopPlay) {
+    for (let i = 3; i < snake2.length; i++) {
+      if (elementsOverlap(snake2[i], snakeHead2)) return true;
+    }
+    for (let i = 0; i < snake.length; i++) {
+      for (let j = 0; j < snake2.length; j++) {
+        if (elementsOverlap(snake[i], snake2[j])) return true;
+      }
+    }
+  }
   for (let i = 0; i < oldSnake.length; i++) {
     if (elementsOverlap(snakeHead, oldSnake[i])) return true;
-    for (let j = 0; j < movingObstacle.length; j++) {
-      if (elementsOverlap(oldSnake[i], movingObstacle[j])) return true;
+  }
+  if (coopPlay) {
+    for (let i = 0; i < oldSnake2.length; i++) {
+      if (elementsOverlap(snakeHead2, oldSnake2[i])) return true;
+    }
+    for (let i = 0; i < oldSnake2.length; i++) {
+      if (elementsOverlap(snakeHead, oldSnake2[i])) return true;
+    }
+    for (let i = 0; i < oldSnake.length; i++) {
+      if (elementsOverlap(snakeHead2, oldSnake[i])) return true;
     }
   }
 
@@ -1471,6 +1811,53 @@ function spikeCollide() {
       }
     }
   }
+  for (let i = 0; i < oldSnake.length; i++) {
+    for (let j = 0; j < movingObstacle.length; j++) {
+      let object_1 = oldSnake[i].getBoundingClientRect();
+      let object_2 = movingObstacle[j].getBoundingClientRect();
+      if (
+        object_1.left < object_2.left + object_2.width &&
+        object_1.left + object_1.width > object_2.left &&
+        object_1.top < object_2.top + object_2.height &&
+        object_1.top + object_1.height > object_2.top
+      ) {
+        gameoverCollide = true;
+        return;
+      }
+    }
+  }
+  if (coopPlay) {
+    for (let i = 0; i < snake2.length; i++) {
+      for (let j = 0; j < movingObstacle.length; j++) {
+        let object_1 = snake2[i].getBoundingClientRect();
+        let object_2 = movingObstacle[j].getBoundingClientRect();
+        if (
+          object_1.left < object_2.left + object_2.width &&
+          object_1.left + object_1.width > object_2.left &&
+          object_1.top < object_2.top + object_2.height &&
+          object_1.top + object_1.height > object_2.top
+        ) {
+          gameoverCollide = true;
+          return;
+        }
+      }
+    }
+    for (let i = 0; i < oldSnake2.length; i++) {
+      for (let j = 0; j < movingObstacle.length; j++) {
+        let object_1 = oldSnake2[i].getBoundingClientRect();
+        let object_2 = movingObstacle[j].getBoundingClientRect();
+        if (
+          object_1.left < object_2.left + object_2.width &&
+          object_1.left + object_1.width > object_2.left &&
+          object_1.top < object_2.top + object_2.height &&
+          object_1.top + object_1.height > object_2.top
+        ) {
+          gameoverCollide = true;
+          return;
+        }
+      }
+    }
+  }
   window.requestAnimationFrame(spikeCollide);
 }
 
@@ -1478,10 +1865,20 @@ function gameLoop() {
   if (!paused) {
     for (let i = 0; i < powers.length; i++) {
       if (elementsOverlap(snakeHead, powers[i][0])) {
-        powers[i][1].do();
+        powers[i][1].do(0);
         powers[i][0].parentNode.removeChild(powers[i][0]);
         power.play();
         powers.splice(i, 1);
+      }
+    }
+    if (coop) {
+      for (let i = 0; i < powers.length; i++) {
+        if (elementsOverlap(snakeHead2, powers[i][0])) {
+          powers[i][1].do(1);
+          powers[i][0].parentNode.removeChild(powers[i][0]);
+          power.play();
+          powers.splice(i, 1);
+        }
       }
     }
     if (maxTime - curTime <= 15) {
@@ -1580,6 +1977,34 @@ function gameLoop() {
           }
           scoreEle.textContent = score;
         }
+        if (coopPlay && elementsOverlap(letters[i], snakeHead2)) {
+          if (letters[i].textContent == currentWord[index].toUpperCase()) {
+            letters[i].parentNode.removeChild(letters[i]);
+            text.innerHTML = `<span class="colorTextGreen">${currentWord
+              .toUpperCase()
+              .slice(0, index + 1)}</span>${currentWord
+              .toUpperCase()
+              .slice(index + 1, currentWord.length)}`;
+            letters.splice(i, 1);
+            score += 10;
+            eat.play();
+            increaseSnakeSize2();
+            index++;
+          } else {
+            text.innerHTML = `<span class="colorTextGreen">${currentWord
+              .toUpperCase()
+              .slice(0, index)}</span><span class="colorTextRed">${currentWord
+              .toUpperCase()
+              .slice(index, index + 1)}</span>${currentWord
+              .toUpperCase()
+              .slice(index + 1, currentWord.length)}`;
+            hiss.play();
+            increaseSnakeSize2(2);
+            curTime += 3;
+            score -= 5;
+          }
+          scoreEle.textContent = score;
+        }
       }
     }
 
@@ -1617,6 +2042,31 @@ function gameLoop() {
       gameBg.append(ele);
       snake.push(ele);
     }
+    if (oldSnake2.length != 0 && started && !gameoverCollide && coopPlay) {
+      for (let i = oldSnake2.length - 1; i > 0; i--) {
+        oldSnake2[i].style.top = `${parseInt(oldSnake2[i - 1].style.top)}px`;
+        oldSnake2[i].style.left = `${parseInt(oldSnake2[i - 1].style.left)}px`;
+        oldSnake2[i].dataset.x = oldSnake2[i - 1].dataset.x;
+        oldSnake2[i].dataset.y = oldSnake2[i - 1].dataset.y;
+      }
+      let clone = [
+        snake2[snake2.length - 1].style.top,
+        snake2[snake2.length - 1].style.left,
+      ];
+      let ele = document.createElement("div");
+
+      oldSnake2[0].parentElement.removeChild(oldSnake2[0]);
+      oldSnake2.shift();
+      ele.style.height = `${pixelSize}px`;
+      ele.style.width = `${pixelSize}px`;
+      ele.dataset.x = snake2[snake2.length - 1].dataset.x;
+      ele.dataset.y = snake2[snake2.length - 1].dataset.y;
+      ele.style.top = clone[0];
+      ele.style.left = clone[1];
+      ele.classList.add("snake-body2");
+      gameBg.append(ele);
+      snake2.push(ele);
+    }
     for (let i = 0; i < portals.length; i++) {
       if (elementsOverlap(snakeHead, portals[i])) {
         if (oldSnake.length != 0) {
@@ -1648,6 +2098,7 @@ function gameLoop() {
             return;
           }
         }
+
         oldDirX = dirX;
         oldDirY = dirY;
         oldSnake = [...snake.slice(1)];
@@ -1680,6 +2131,69 @@ function gameLoop() {
         portaled = true;
         break;
       }
+      if (coopPlay && elementsOverlap(snakeHead2, portals[i])) {
+        if (oldSnake2.length != 0) {
+          if (score > highScore) {
+            highScore = score;
+            highScoreEle.textContent = highScore;
+            localStorage.setItem("highScore", highScore);
+          }
+          // started = false;
+          time.textContent = `00:00`;
+          time2.textContent = `00:00`;
+          clearInterval(interval);
+          lives--;
+          let hearts = Array.from(heart.querySelectorAll(".heartContent"));
+          hearts[lives].classList.add("blinking");
+          if (lives > 0) {
+            hiss.play();
+            paused = true;
+            setTimeout(() => {
+              paused = false;
+              reset();
+            }, 300);
+          } else {
+            gameBgm.pause();
+            gameBgm.currentTime = 0;
+            goAudio.play();
+            go.classList.remove("hide");
+            waitingToRestart = true;
+            return;
+          }
+        }
+
+        oldDirX2 = dirX2;
+        oldDirY2 = dirY2;
+        oldSnake2 = [...snake2.slice(1)];
+        snakeHead2.parentElement.removeChild(snakeHead2);
+        snake2.splice(0, 1);
+        let ele = document.createElement("div");
+        ele.classList.add("snake2");
+        // ele.classList.add("snakeMove");
+        ele.style.height = `${pixelSize}px`;
+        ele.style.width = `${pixelSize}px`;
+        ele.dataset.x = parseInt(portals[i].dataset.teleportX);
+        ele.dataset.y = parseInt(portals[i].dataset.teleportY);
+        ele.style.top = `${
+          parseInt(portals[i].dataset.teleportY) * pixelSize
+        }px`;
+        ele.style.left = `${
+          parseInt(portals[i].dataset.teleportX) * pixelSize
+        }px`;
+        root.style.setProperty(
+          "--fromX2",
+          `${parseInt(portals[i].dataset.teleportX) * pixelSize}px`
+        );
+        root.style.setProperty(
+          "--fromY2",
+          `${parseInt(portals[i].dataset.teleportY) * pixelSize}px`
+        );
+        gameBg.append(ele);
+        snake2 = [ele];
+        snakeHead2 = ele;
+        portaled2 = true;
+        break;
+      }
     }
     if (started && !gameoverCollide) {
       for (let i = snake.length - 1; i > 0; i--) {
@@ -1687,6 +2201,14 @@ function gameLoop() {
         snake[i].style.left = `${parseInt(snake[i - 1].style.left)}px`;
         snake[i].dataset.x = snake[i - 1].dataset.x;
         snake[i].dataset.y = snake[i - 1].dataset.y;
+      }
+      if (coopPlay) {
+        for (let i = snake2.length - 1; i > 0; i--) {
+          snake2[i].style.top = `${parseInt(snake2[i - 1].style.top)}px`;
+          snake2[i].style.left = `${parseInt(snake2[i - 1].style.left)}px`;
+          snake2[i].dataset.x = snake2[i - 1].dataset.x;
+          snake2[i].dataset.y = snake2[i - 1].dataset.y;
+        }
       }
     }
     root.style.setProperty(
@@ -1697,9 +2219,25 @@ function gameLoop() {
       "--toY",
       `${parseInt(snakeHead.style.top) + 1 * pixelSize * dirY * -1}px`
     );
+    if (coopPlay) {
+      root.style.setProperty(
+        "--toX2",
+        `${parseInt(snakeHead2.style.left) + 1 * pixelSize * dirX}px`
+      );
+      root.style.setProperty(
+        "--toY2",
+        `${parseInt(snakeHead2.style.top) + 1 * pixelSize * dirY * -1}px`
+      );
+    }
     if (portaled) {
       snakeHead.classList.add("moveSnake");
       portaled = false;
+    } else {
+      //   snakeHead.classList.remove("snakeMove");
+    }
+    if (portaled2 && coopPlay) {
+      snakeHead2.classList.add("moveSnake2");
+      portaled2 = false;
     } else {
       //   snakeHead.classList.remove("snakeMove");
     }
@@ -1713,8 +2251,18 @@ function gameLoop() {
         parseInt(snakeHead.style.left) + 1 * pixelSize * dirX
       }px`;
     }
-
+    if (coopPlay && started && !gameoverCollide) {
+      snakeHead2.dataset.x = parseInt(snakeHead2.dataset.x) + 1 * dirX2;
+      snakeHead2.dataset.y = parseInt(snakeHead2.dataset.y) + -1 * dirY2;
+      snakeHead2.style.top = `${
+        parseInt(snakeHead2.style.top) + 1 * pixelSize * dirY2 * -1
+      }px`;
+      snakeHead2.style.left = `${
+        parseInt(snakeHead2.style.left) + 1 * pixelSize * dirX2
+      }px`;
+    }
     moved = true;
+    moved2 = true;
     if (CheckGameOver()) {
       curTime = 0;
       if (score > highScore) {
@@ -1735,7 +2283,31 @@ function gameLoop() {
         paused = true;
         setTimeout(() => {
           paused = false;
-          reset();
+          reset(
+            false,
+            {
+              dimension: DIMENSIONS,
+              snake: [],
+              oldSnake: [],
+              dirX: 0,
+              dirY: 0,
+              obstacles: [],
+              letters: [],
+              speed: SPEED,
+              curTime: 0,
+              portals: [],
+              score: 0,
+              index: 0,
+              curPosX: Math.floor(Math.random() * DIMENSIONS),
+              curPosY: Math.floor(Math.random() * DIMENSIONS),
+              snakeHead: undefined,
+              lives: LIVES,
+              oldDirX: 0,
+              oldDirY: 0,
+              load: false,
+            },
+            coopPlay
+          );
         }, 300);
       } else {
         gameBgm.pause();
@@ -1753,60 +2325,79 @@ function gameLoop() {
 reset(true, gameState);
 gameLoop();
 spikeCollide();
-window.onresize = () =>
-  reset(true, {
-    snake: snake.map((ele) => [
-      parseInt(ele.dataset.x),
-      parseInt(ele.dataset.y),
-    ]),
-    oldSnake: oldSnake.map((ele) => [
-      parseInt(ele.dataset.x),
-      parseInt(ele.dataset.y),
-    ]),
-    dimension: DIMENSIONS,
-    dirX,
-    dirY,
-    movingObstacle: movingObstacle.map((ele) => {
-      return {
-        x: ele.dataset.x,
-        y: ele.dataset.y,
-        height: ele.dataset.height,
-        width: ele.dataset.width,
-        top: ele.dataset.top,
-        left: ele.dataset.left,
-        orgX: ele.dataset.orgX,
-        orgY: ele.dataset.orgY,
-        dir: ele.dataset.dir,
-        movDir: ele.dataset.movDir,
-        blocks: ele.dataset.blocks,
-        travelled: ele.dataset.travelled,
-      };
-    }),
-    obstacles: obstacles.map((ele) => [
-      parseInt(ele.dataset.x),
-      parseInt(ele.dataset.y),
-    ]),
-    letters: letters.map((ele) => [
-      parseInt(ele.dataset.x),
-      parseInt(ele.dataset.y),
-    ]),
-    speed,
-    portals: portals.map((ele) => [
-      parseInt(ele.dataset.x),
-      parseInt(ele.dataset.y),
-    ]),
-    curTime,
-    score,
-    word: currentWord,
-    curPosX: parseInt(snakeHead.dataset.x),
-    curPosY: parseInt(snakeHead.dataset.y),
-    snakeHead: [parseInt(snakeHead.dataset.x), parseInt(snakeHead.dataset.y)],
-    lives: lives,
-    index,
-    oldDirX,
-    oldDirY,
-    load: true,
-  });
+window.onresize = () => {
+  console.log(snake2);
+  console.log(
+    snake2.map((ele) => [parseInt(ele.dataset.x), parseInt(ele.dataset.y)])
+  );
+  reset(
+    true,
+    {
+      snake: snake.map((ele) => [
+        parseInt(ele.dataset.x),
+        parseInt(ele.dataset.y),
+      ]),
+      snake2: snake2.map((ele) => [
+        parseInt(ele.dataset.x),
+        parseInt(ele.dataset.y),
+      ]),
+      oldSnake: oldSnake.map((ele) => [
+        parseInt(ele.dataset.x),
+        parseInt(ele.dataset.y),
+      ]),
+      oldSnake2: oldSnake2.map((ele) => [
+        parseInt(ele.dataset.x),
+        parseInt(ele.dataset.y),
+      ]),
+      dimension: DIMENSIONS,
+      dirX,
+      dirY,
+      movingObstacle: movingObstacle.map((ele) => {
+        return {
+          x: ele.dataset.x,
+          y: ele.dataset.y,
+          height: ele.dataset.height,
+          width: ele.dataset.width,
+          top: ele.dataset.top,
+          left: ele.dataset.left,
+          orgX: ele.dataset.orgX,
+          orgY: ele.dataset.orgY,
+          dir: ele.dataset.dir,
+          movDir: ele.dataset.movDir,
+          blocks: ele.dataset.blocks,
+          travelled: ele.dataset.travelled,
+        };
+      }),
+      obstacles: obstacles.map((ele) => [
+        parseInt(ele.dataset.x),
+        parseInt(ele.dataset.y),
+      ]),
+      letters: letters.map((ele) => [
+        parseInt(ele.dataset.x),
+        parseInt(ele.dataset.y),
+      ]),
+      speed,
+      portals: portals.map((ele) => [
+        parseInt(ele.dataset.x),
+        parseInt(ele.dataset.y),
+      ]),
+      curTime,
+      score,
+      word: currentWord,
+      curPosX: parseInt(snakeHead.dataset.x),
+      curPosY: parseInt(snakeHead.dataset.y),
+      curPosX2: parseInt(snakeHead2.dataset.x),
+      curPosY2: parseInt(snakeHead2.dataset.y),
+      snakeHead: [parseInt(snakeHead.dataset.x), parseInt(snakeHead.dataset.y)],
+      lives: lives,
+      index,
+      oldDirX,
+      oldDirY,
+      load: true,
+    },
+    coopPlay
+  );
+};
 
 document.querySelector("#exit").addEventListener("click", () => {
   click.play();
@@ -1817,11 +2408,10 @@ document.querySelector("#exit").addEventListener("click", () => {
 
 document.querySelector("#new").addEventListener("click", () => {
   click.play();
-  click.play();
-  console.log("here");
   if (started) {
     gameBgm.play();
   }
+  reset();
   paused = false;
   setting.querySelector("img").classList.remove("onclick");
   menu.classList.add("hide");
@@ -1848,4 +2438,35 @@ Array.from(document.querySelectorAll(".sec")).forEach((ele, index) => {
     document.querySelector(".second").classList.add("hide");
     document.querySelector(".bg").classList.add("hide");
   });
+});
+
+coop.addEventListener("click", () => {
+  console.log("here");
+  reset(
+    true,
+    {
+      dimension: DIMENSIONS,
+      snake: [],
+      oldSnake: [],
+      dirX: 0,
+      dirY: 0,
+      obstacles: [],
+      letters: [],
+      speed: SPEED,
+      curTime: 0,
+      portals: [],
+      score: 0,
+      index: 0,
+      curPosX: Math.floor(Math.random() * DIMENSIONS),
+      curPosY: Math.floor(Math.random() * DIMENSIONS),
+      snakeHead: undefined,
+      lives: LIVES,
+      oldDirX: 0,
+      oldDirY: 0,
+      load: false,
+    },
+    true
+  );
+  document.querySelector(".second").classList.add("hide");
+  document.querySelector(".bg").classList.add("hide");
 });
