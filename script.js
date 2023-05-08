@@ -1949,61 +1949,70 @@ function gameLoop() {
       createWord(word.toUpperCase());
     } else {
       for (let i = 0; i < letters.length; i++) {
-        if (elementsOverlap(letters[i], snakeHead)) {
-          if (letters[i].textContent == currentWord[index].toUpperCase()) {
-            letters[i].parentNode.removeChild(letters[i]);
-            text.innerHTML = `<span class="colorTextGreen">${currentWord
-              .toUpperCase()
-              .slice(0, index + 1)}</span>${currentWord
-              .toUpperCase()
-              .slice(index + 1, currentWord.length)}`;
-            letters.splice(i, 1);
-            score += 10;
-            eat.play();
-            increaseSnakeSize();
-            index++;
-          } else {
-            text.innerHTML = `<span class="colorTextGreen">${currentWord
-              .toUpperCase()
-              .slice(0, index)}</span><span class="colorTextRed">${currentWord
-              .toUpperCase()
-              .slice(index, index + 1)}</span>${currentWord
-              .toUpperCase()
-              .slice(index + 1, currentWord.length)}`;
-            hiss.play();
-            increaseSnakeSize(2);
-            curTime += 3;
-            score -= 5;
+        for (let j = 0; j < snake.length; j++) {
+          if (elementsOverlap(letters[i], snake[j])) {
+            if (letters[i].textContent == currentWord[index].toUpperCase()) {
+              letters[i].parentNode.removeChild(letters[i]);
+              text.innerHTML = `<span class="colorTextGreen">${currentWord
+                .toUpperCase()
+                .slice(0, index + 1)}</span>${currentWord
+                .toUpperCase()
+                .slice(index + 1, currentWord.length)}`;
+              letters.splice(i, 1);
+              score += 10;
+              eat.play();
+              increaseSnakeSize();
+              index++;
+            } else {
+              text.innerHTML = `<span class="colorTextGreen">${currentWord
+                .toUpperCase()
+                .slice(0, index)}</span><span class="colorTextRed">${currentWord
+                .toUpperCase()
+                .slice(index, index + 1)}</span>${currentWord
+                .toUpperCase()
+                .slice(index + 1, currentWord.length)}`;
+              hiss.play();
+              increaseSnakeSize(2);
+              curTime += 3;
+              score -= 5;
+            }
+            scoreEle.textContent = score;
           }
-          scoreEle.textContent = score;
         }
-        if (coopPlay && elementsOverlap(letters[i], snakeHead2)) {
-          if (letters[i].textContent == currentWord[index].toUpperCase()) {
-            letters[i].parentNode.removeChild(letters[i]);
-            text.innerHTML = `<span class="colorTextGreen">${currentWord
-              .toUpperCase()
-              .slice(0, index + 1)}</span>${currentWord
-              .toUpperCase()
-              .slice(index + 1, currentWord.length)}`;
-            letters.splice(i, 1);
-            score += 10;
-            eat.play();
-            increaseSnakeSize2();
-            index++;
-          } else {
-            text.innerHTML = `<span class="colorTextGreen">${currentWord
-              .toUpperCase()
-              .slice(0, index)}</span><span class="colorTextRed">${currentWord
-              .toUpperCase()
-              .slice(index, index + 1)}</span>${currentWord
-              .toUpperCase()
-              .slice(index + 1, currentWord.length)}`;
-            hiss.play();
-            increaseSnakeSize2(2);
-            curTime += 3;
-            score -= 5;
+        if (coopPlay) {
+          for (let j = 0; j < snake2.length; j++) {
+            if (elementsOverlap(letters[i], snake2[j])) {
+              if (letters[i].textContent == currentWord[index].toUpperCase()) {
+                letters[i].parentNode.removeChild(letters[i]);
+                text.innerHTML = `<span class="colorTextGreen">${currentWord
+                  .toUpperCase()
+                  .slice(0, index + 1)}</span>${currentWord
+                  .toUpperCase()
+                  .slice(index + 1, currentWord.length)}`;
+                letters.splice(i, 1);
+                score += 10;
+                eat.play();
+                increaseSnakeSize2();
+                index++;
+              } else {
+                text.innerHTML = `<span class="colorTextGreen">${currentWord
+                  .toUpperCase()
+                  .slice(
+                    0,
+                    index
+                  )}</span><span class="colorTextRed">${currentWord
+                  .toUpperCase()
+                  .slice(index, index + 1)}</span>${currentWord
+                  .toUpperCase()
+                  .slice(index + 1, currentWord.length)}`;
+                hiss.play();
+                increaseSnakeSize2(2);
+                curTime += 3;
+                score -= 5;
+              }
+              scoreEle.textContent = score;
+            }
           }
-          scoreEle.textContent = score;
         }
       }
     }
