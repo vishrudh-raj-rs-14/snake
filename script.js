@@ -1842,36 +1842,37 @@ restart.addEventListener("click", (e) => {
 });
 
 function CheckGameOver() {
-  let top = parseInt(snakeHead.style.top);
-  let left = parseInt(snakeHead.style.left);
+  let top = parseInt(snakeHead.dataset.y);
+  let left = parseInt(snakeHead.dataset.x);
+  console.log(top, left);
   if (top < 0) {
     snakeHead.style.top = 0;
     return true;
-  } else if (top > height - height / DIMENSIONS) {
+  } else if (top >= DIMENSIONS) {
     snakeHead.style.top = `${height - height / DIMENSIONS}px`;
     return true;
   }
   if (left < 0) {
     snakeHead.style.left = 0;
     return true;
-  } else if (left > height - height / DIMENSIONS) {
+  } else if (left >= DIMENSIONS) {
     snakeHead.style.left = `${height - height / DIMENSIONS}px`;
     return true;
   }
   if (coopPlay) {
-    let top = parseInt(snakeHead2.style.top);
-    let left = parseInt(snakeHead2.style.left);
+    let top = parseInt(snakeHead2.dataset.y);
+    let left = parseInt(snakeHead2.dataset.x);
     if (top < 0) {
       snakeHead2.style.top = 0;
       return true;
-    } else if (top > height - height / DIMENSIONS) {
+    } else if (top >= DIMENSIONS) {
       snakeHead2.style.top = `${height - height / DIMENSIONS}px`;
       return true;
     }
     if (left < 0) {
       snakeHead2.style.left = 0;
       return true;
-    } else if (left > height - height / DIMENSIONS) {
+    } else if (left >= DIMENSIONS) {
       snakeHead2.style.left = `${height - height / DIMENSIONS}px`;
       return true;
     }
