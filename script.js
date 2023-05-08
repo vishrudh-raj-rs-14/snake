@@ -66,6 +66,7 @@ let power = new Audio("./assets/power.mp3");
 let goAudio = new Audio("./assets/go.mp3");
 let gameBgm = new Audio("./assets/bgm.mp3");
 gameBgm.loop = true;
+gameBgm.volume = 0.25;
 let click = new Audio("./assets/click.mp3");
 let hiss = new Audio("./assets/hiss.mp3");
 let curTime = 0;
@@ -185,7 +186,7 @@ soundEffect.addEventListener("click", () => {
 
 muteMusic.addEventListener("click", () => {
   if (muteMusic.classList.contains("after-class")) {
-    gameBgm.volume = 0.18;
+    gameBgm.volume = 0.25;
     muteMusic.classList.remove("after-class");
   } else {
     gameBgm.volume = 0;
@@ -278,7 +279,7 @@ document.querySelector(".arrows").addEventListener("touchstart", (e) => {
     if (!paused && (x != 0 || y != 0)) {
       if (!started && delayed) {
         //   gameBgm.loop = true;
-        gameBgm.volume = 0.18;
+        // gameBgm.volume = 0.18;
         gameBgm.play();
         // curTime = 0;
         if (interval) clearInterval(interval);
@@ -410,7 +411,7 @@ window.addEventListener("touchmove", (e) => {
     if (!paused) {
       if (!started && delayed) {
         //   gameBgm.loop = true;
-        gameBgm.volume = 0.18;
+        // gameBgm.volume = 0.18;
         gameBgm.play();
         // curTime = 0;
         if (interval) clearInterval(interval);
@@ -579,7 +580,7 @@ document.querySelector(".mob").addEventListener("click", () => {
 window.addEventListener("keydown", (e) => {
   if (!paused) {
     if (!started && delayed) {
-      gameBgm.volume = 0.18;
+      // gameBgm.volume = 0.18;
       gameBgm.play();
       //   curTime = 0;
 
@@ -692,7 +693,7 @@ window.addEventListener("keydown", (e) => {
   if (coopPlay) {
     if (!paused) {
       if (!started && delayed) {
-        gameBgm.volume = 0.18;
+        // gameBgm.volume = 0.18;
         gameBgm.play();
         //   curTime = 0;
 
@@ -783,7 +784,7 @@ window.addEventListener("keydown", (e) => {
   if (coopPlay) {
     if (!paused) {
       if (!started && delayed) {
-        gameBgm.volume = 0.18;
+        // gameBgm.volume = 0.18;
         gameBgm.play();
         //   curTime = 0;
 
@@ -1289,6 +1290,36 @@ function createMovingObstacle() {
         k++
       ) {
         newobs.push(`${obstacles[j].dataset.x},${k}`);
+      }
+    }
+    for (
+      k = parseInt(snakeHead.dataset.x) - block - 1;
+      k < parseInt(snakeHead.dataset.x) + block + 2;
+      k++
+    ) {
+      newobs.push(`${k},${snakeHead.dataset.y}`);
+    }
+    for (
+      k = parseInt(snakeHead.dataset.y) - block - 1;
+      k < parseInt(snakeHead.dataset.y) + block + 2;
+      k++
+    ) {
+      newobs.push(`${snakeHead.dataset.x},${k}`);
+    }
+    if (coopPlay) {
+      for (
+        k = parseInt(snakeHead2.dataset.x) - block - 1;
+        k < parseInt(snakeHead2.dataset.x) + block + 2;
+        k++
+      ) {
+        newobs.push(`${k},${snakeHead2.dataset.y}`);
+      }
+      for (
+        k = parseInt(snakeHead2.dataset.y) - block - 1;
+        k < parseInt(snakeHead2.dataset.y) + block + 2;
+        k++
+      ) {
+        newobs.push(`${snakeHead2.dataset.x},${k}`);
       }
     }
     let x = Math.floor(Math.random() * DIMENSIONS);
