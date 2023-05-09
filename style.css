@@ -16,9 +16,16 @@
   padding: 0;
   box-sizing: border-box;
 }
-body {
+/* body,
+html {
+  margin: 0;
+  padding: 0;
   width: 100vw;
   height: 100vh;
+} */
+body {
+  width: 100vw;
+  height: calc(100vh - 3px);
   overflow: hidden;
   background-image: url(./assets/jungle_bg.jpg);
   background-repeat: no-repeat;
@@ -388,13 +395,13 @@ body {
 
 .game {
   width: 100vw;
-  padding-top: 10px;
   height: 90vh;
   /* background-color: rgb(7 166 110); */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 
 .sound {
@@ -444,9 +451,18 @@ body {
   background-color: rgb(182 65 65);
 }
 
+.game-bg-holder {
+  width: 600px;
+  height: 600px;
+  position: relative;
+}
+
 .game-bg {
   width: 600px;
   height: 600px;
+  position: absolute;
+  top: 0;
+  left: 0;
   background-color: rgba(0, 0, 0, 0.8);
   box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
     rgba(0, 0, 0, 0.22) 0px 15px 12px;
@@ -681,15 +697,36 @@ body {
   .mob {
     display: block;
   }
-  .game-bg {
+  .game-bg-holder {
     position: relative;
+    width: 360px;
+    height: 360px;
+  }
+  .game-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 360px !important;
     height: 360px !important;
     margin-bottom: 10px;
   }
+  #joystick {
+    position: relative;
+    transform: scale(1);
+    background-color: #210124;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 50px;
+    grid-row: 2;
+  }
   .game {
-    padding: 20px 0 0 0;
+    padding: 50px 0 0 0;
     height: 95vh;
+    justify-content: flex-start;
   }
   .menu-main {
     width: 70vw !important;
@@ -708,13 +745,12 @@ body {
   .text {
     width: 350px;
     height: auto;
-    margin-top: 0px;
 
     /* font-size: 20px; */
   }
 
   body {
-    overflow: scroll;
+    /* overflow: scroll; */
   }
 
   .heart img {
@@ -819,30 +855,34 @@ body {
 
 @media only screen and (min-height: 700px) {
   #joystick {
-    width: 70px;
-    height: 70px;
+    width: 100px;
+    height: 100px;
   }
   #joystick-head {
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
   }
   .joystick-arrow:nth-of-type(1) {
-    bottom: 80px;
-    transform: scale(1.5);
+    bottom: 120px;
+    transform: scale(1.8);
   }
   .joystick-arrow:nth-of-type(2) {
-    top: 80px;
-    transform: scale(1.5);
+    top: 120px;
+    transform: scale(1.8);
   }
   .joystick-arrow:nth-of-type(3) {
-    left: 80px;
-    transform: scale(1.5);
+    left: 120px;
+    transform: scale(1.8);
   }
   .joystick-arrow:nth-of-type(4) {
-    right: 80px;
-    transform: scale(1.5);
+    right: 120px;
+    transform: scale(1.8);
   }
   .arrows {
     margin-top: 10px;
+  }
+  .text {
+    margin-top: 30px;
+    margin-bottom: 30px;
   }
 }

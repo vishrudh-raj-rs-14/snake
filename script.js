@@ -36,7 +36,6 @@ const newGame = document.querySelector("#new");
 const loadGame = document.querySelector("#load");
 const coop = document.querySelector("#coop");
 const load = document.querySelector("#load2");
-console.log(load);
 const menu = document.querySelector(".settings-modal");
 let snakeHead = document.querySelector(".snake");
 let snakeHead2;
@@ -841,7 +840,6 @@ window.addEventListener("keydown", (e) => {
         );
         gameLoop();
       }
-      console.log(e.key, moved2);
 
       if (e.key == "ArrowUp" && dirY2 != -1 && moved2 && delayed) {
         moved2 = false;
@@ -1102,7 +1100,6 @@ function increaseSnakeSize2(n = 1) {
     body.style.top = `${parseInt(snake2[snake2.length - 1].style.top)}px`;
     body.style.left = `${parseInt(snake2[snake2.length - 1].style.left)}px`;
     body.classList.add("snake-body2");
-    console.log(body);
     snake2.push(body);
     gameBg.append(body);
   }
@@ -1477,7 +1474,6 @@ function reset(
   },
   coop = false
 ) {
-  // console.log(state);
   DIMENSIONS = state.dimension;
   go.classList.add("hide");
   delayed = false;
@@ -1580,7 +1576,6 @@ function reset(
   }
   if (coop) {
     for (let i = 0; i < snake2.length; i++) {
-      console.log(snake2[i]);
       if (snake2[i]) {
         if (snake2[i].parentNode) {
           snake2[i].parentNode.removeChild(snake2[i]);
@@ -1607,7 +1602,6 @@ function reset(
   snakeHead.dataset.y = curPosY;
   snakeHead.style.top = `${curPosY * pixelSize}px`;
   snakeHead.style.left = `${curPosX * pixelSize}px`;
-  console.log(state.curPosX2, state.curPosY2);
   if (state.curPosX2 && state.curPosY2) {
     snakeHead2.dataset.x = parseInt(state.curPosX2);
     snakeHead2.dataset.y = parseInt(state.curPosY2);
@@ -1824,7 +1818,6 @@ Array.from(document.querySelectorAll(".load")).forEach((ele, i_) => {
     document.querySelector(".main-menu").classList.remove("hide");
     menu.classList.add("hide");
     click.play();
-    console.log("he");
     if (started) {
       gameBgm.play();
     }
@@ -1836,7 +1829,6 @@ Array.from(document.querySelectorAll(".load")).forEach((ele, i_) => {
 load.addEventListener("click", (e) => {
   document.querySelector(".load-menu").classList.remove("hide");
   document.querySelector(".main-menu").classList.add("hide");
-  console.log("here");
 });
 
 restart.addEventListener("click", (e) => {
@@ -1875,7 +1867,6 @@ restart.addEventListener("click", (e) => {
 function CheckGameOver() {
   let top = parseInt(snakeHead.dataset.y);
   let left = parseInt(snakeHead.dataset.x);
-  console.log(top, left);
   if (top < 0) {
     snakeHead.style.top = 0;
     return true;
@@ -2047,6 +2038,12 @@ function gameLoop() {
         powers.splice(i, 1);
       }
     }
+    console.log(
+      snakeHead.style.height,
+      snakeHead.getBoundingClientRect().height
+    );
+    console.log(gameBg.style.height, snakeHead.getBoundingClientRect().height);
+
     if (coopPlay) {
       for (let i = 0; i < powers.length; i++) {
         if (elementsOverlap(snakeHead2, powers[i][0])) {
@@ -2679,7 +2676,6 @@ Array.from(document.querySelectorAll(".sec")).forEach((ele, index) => {
 });
 
 coop.addEventListener("click", () => {
-  console.log("here");
   reset(
     true,
     {
