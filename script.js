@@ -2038,11 +2038,6 @@ function gameLoop() {
         powers.splice(i, 1);
       }
     }
-    console.log(
-      snakeHead.style.height,
-      snakeHead.getBoundingClientRect().height
-    );
-    console.log(gameBg.style.height, snakeHead.getBoundingClientRect().height);
 
     if (coopPlay) {
       for (let i = 0; i < powers.length; i++) {
@@ -2122,7 +2117,7 @@ function gameLoop() {
       createWord(word.toUpperCase());
     } else {
       for (let i = 0; i < letters.length; i++) {
-        if (elementsOverlap(letters[i], snakeHead)) {
+        if (letters[i] && elementsOverlap(letters[i], snakeHead)) {
           if (letters[i].textContent == currentWord[index].toUpperCase()) {
             letters[i].parentNode.removeChild(letters[i]);
             text.innerHTML = `<span class="colorTextGreen">${currentWord
@@ -2150,7 +2145,7 @@ function gameLoop() {
           }
           scoreEle.textContent = score;
         }
-        if (coopPlay && elementsOverlap(letters[i], snakeHead2)) {
+        if (coopPlay && letters[i] && elementsOverlap(letters[i], snakeHead2)) {
           if (letters[i].textContent == currentWord[index].toUpperCase()) {
             letters[i].parentNode.removeChild(letters[i]);
             text.innerHTML = `<span class="colorTextGreen">${currentWord
