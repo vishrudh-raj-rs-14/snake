@@ -75,6 +75,21 @@ const time = document.querySelector(".time");
 let time2 = document.querySelector(".time2");
 const heart = document.querySelector(".heart");
 let powers = [];
+document.body.onpointermove = (e) => {
+  let blob = document.querySelector(".blob");
+  blob.animate(
+    {
+      top: `${e.clientY}px`,
+      left: `${e.clientX}px`,
+    },
+
+    {
+      duration: 3000,
+      fill: "forwards",
+    }
+  );
+};
+
 for (let i = 0; i < lives; i++) {
   let heartC = document.createElement("div");
   heartC.classList.add("heartContent");
@@ -2699,3 +2714,11 @@ coop.addEventListener("click", () => {
   document.querySelector(".second").classList.add("hide");
   document.querySelector(".bg").classList.add("hide");
 });
+let blob = document.querySelector(".blob");
+
+window.addEventListener("mouseenter", (e) => {
+  console.log("here");
+});
+
+// blob.style.top = `${e.clientY}px`;
+// blob.style.left = `${e.clientX}px`;
