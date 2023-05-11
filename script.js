@@ -177,6 +177,9 @@ const powerUp = [
     color: "#FF033E",
     do: (n = 0) => {
       speed += 2;
+      document
+        .querySelector(":root")
+        .style.setProperty("--transition", `${1000 / speed}ms`);
     },
     img: "./assets/lightning.png",
   },
@@ -303,6 +306,9 @@ document.querySelector(".arrows").addEventListener("touchstart", (e) => {
           }
           if (curTime % 5 == 0 && !paused) {
             speed += DIMENSIONS == 30 ? 0.5 : 1;
+            document
+              .querySelector(":root")
+              .style.setProperty("--transition", `${1000 / speed}ms`);
           }
           if (curTime % 15 == 0 && !paused) {
             createPower();
@@ -435,6 +441,9 @@ window.addEventListener("touchmove", (e) => {
           }
           if (curTime % 5 == 0 && !paused) {
             speed += DIMENSIONS == 30 ? 0.5 : 1;
+            document
+              .querySelector(":root")
+              .style.setProperty("--transition", `${1000 / speed}ms`);
           }
           if (curTime % 15 == 0 && !paused) {
             createPower();
@@ -605,6 +614,9 @@ window.addEventListener("keydown", (e) => {
         }
         if (curTime % 5 == 0 && !paused) {
           speed += DIMENSIONS == 30 ? 0.5 : 1;
+          document
+            .querySelector(":root")
+            .style.setProperty("--transition", `${1000 / speed}ms`);
         }
         if (curTime % 15 == 0 && !paused) {
           createPower();
@@ -718,6 +730,9 @@ window.addEventListener("keydown", (e) => {
           }
           if (curTime % 5 == 0 && !paused) {
             speed += DIMENSIONS == 30 ? 0.5 : 1;
+            document
+              .querySelector(":root")
+              .style.setProperty("--transition", `${1000 / speed}ms`);
           }
           if (curTime % 15 == 0 && !paused) {
             createPower();
@@ -809,6 +824,9 @@ window.addEventListener("keydown", (e) => {
           }
           if (curTime % 5 == 0 && !paused) {
             speed += DIMENSIONS == 30 ? 0.5 : 1;
+            document
+              .querySelector(":root")
+              .style.setProperty("--transition", `${1000 / speed}ms`);
           }
           if (curTime % 15 == 0 && !paused) {
             createPower();
@@ -1541,6 +1559,9 @@ function reset(
   powers = [];
   //   save.classList.add("disabled");
   speed = SPEED;
+  document
+    .querySelector(":root")
+    .style.setProperty("--transition", `${1000 / speed}ms`);
   dirX = state.dirX;
   dirY = state.dirY;
   if (coop) {

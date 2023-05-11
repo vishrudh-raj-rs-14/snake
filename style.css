@@ -9,6 +9,8 @@
 
   --toX2: 0px;
   --toY2: 0px;
+
+  --transition: 100ms;
 }
 
 * {
@@ -352,7 +354,7 @@ body {
   background-color: rgba(52, 238, 126, 0.803);
   border-radius: 30%;
   position: absolute;
-  transition: all 100ms linear;
+  transition: all var(--transition) linear;
 
   /* transition: all 100ms ease; */
 }
@@ -499,7 +501,7 @@ body {
   width: 135px;
   height: 165px;
   /* background-color: rgb(125, 125, 125); */
-  background-color: black;
+  background: rgba(255, 255, 255, 0.05);
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   display: flex;
   /* scale: 1.1; */
@@ -580,8 +582,8 @@ body {
   position: absolute;
   border-radius: 30%;
   background-color: green;
-  transition: all 100ms linear;
   z-index: 2;
+  transition: all var(--transition) linear;
   /* transition: all 100ms ease;s */
 }
 
