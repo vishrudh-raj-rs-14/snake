@@ -494,38 +494,104 @@ body {
 }
 
 .tile {
+  font-size: 14px;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) perspective(50px);
   position: absolute;
   width: 135px;
   height: 165px;
+  transform-origin: center;
   /* background-color: rgb(125, 125, 125); */
-  background: rgba(255, 255, 255, 0.05);
+  /* background-color: black; */
+  background: rgba(31, 31, 31, 0.785);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   display: flex;
+  flex-direction: column;
+
   /* scale: 1.1; */
   justify-content: center;
   align-items: center;
+  transition: all 150ms ease;
 }
 
 .tile-head img {
   margin-left: 10px;
+  /* margin-bottom: 15px; */
+}
+
+.tile-text {
+  height: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2px 3px;
+  transition: all 100ms ease;
+  opacity: 0;
+}
+
+/* .tile:hover {
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  cursor: pointer;
+} */
+
+.tile:hover {
+  cursor: pointer;
 }
 
 .tile img {
   height: 30%;
+  transition: all 150ms ease;
   /* margin-left: 10px; */
+}
+
+.tile:hover img {
+  scale: 1.12;
+}
+
+.tile:hover .tile-text {
+  opacity: 1;
+  transform: translateY(10px);
+  height: 20px;
+}
+
+.disabled-tile {
+  opacity: 0.5 !important;
+  background-color: rgb(73, 73, 73) !important;
+}
+
+.disabled-tile:hover {
+  cursor: not-allowed;
+}
+
+.disabled-tile:hover img {
+  scale: 1 !important;
+}
+
+.disabled-tile:hover .tile-text {
+  opacity: 0 !important;
+  height: 0 !important;
+}
+
+.disabled-tile img {
+  opacity: 0.5;
+}
+
+.tile-head:hover .tile-text {
+  opacity: 1;
+  transform: translateY(10px);
+  height: 20px;
 }
 
 .menu-main2 .tile:nth-child(2) {
   top: calc(50% + 130px);
-  left: calc(50% + 70px);
+  left: calc(50% - 70px);
 }
 
 .menu-main2 .tile:nth-child(3) {
   top: calc(50% + 130px);
-  left: calc(50% - 70px);
+  left: calc(50% + 70px);
 }
 
 .menu-main2 .tile:nth-child(4) {
@@ -568,7 +634,7 @@ body {
 .snake2 {
   position: absolute;
   border-radius: 30%;
-  transition: all 100ms linear;
+  transition: all var(--transition) linear;
   z-index: 2;
   background-color: rgb(37, 78, 225);
 }
@@ -576,14 +642,14 @@ body {
   background-color: rgb(50, 93, 247);
   border-radius: 30%;
   position: absolute;
-  transition: all 100ms linear;
+  transition: all var(--transition) linear;
 }
 .snake {
   position: absolute;
   border-radius: 30%;
   background-color: green;
-  z-index: 2;
   transition: all var(--transition) linear;
+  z-index: 2;
   /* transition: all 100ms ease;s */
 }
 
@@ -603,6 +669,7 @@ body {
     left: var(--toX2);
   }
 }
+
 @keyframes snakeStart {
   0% {
     top: var(--fromY);
@@ -612,6 +679,41 @@ body {
     top: var(--toY);
     left: var(--toX);
   }
+}
+
+@keyframes stars {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-2000px);
+  }
+}
+
+.star {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 1px;
+  height: 1px;
+  background-color: white;
+  position: absolute;
+  z-index: 4;
+}
+.star1 {
+  width: 1px;
+  height: 1px;
+  animation: stars 50s linear infinite;
+}
+.star2 {
+  width: 2px;
+  height: 2px;
+  animation: stars 100s linear infinite;
+}
+.star3 {
+  width: 3px;
+  height: 3px;
+  animation: stars 100s linear infinite;
 }
 
 .menu {

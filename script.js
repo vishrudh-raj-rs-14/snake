@@ -247,13 +247,15 @@ optionSelect.forEach((ele) => {
   });
 });
 document.addEventListener("keydown", (e) => {
-  if (e.key == "Escape") {
-    click.play();
-    gameBgm.pause();
-    let gear = setting.querySelector("img");
-    paused = true;
-    gear.classList.add("onclick");
-    menu.classList.remove("hide");
+  if (document.querySelector(".bg").classList.contains("hide")) {
+    if (e.key == "Escape") {
+      click.play();
+      gameBgm.pause();
+      let gear = setting.querySelector("img");
+      paused = true;
+      gear.classList.add("onclick");
+      menu.classList.remove("hide");
+    }
   }
 });
 
@@ -601,7 +603,7 @@ document.querySelector(".mob").addEventListener("click", () => {
 });
 
 window.addEventListener("keydown", (e) => {
-  if (!paused) {
+  if (!paused && document.querySelector(".bg").classList.contains("hide")) {
     if (!started && delayed) {
       // gameBgm.volume = 0.18;
       gameBgm.play();
@@ -717,7 +719,7 @@ window.addEventListener("keydown", (e) => {
 
 window.addEventListener("keydown", (e) => {
   if (coopPlay) {
-    if (!paused) {
+    if (!paused && document.querySelector(".bg").classList.contains("hide")) {
       if (!started && delayed) {
         // gameBgm.volume = 0.18;
         gameBgm.play();
@@ -811,7 +813,7 @@ window.addEventListener("keydown", (e) => {
 });
 window.addEventListener("keydown", (e) => {
   if (coopPlay) {
-    if (!paused) {
+    if (!paused && document.querySelector(".bg").classList.contains("hide")) {
       if (!started && delayed) {
         // gameBgm.volume = 0.18;
         gameBgm.play();
@@ -1825,7 +1827,7 @@ Array.from(document.querySelectorAll(".slot")).forEach((ele, i_) => {
     };
     localStorage.setItem(`state${i_}`, JSON.stringify(gameState));
     Array.from(document.querySelectorAll(".load"))[i_].classList.remove(
-      "disabled"
+      "disabled-tile"
     );
     e.target.parentElement.classList.remove("free");
     document.querySelector(".v2").classList.add("hide");
@@ -2667,8 +2669,68 @@ window.onresize = () => {
 
 document.querySelector("#exit").addEventListener("click", () => {
   click.play();
-  reset(true);
   menu.classList.add("hide");
+  let gameState = {
+    snake: snake.map((ele) => [
+      parseInt(ele.dataset.x),
+      parseInt(ele.dataset.y),
+    ]),
+    oldSnake: oldSnake.map((ele) => [
+      parseInt(ele.dataset.x),
+      parseInt(ele.dataset.y),
+    ]),
+    dimension: DIMENSIONS,
+    dirX,
+    dirY,
+    obstacles: obstacles.map((ele) => [
+      parseInt(ele.dataset.x),
+      parseInt(ele.dataset.y),
+    ]),
+    letters: letters.map((ele) => [
+      parseInt(ele.dataset.x),
+      parseInt(ele.dataset.y),
+    ]),
+    speed,
+    portals: portals.map((ele) => [
+      parseInt(ele.dataset.x),
+      parseInt(ele.dataset.y),
+    ]),
+    curTime,
+    movingObstacle: movingObstacle.map((ele) => {
+      return {
+        x: ele.dataset.x,
+        y: ele.dataset.y,
+        height: ele.dataset.height,
+        width: ele.dataset.width,
+        top: ele.dataset.top,
+        left: ele.dataset.left,
+        orgX: ele.dataset.orgX,
+        orgY: ele.dataset.orgY,
+        dir: ele.dataset.dir,
+        movDir: ele.dataset.movDir,
+        blocks: ele.dataset.blocks,
+        travelled: ele.dataset.travelled,
+      };
+    }),
+    score,
+    word: currentWord,
+    curPosX: parseInt(snakeHead.dataset.x),
+    curPosY: parseInt(snakeHead.dataset.y),
+    snakeHead: [parseInt(snakeHead.dataset.x), parseInt(snakeHead.dataset.y)],
+    lives: lives,
+    index,
+    oldDirX,
+    oldDirY,
+    load: true,
+  };
+  if (!coopPlay) {
+    localStorage.setItem(`state-accident`, JSON.stringify(gameState));
+  }
+  if (!localStorage.getItem(`state-accident`)) {
+    document.querySelector("#continue").classList.add("disabled-tile");
+  }
+  reset(true);
+  createStars();
   document.querySelector(".bg").classList.remove("hide");
 });
 
@@ -2679,6 +2741,7 @@ document.querySelector("#new").addEventListener("click", () => {
   }
   reset();
   paused = false;
+  deleteStars();
   setting.querySelector("img").classList.remove("onclick");
   menu.classList.add("hide");
   document.querySelector(".bg").classList.add("hide");
@@ -2686,26 +2749,61 @@ document.querySelector("#new").addEventListener("click", () => {
 
 loadGame.addEventListener("click", () => {
   click.play();
-  document.querySelector(".menu-main").classList.add("hide");
+  document.querySelector(".menu-main2").classList.add("hide");
   document.querySelector(".second").classList.remove("hide");
 });
 Array.from(document.querySelectorAll(".sec")).forEach((ele, index) => {
   if (!localStorage.getItem(`state${index}`)) {
-    ele.classList.add("disabled");
+    ele.classList.add("disabled-tile");
   } else {
-    ele.classList.remove("disabled");
+    ele.classList.remove("disabled-tile");
   }
   ele.addEventListener("click", () => {
     if (JSON.parse(localStorage.getItem(`state${index}`))) {
       click.play();
+      deleteStars();
       reset(true, JSON.parse(localStorage.getItem(`state${index}`)));
     }
-    document.querySelector(".menu-main").classList.remove("hide");
+    document.querySelector(".menu-main2").classList.remove("hide");
     document.querySelector(".second").classList.add("hide");
     document.querySelector(".bg").classList.add("hide");
   });
 });
 
+function createStars() {
+  let bg = document.querySelector(".bg");
+  for (let i = 0; i < 700; i++) {
+    let star = document.createElement("div");
+    star.classList.add("star");
+    star.classList.add("star1");
+    let posX = Math.ceil(Math.random() * window.innerWidth);
+    let posY = Math.ceil(Math.random() * window.innerHeight * 3.5);
+    star.style.left = `${posX}px`;
+    star.style.top = `${posY}px`;
+    bg.append(star);
+  }
+  for (let i = 0; i < 200; i++) {
+    let star = document.createElement("div");
+    star.classList.add("star");
+    star.classList.add("star2");
+    let posX = Math.ceil(Math.random() * window.innerWidth);
+    let posY = Math.ceil(Math.random() * window.innerHeight * 3.5);
+    star.style.left = `${posX}px`;
+    star.style.top = `${posY}px`;
+    bg.append(star);
+  }
+  for (let i = 0; i < 100; i++) {
+    let star = document.createElement("div");
+    star.classList.add("star");
+    star.classList.add("star3");
+    let posX = Math.ceil(Math.random() * window.innerWidth);
+    let posY = Math.ceil(Math.random() * window.innerHeight * 3.5);
+    star.style.left = `${posX}px`;
+    star.style.top = `${posY}px`;
+    bg.append(star);
+  }
+}
+createStars();
 coop.addEventListener("click", () => {
   reset(
     true,
@@ -2732,6 +2830,7 @@ coop.addEventListener("click", () => {
     },
     true
   );
+  click.play();
   document.querySelector(".second").classList.add("hide");
   document.querySelector(".bg").classList.add("hide");
 });
@@ -2740,6 +2839,83 @@ let blob = document.querySelector(".blob");
 window.addEventListener("mouseenter", (e) => {
   console.log("here");
 });
+
+window.addEventListener("beforeunload", (e) => {
+  let gameState = {
+    snake: snake.map((ele) => [
+      parseInt(ele.dataset.x),
+      parseInt(ele.dataset.y),
+    ]),
+    oldSnake: oldSnake.map((ele) => [
+      parseInt(ele.dataset.x),
+      parseInt(ele.dataset.y),
+    ]),
+    dimension: DIMENSIONS,
+    dirX,
+    dirY,
+    obstacles: obstacles.map((ele) => [
+      parseInt(ele.dataset.x),
+      parseInt(ele.dataset.y),
+    ]),
+    letters: letters.map((ele) => [
+      parseInt(ele.dataset.x),
+      parseInt(ele.dataset.y),
+    ]),
+    speed,
+    portals: portals.map((ele) => [
+      parseInt(ele.dataset.x),
+      parseInt(ele.dataset.y),
+    ]),
+    curTime,
+    movingObstacle: movingObstacle.map((ele) => {
+      return {
+        x: ele.dataset.x,
+        y: ele.dataset.y,
+        height: ele.dataset.height,
+        width: ele.dataset.width,
+        top: ele.dataset.top,
+        left: ele.dataset.left,
+        orgX: ele.dataset.orgX,
+        orgY: ele.dataset.orgY,
+        dir: ele.dataset.dir,
+        movDir: ele.dataset.movDir,
+        blocks: ele.dataset.blocks,
+        travelled: ele.dataset.travelled,
+      };
+    }),
+    score,
+    word: currentWord,
+    curPosX: parseInt(snakeHead.dataset.x),
+    curPosY: parseInt(snakeHead.dataset.y),
+    snakeHead: [parseInt(snakeHead.dataset.x), parseInt(snakeHead.dataset.y)],
+    lives: lives,
+    index,
+    oldDirX,
+    oldDirY,
+    load: true,
+  };
+  if (!coopPlay) {
+    localStorage.setItem(`state-accident`, JSON.stringify(gameState));
+  }
+});
+
+if (localStorage.getItem("state-accident")) {
+  document.querySelector("#continue").classList.remove("disabled-tile");
+  document.querySelector("#continue").addEventListener("click", (e) => {
+    if (JSON.parse(localStorage.getItem(`state-accident`))) {
+      reset(true, JSON.parse(localStorage.getItem(`state-accident`)));
+      document.querySelector(".bg").classList.add("hide");
+      click.play();
+    }
+    deleteStars();
+  });
+}
+
+function deleteStars() {
+  document.querySelectorAll(".star").forEach((ele) => {
+    ele.parentElement.removeChild(ele);
+  });
+}
 
 // blob.style.top = `${e.clientY}px`;
 // blob.style.left = `${e.clientX}px`;
