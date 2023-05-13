@@ -199,6 +199,8 @@ body {
 }
 
 .disabled button {
+  pointer-events: none;
+  user-select: none;
   background-color: rgb(123, 55, 33);
   color: rgb(198, 198, 198);
   cursor: not-allowed;
@@ -580,6 +582,8 @@ body {
 }
 
 .disabled-tile {
+  pointer-events: none;
+  user-select: none;
   opacity: 0.5 !important;
   background-color: rgb(73, 73, 73) !important;
 }

@@ -1053,6 +1053,35 @@ function createWord(word) {
   for (let i = 0; i < portals.length; i++) {
     lst.push(`${portals[i].dataset.x},${portals[i].dataset.y}`);
   }
+
+  for (let j = 0; j < movingObstacle.length; j++) {
+    for (
+      k =
+        parseInt(movingObstacle[j].dataset.orgX) -
+        parseInt(movingObstacle[j].dataset.blocks) -
+        1;
+      k <
+      parseInt(movingObstacle[j].dataset.orgX) +
+        parseInt(movingObstacle[j].dataset.blocks) +
+        2;
+      k++
+    ) {
+      lst.push(`${k},${movingObstacle[j].dataset.orgY}`);
+    }
+    for (
+      k =
+        parseInt(movingObstacle[j].dataset.orgY) -
+        parseInt(movingObstacle[j].dataset.blocks) -
+        1;
+      k <
+      parseInt(movingObstacle[j].dataset.orgY) +
+        parseInt(movingObstacle[j].dataset.blocks) +
+        2;
+      k++
+    ) {
+      lst.push(`${movingObstacle[j].dataset.orgX},${k}`);
+    }
+  }
   for (let i = 0; i < word.length; i++) {
     const ele = document.createElement("div");
     ele.classList.add("word");
