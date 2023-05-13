@@ -87,6 +87,10 @@ body {
   flex-direction: column;
 }
 
+.go-score {
+  margin: 5px;
+}
+
 .go-text span:nth-child(1) {
   color: #f40009;
 }

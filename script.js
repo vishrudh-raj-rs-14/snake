@@ -32,6 +32,9 @@ gameBg.innerHTML = `<div class="snake"></div><div class="time2">00:00</div>`;
 const setting = document.querySelector(".menu");
 const save = document.querySelector("#save");
 let gameoverCollide = false;
+let mainAudio = new Audio("./assets/main.mp3");
+mainAudio.volume = 0.25;
+mainAudio.loop = true;
 const newGame = document.querySelector("#new");
 const loadGame = document.querySelector("#load");
 const coop = document.querySelector("#coop");
@@ -75,6 +78,12 @@ const time = document.querySelector(".time");
 let time2 = document.querySelector(".time2");
 const heart = document.querySelector(".heart");
 let powers = [];
+mainAudio.autoplay = true;
+// mainAudio.muted = true;
+// if (mainAudio.paused) {
+//   mainAudio.play();
+// }
+
 document.body.onpointermove = (e) => {
   let blob = document.querySelector(".blob");
   blob.animate(
@@ -2298,6 +2307,7 @@ function gameLoop() {
             gameBgm.pause();
             gameBgm.currentTime = 0;
             goAudio.play();
+            document.querySelector(".go-score-val").textContent = score;
             go.classList.remove("hide");
             waitingToRestart = true;
             return;
@@ -2361,6 +2371,7 @@ function gameLoop() {
             gameBgm.pause();
             gameBgm.currentTime = 0;
             goAudio.play();
+            document.querySelector(".go-score-val").textContent = score;
             go.classList.remove("hide");
             waitingToRestart = true;
             return;
@@ -2519,6 +2530,7 @@ function gameLoop() {
         gameoverCollide = false;
         gameBgm.currentTime = 0;
         goAudio.play();
+        document.querySelector(".go-score-val").textContent = score;
         go.classList.remove("hide");
         waitingToRestart = true;
         return;
@@ -2722,7 +2734,7 @@ document.querySelector("#exit").addEventListener("click", () => {
     oldDirY,
     load: true,
   };
-  if (!coopPlay) {
+  if (!coopPlay && lives > 0) {
     localStorage.setItem(`state-accident`, JSON.stringify(gameState));
   }
   if (!localStorage.getItem(`state-accident`)) {
@@ -2730,6 +2742,7 @@ document.querySelector("#exit").addEventListener("click", () => {
   }
   reset(true);
   createStars();
+  mainAudio.play();
   document.querySelector(".bg").classList.remove("hide");
 });
 
@@ -2743,6 +2756,7 @@ document.querySelector("#new").addEventListener("click", () => {
   deleteStars();
   setting.querySelector("img").classList.remove("onclick");
   menu.classList.add("hide");
+  mainAudio.pause();
   document.querySelector(".bg").classList.add("hide");
 });
 
@@ -2765,6 +2779,7 @@ Array.from(document.querySelectorAll(".sec")).forEach((ele, index) => {
     }
     document.querySelector(".menu-main2").classList.remove("hide");
     document.querySelector(".second").classList.add("hide");
+    mainAudio.pause();
     document.querySelector(".bg").classList.add("hide");
   });
 });
@@ -2831,6 +2846,7 @@ coop.addEventListener("click", () => {
   );
   click.play();
   document.querySelector(".second").classList.add("hide");
+  mainAudio.pause();
   document.querySelector(".bg").classList.add("hide");
 });
 let blob = document.querySelector(".blob");
@@ -2893,7 +2909,7 @@ window.addEventListener("beforeunload", (e) => {
     oldDirY,
     load: true,
   };
-  if (!coopPlay) {
+  if (!coopPlay && lives > 0) {
     localStorage.setItem(`state-accident`, JSON.stringify(gameState));
   }
 });
@@ -2903,6 +2919,7 @@ if (localStorage.getItem("state-accident")) {
   document.querySelector("#continue").addEventListener("click", (e) => {
     if (JSON.parse(localStorage.getItem(`state-accident`))) {
       reset(true, JSON.parse(localStorage.getItem(`state-accident`)));
+      mainAudio.pause();
       document.querySelector(".bg").classList.add("hide");
       click.play();
     }
@@ -2920,6 +2937,7 @@ function deleteStars() {
 // blob.style.left = `${e.clientX}px`;
 
 document.querySelector("#themes").addEventListener("click", () => {
+  click.play();
   document.querySelector(".menu-main2").classList.add("hide");
   document.querySelector(".third").classList.remove("hide");
 });
@@ -2928,10 +2946,11 @@ document.querySelector("#jungle").addEventListener("click", (e) => {
   Array.from(document.querySelectorAll(".theme-card")).forEach((ele) => {
     ele.classList.remove("selected-card");
   });
+  click.play();
   document.querySelector("#jungle").classList.add("selected-card");
   root.style.setProperty(
     "--background",
-    `url(https://img.freepik.com/free-photo/majestic-mountain-peak-tranquil-tropical-rainforest-generated-by-ai_188544-10640.jpg?w=2000&t=st=1683952651~exp=1683953251~hmac=10d79377c8a002e86e178065948808159fcc16d9f6c4969dae389735c97acbf0)`
+    `url(https://ik.imagekit.io/ehbewtutq/jungle_bg.jpg?updatedAt=1683983356058)`
   );
   document.querySelector(".menu-main2").classList.remove("hide");
   document.querySelector(".third").classList.add("hide");
@@ -2942,9 +2961,10 @@ document.querySelector("#alien").addEventListener("click", (e) => {
     ele.classList.remove("selected-card");
   });
   document.querySelector("#alien").classList.add("selected-card");
+  click.play();
   root.style.setProperty(
     "--background",
-    `url(https://img.freepik.com/free-vector/space-game-background-neon-night-alien-landscape_107791-1624.jpg?w=2000&t=st=1683954896~exp=1683955496~hmac=7b1c2777c80f62ec2361334cb1954b30bc7ef77c415c5655e4c5cbae193d5c8a)`
+    `url(https://ik.imagekit.io/ehbewtutq/1624.jpg?updatedAt=1683983490991)`
   );
   document.querySelector(".menu-main2").classList.remove("hide");
   document.querySelector(".third").classList.add("hide");
@@ -2955,9 +2975,10 @@ document.querySelector("#scifi").addEventListener("click", (e) => {
     ele.classList.remove("selected-card");
   });
   document.querySelector("#scifi").classList.add("selected-card");
+  click.play();
   root.style.setProperty(
     "--background",
-    `url(https://cdn.pixabay.com/photo/2020/12/20/21/17/city-5848267_1280.jpg)`
+    `url(https://ik.imagekit.io/ehbewtutq/city-5848267_1920.jpg?updatedAt=1683983490935)`
   );
   document.querySelector(".menu-main2").classList.remove("hide");
   document.querySelector(".third").classList.add("hide");
