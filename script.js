@@ -1827,8 +1827,14 @@ Array.from(document.querySelectorAll(".slot")).forEach((ele, i_) => {
     };
     localStorage.setItem(`state${i_}`, JSON.stringify(gameState));
     Array.from(document.querySelectorAll(".load"))[i_].classList.remove(
+      "disabled"
+    );
+    Array.from(document.querySelectorAll(".sec"))[i_].classList.remove(
       "disabled-tile"
     );
+    // Array.from(document.querySelectorAll(".load"))[i_].classList.remove(
+    //   "disabled-tile"
+    // );
     e.target.parentElement.classList.remove("free");
     document.querySelector(".v2").classList.add("hide");
     document.querySelector(".main-menu").classList.remove("hide");
@@ -1843,14 +1849,14 @@ Array.from(document.querySelectorAll(".slot")).forEach((ele, i_) => {
 });
 
 Array.from(document.querySelectorAll(".load")).forEach((ele, i_) => {
-  let state = JSON.parse(localStorage.getItem(`state${i_ - 3}`));
+  let state = JSON.parse(localStorage.getItem(`state${i_}`));
   if (!state) {
     ele.classList.add("disabled");
   } else {
     ele.classList.remove("disabled");
   }
   return ele.addEventListener("click", (e) => {
-    let state = JSON.parse(localStorage.getItem(`state${i_ - 3}`));
+    let state = JSON.parse(localStorage.getItem(`state${i_}`));
     if (state) reset(true, state);
     document.querySelector(".load-menu").classList.add("hide");
     document.querySelector(".main-menu").classList.remove("hide");
@@ -2919,3 +2925,47 @@ function deleteStars() {
 
 // blob.style.top = `${e.clientY}px`;
 // blob.style.left = `${e.clientX}px`;
+
+document.querySelector("#themes").addEventListener("click", () => {
+  document.querySelector(".menu-main2").classList.add("hide");
+  document.querySelector(".third").classList.remove("hide");
+});
+
+document.querySelector("#jungle").addEventListener("click", (e) => {
+  Array.from(document.querySelectorAll(".theme-card")).forEach((ele) => {
+    ele.classList.remove("selected-card");
+  });
+  document.querySelector("#jungle").classList.add("selected-card");
+  root.style.setProperty(
+    "--background",
+    `url(https://img.freepik.com/free-photo/majestic-mountain-peak-tranquil-tropical-rainforest-generated-by-ai_188544-10640.jpg?w=2000&t=st=1683952651~exp=1683953251~hmac=10d79377c8a002e86e178065948808159fcc16d9f6c4969dae389735c97acbf0)`
+  );
+  document.querySelector(".menu-main2").classList.remove("hide");
+  document.querySelector(".third").classList.add("hide");
+});
+
+document.querySelector("#alien").addEventListener("click", (e) => {
+  Array.from(document.querySelectorAll(".theme-card")).forEach((ele) => {
+    ele.classList.remove("selected-card");
+  });
+  document.querySelector("#alien").classList.add("selected-card");
+  root.style.setProperty(
+    "--background",
+    `url(https://img.freepik.com/free-vector/space-game-background-neon-night-alien-landscape_107791-1624.jpg?w=2000&t=st=1683954896~exp=1683955496~hmac=7b1c2777c80f62ec2361334cb1954b30bc7ef77c415c5655e4c5cbae193d5c8a)`
+  );
+  document.querySelector(".menu-main2").classList.remove("hide");
+  document.querySelector(".third").classList.add("hide");
+});
+
+document.querySelector("#scifi").addEventListener("click", (e) => {
+  Array.from(document.querySelectorAll(".theme-card")).forEach((ele) => {
+    ele.classList.remove("selected-card");
+  });
+  document.querySelector("#scifi").classList.add("selected-card");
+  root.style.setProperty(
+    "--background",
+    `url(https://cdn.pixabay.com/photo/2020/12/20/21/17/city-5848267_1280.jpg)`
+  );
+  document.querySelector(".menu-main2").classList.remove("hide");
+  document.querySelector(".third").classList.add("hide");
+});

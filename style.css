@@ -11,6 +11,8 @@
   --toY2: 0px;
 
   --transition: 100ms;
+
+  --background: url(https://cdn.pixabay.com/photo/2020/12/20/21/17/city-5848267_1280.jpg);
 }
 
 * {
@@ -29,7 +31,10 @@ body {
   width: 100vw;
   height: calc(100vh - 3px);
   overflow: hidden;
-  background-image: url(https://img.freepik.com/free-photo/majestic-mountain-peak-tranquil-tropical-rainforest-generated-by-ai_188544-10640.jpg?w=2000&t=st=1683827617~exp=1683828217~hmac=51c64a0226b403eb09107a59358021fb2c5b1b0423622ba490d431ef74ce04d3);
+  /* background-image: url(https://img.freepik.com/free-photo/majestic-mountain-peak-tranquil-tropical-rainforest-generated-by-ai_188544-10640.jpg?w=2000&t=st=1683952651~exp=1683953251~hmac=10d79377c8a002e86e178065948808159fcc16d9f6c4969dae389735c97acbf0); */
+  /* background-image: url(https://img.freepik.com/free-vector/space-game-background-neon-night-alien-landscape_107791-1624.jpg?w=2000&t=st=1683954896~exp=1683955496~hmac=7b1c2777c80f62ec2361334cb1954b30bc7ef77c415c5655e4c5cbae193d5c8a); */
+  /* background-image: url(https://cdn.pixabay.com/photo/2020/12/20/21/17/city-5848267_1280.jpg); */
+  background-image: var(--background);
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: fixed;
@@ -753,6 +758,133 @@ body {
 
 .onclick {
   animation: rotate 1s ease;
+}
+
+.themes-head {
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  transform: translateY(-50px);
+  /* margin-bottom: 50px; */
+}
+
+.third {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: flex-start;
+  padding: 100px 0px; */
+}
+
+.theme-card-container {
+  width: 100%;
+  padding: 0 100px;
+  justify-content: space-around;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.theme-card {
+  flex-shrink: 0;
+  display: flex;
+  height: 200px;
+  width: 300px;
+  position: relative;
+  justify-content: center;
+  margin: 15px;
+  align-items: center;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.44);
+  border: 1px solid rgba(255, 255, 255, 0.186);
+  border-radius: 10px;
+  font-size: 28px;
+  transition: all 250ms ease;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  transition: all 250ms ease;
+  /* background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.506),
+    rgba(0, 0, 0, 0.334)
+  ); */
+  background-color: rgba(0, 0, 0, 0.072);
+}
+
+.selected-card {
+  border: 1px solid #32de84;
+}
+
+.selected-card .overlay {
+  background-color: rgba(0, 0, 0, 0.384);
+}
+
+.selected-card .theme-card-name {
+  opacity: 1;
+}
+
+.theme-card-name {
+  transition: all 250ms ease;
+  opacity: 0;
+  position: absolute;
+  margin: 10px 0 15px 0;
+}
+
+.theme-card:hover .theme-card-name {
+  background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.781),
+      rgba(0, 0, 0, 0.097)
+    )
+    url(./assets/jungle_bg.jpg);
+  opacity: 1;
+}
+
+.theme-card:hover .overlay {
+  background-color: rgba(0, 0, 0, 0.384);
+}
+
+.theme-card:hover {
+  cursor: pointer;
+}
+
+.theme-img {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin: 10px; */
+}
+.theme-img img {
+  border-radius: 10px;
+  height: 100%;
+}
+
+.theme-button {
+  /* margin: 10px; */
+}
+
+.theme-choose-button {
+  background-color: #387ec5;
+  border-radius: 10px;
+  font-size: 18px;
+  padding: 10px 15px;
+  color: white;
+  border: none;
+  box-shadow: rgba(186, 186, 186, 0.35) 0px 5px 15px;
+  transition: all 250ms ease;
+}
+
+.theme-choose-button:hover {
+  background-color: #348ce4;
+  scale: 1.1;
 }
 
 #joystick {
