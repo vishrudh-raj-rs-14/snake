@@ -35,6 +35,7 @@ body {
   /* background-image: url(https://img.freepik.com/free-vector/space-game-background-neon-night-alien-landscape_107791-1624.jpg?w=2000&t=st=1683954896~exp=1683955496~hmac=7b1c2777c80f62ec2361334cb1954b30bc7ef77c415c5655e4c5cbae193d5c8a); */
   /* background-image: url(https://cdn.pixabay.com/photo/2020/12/20/21/17/city-5848267_1280.jpg); */
   background-image: var(--background);
+  /* background-image: url(https://img.freepik.com/free-vector/space-game-background-neon-night-alien-landscape_107791-1624.jpg?w=2000&t=st=1683968548~exp=1683969148~hmac=48f9ef561282e97ff90fceb4c7a127f43f1646d0513c622bb78481374b4ba4d4); */
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: fixed;
@@ -958,6 +959,10 @@ body {
   border-right: 10px solid #210124;
 }
 
+.swipe-info {
+  display: none;
+}
+
 @keyframes rotate {
   from {
     transform: rotate(0deg);
@@ -1028,6 +1033,58 @@ body {
     width: 360px;
     height: 360px;
   }
+
+  .mob2 {
+    user-select: none;
+    pointer-events: none;
+    opacity: 0.5 !important;
+    background-color: rgb(73, 73, 73) !important;
+  }
+
+  .mob2:hover {
+    cursor: not-allowed;
+  }
+
+  .mob2:hover img {
+    scale: 1 !important;
+  }
+
+  .tile {
+    scale: 0.9;
+  }
+  .menu-main2 .tile:nth-child(2) {
+    top: calc(50% + 120px);
+    left: calc(50% - 65px);
+  }
+
+  .menu-main2 .tile:nth-child(3) {
+    top: calc(50% + 120px);
+    left: calc(50% + 65px);
+  }
+
+  .menu-main2 .tile:nth-child(4) {
+    /* top: calc(50% + 130px); */
+    left: calc(50% - 125px);
+  }
+  .menu-main2 .tile:nth-child(5) {
+    /* top: calc(50% + 130px); */
+    left: calc(50% + 125px);
+  }
+
+  .tile-text {
+    opacity: 1;
+    transform: translateY(10px);
+    height: 20px;
+  }
+
+  .mob2:hover .tile-text {
+    opacity: 0 !important;
+    height: 0 !important;
+  }
+
+  .mob2 img {
+    opacity: 0.5;
+  }
   .game-bg {
     position: absolute;
     top: 0;
@@ -1050,12 +1107,34 @@ body {
     grid-row: 2;
   }
   .game {
-    padding: 50px 0 0 0;
-    height: 95vh;
-    justify-content: flex-start;
+    /* height: 95vh; */
+    justify-content: center;
   }
   .menu-main {
     width: 70vw !important;
+  }
+
+  .swipe-info {
+    display: block;
+    color: white;
+    font-size: 20px;
+    font-family: "Orbitron";
+    background-color: rgba(0, 0, 0, 0.709);
+    padding: 8px 16px;
+    border-radius: 10px;
+    animation: glaze 2s infinite;
+  }
+
+  @keyframes glaze {
+    0% {
+      scale: 1;
+    }
+    50% {
+      scale: 1.1;
+    }
+    100% {
+      scale: 1;
+    }
   }
   .arrows {
     display: block;
@@ -1103,6 +1182,9 @@ body {
     transform: translateX(-50%);
     transform: translateX(-50%);
     font-size: 25px;
+    background-color: rgba(0, 0, 0, 0.709);
+    padding: 5px;
+    border-radius: 10px;
   }
   .controls img {
     width: 50px;
