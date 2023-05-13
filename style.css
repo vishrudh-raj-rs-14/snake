@@ -56,6 +56,8 @@ body {
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
+  text-align: center;
+  width: 100%;
   z-index: 10;
 }
 .hide {
@@ -1052,6 +1054,18 @@ body {
     background-color: rgb(73, 73, 73) !important;
   }
 
+  .blob {
+    display: none;
+  }
+
+  .menu-main2 {
+    background: radial-gradient(
+      ellipse at center,
+      #32de854b 0%,
+      #348ce452 100%
+    );
+  }
+
   .mob2:hover {
     cursor: not-allowed;
   }
@@ -1062,23 +1076,24 @@ body {
 
   .tile {
     scale: 0.9;
+    top: calc(50% - 20px);
   }
   .menu-main2 .tile:nth-child(2) {
-    top: calc(50% + 120px);
+    top: calc(50% + 100px);
     left: calc(50% - 65px);
   }
 
   .menu-main2 .tile:nth-child(3) {
-    top: calc(50% + 120px);
+    top: calc(50% + 100px);
     left: calc(50% + 65px);
   }
 
   .menu-main2 .tile:nth-child(4) {
-    /* top: calc(50% + 130px); */
+    top: calc(50% - 20px);
     left: calc(50% - 125px);
   }
   .menu-main2 .tile:nth-child(5) {
-    /* top: calc(50% + 130px); */
+    top: calc(50% - 20px);
     left: calc(50% + 125px);
   }
 
