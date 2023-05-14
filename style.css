@@ -642,6 +642,23 @@ body {
   }
 }
 
+.phaser {
+  /* animation: phase 0.5s linear; */
+  animation: phase 0.5s linear 0s 20;
+}
+
+@keyframes phase {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .game-bg {
   width: 600px;
   height: 600px;

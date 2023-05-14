@@ -1,6 +1,6 @@
 let DIMENSIONS = 30;
 const LIVES = 3;
-
+let shiedled = false;
 const SPEED = 7;
 let canMoveSpike = true;
 let gameState = (state = {
@@ -192,10 +192,30 @@ const powerUp = [
       speed += 2;
       document
         .querySelector(":root")
-        .style.setProperty("--transition", `${1000 / speed}ms`);
+        .style.setProperty(
+          "--transition",
+          `${1000 / speed <= 100 ? 100 : 1000 / speed}ms`
+        );
     },
     img: "./assets/lightning.png",
   },
+  // {
+  //   shield: "phaser",
+  //   color: "#007FFF",
+  //   do: () => {
+  //     shiedled = true;
+  //     snake.forEach((ele) => {
+  //       ele.classList.add("phaser");
+  //     });
+  //     setTimeout(() => {
+  //       shiedled = false;
+  //       snake.forEach((ele) => {
+  //         ele.classList.remove("phaser");
+  //       });
+  //     }, 10000);
+  //   },
+  //   img: "./assets/shield.png",
+  // },
 ];
 
 soundEffect.addEventListener("click", () => {
@@ -450,7 +470,10 @@ window.addEventListener("touchmove", (e) => {
             speed += DIMENSIONS == 30 ? 0.5 : 1;
             document
               .querySelector(":root")
-              .style.setProperty("--transition", `${1000 / speed}ms`);
+              .style.setProperty(
+                "--transition",
+                `${1000 / speed <= 100 ? 100 : 1000 / speed}ms`
+              );
           }
           if (curTime % 15 == 0 && !paused) {
             createPower();
@@ -626,7 +649,10 @@ window.addEventListener("keydown", (e) => {
           speed += DIMENSIONS == 30 ? 0.5 : 1;
           document
             .querySelector(":root")
-            .style.setProperty("--transition", `${1000 / speed}ms`);
+            .style.setProperty(
+              "--transition",
+              `${1000 / speed <= 100 ? 100 : 1000 / speed}ms`
+            );
         }
         if (curTime % 15 == 0 && !paused) {
           createPower();
@@ -743,7 +769,10 @@ window.addEventListener("keydown", (e) => {
             speed += DIMENSIONS == 30 ? 0.5 : 1;
             document
               .querySelector(":root")
-              .style.setProperty("--transition", `${1000 / speed}ms`);
+              .style.setProperty(
+                "--transition",
+                `${1000 / speed <= 100 ? 100 : 1000 / speed}ms`
+              );
           }
           if (curTime % 15 == 0 && !paused) {
             createPower();
@@ -838,7 +867,10 @@ window.addEventListener("keydown", (e) => {
             speed += DIMENSIONS == 30 ? 0.5 : 1;
             document
               .querySelector(":root")
-              .style.setProperty("--transition", `${1000 / speed}ms`);
+              .style.setProperty(
+                "--transition",
+                `${1000 / speed <= 100 ? 100 : 1000 / speed}ms`
+              );
           }
           if (curTime % 15 == 0 && !paused) {
             createPower();
@@ -1163,6 +1195,14 @@ function increaseSnakeSize(n = 1) {
     body.style.top = `${parseInt(snake[snake.length - 1].style.top)}px`;
     body.style.left = `${parseInt(snake[snake.length - 1].style.left)}px`;
     body.classList.add("snake-body");
+    if (shiedled) {
+      snake.forEach((ele) => {
+        ele.style.animation = "none";
+        ele.offsetHeight;
+        ele.style.animation = null;
+      });
+      body.classList.add("phaser");
+    }
     snake.push(body);
     gameBg.append(body);
   }
@@ -1565,6 +1605,7 @@ function reset(
   paused = false;
   canMoveSpike = true;
   pixelSize = gameBg.getBoundingClientRect().height / DIMENSIONS;
+  shiedled = false;
   letters = [];
   wordCreated = false;
   index = state.index;
@@ -1604,7 +1645,10 @@ function reset(
   speed = SPEED;
   document
     .querySelector(":root")
-    .style.setProperty("--transition", `${1000 / speed}ms`);
+    .style.setProperty(
+      "--transition",
+      `${1000 / speed <= 100 ? 100 : 1000 / speed}ms`
+    );
   dirX = state.dirX;
   dirY = state.dirY;
   if (coop) {
@@ -1988,7 +2032,7 @@ function CheckGameOver() {
   if (curTime >= maxTime) return true;
   let game = gameBg.getBoundingClientRect();
   for (let i = 0; i < obstacles.length; i++) {
-    if (elementsOverlap(snakeHead, obstacles[i])) {
+    if (elementsOverlap(snakeHead, obstacles[i]) && !shiedled) {
       snakeHead.style.top = `${
         parseInt(snakeHead.style.top) + 1 * dirY * pixelSize
       }px`;
@@ -2001,7 +2045,7 @@ function CheckGameOver() {
       dirY2 = 0;
       return true;
     }
-    if (coopPlay && elementsOverlap(snakeHead2, obstacles[i])) {
+    if (coopPlay && elementsOverlap(snakeHead2, obstacles[i]) && !shiedled) {
       snakeHead2.style.top = `${
         parseInt(snakeHead2.style.top) + 1 * dirY * pixelSize
       }px`;
@@ -2017,30 +2061,30 @@ function CheckGameOver() {
   }
 
   for (let i = 3; i < snake.length; i++) {
-    if (elementsOverlap(snake[i], snakeHead)) return true;
+    if (elementsOverlap(snake[i], snakeHead) && !shiedled) return true;
   }
   if (coopPlay) {
     for (let i = 3; i < snake2.length; i++) {
-      if (elementsOverlap(snake2[i], snakeHead2)) return true;
+      if (elementsOverlap(snake2[i], snakeHead2) && !shiedled) return true;
     }
     for (let i = 0; i < snake.length; i++) {
       for (let j = 0; j < snake2.length; j++) {
-        if (elementsOverlap(snake[i], snake2[j])) return true;
+        if (elementsOverlap(snake[i], snake2[j]) && !shiedled) return true;
       }
     }
   }
   for (let i = 0; i < oldSnake.length; i++) {
-    if (elementsOverlap(snakeHead, oldSnake[i])) return true;
+    if (elementsOverlap(snakeHead, oldSnake[i]) && !shiedled) return true;
   }
   if (coopPlay) {
     for (let i = 0; i < oldSnake2.length; i++) {
-      if (elementsOverlap(snakeHead2, oldSnake2[i])) return true;
+      if (elementsOverlap(snakeHead2, oldSnake2[i]) && !shiedled) return true;
     }
     for (let i = 0; i < oldSnake2.length; i++) {
-      if (elementsOverlap(snakeHead, oldSnake2[i])) return true;
+      if (elementsOverlap(snakeHead, oldSnake2[i]) && !shiedled) return true;
     }
     for (let i = 0; i < oldSnake.length; i++) {
-      if (elementsOverlap(snakeHead2, oldSnake[i])) return true;
+      if (elementsOverlap(snakeHead2, oldSnake[i]) && !shiedled) return true;
     }
   }
 
@@ -2056,7 +2100,8 @@ function spikeCollide() {
         object_1.left < object_2.left + object_2.width &&
         object_1.left + object_1.width > object_2.left &&
         object_1.top < object_2.top + object_2.height &&
-        object_1.top + object_1.height > object_2.top
+        object_1.top + object_1.height > object_2.top &&
+        !shiedled
       ) {
         gameoverCollide = true;
         return;
@@ -2071,7 +2116,8 @@ function spikeCollide() {
         object_1.left < object_2.left + object_2.width &&
         object_1.left + object_1.width > object_2.left &&
         object_1.top < object_2.top + object_2.height &&
-        object_1.top + object_1.height > object_2.top
+        object_1.top + object_1.height > object_2.top &&
+        !shiedled
       ) {
         gameoverCollide = true;
         return;
@@ -2087,7 +2133,8 @@ function spikeCollide() {
           object_1.left < object_2.left + object_2.width &&
           object_1.left + object_1.width > object_2.left &&
           object_1.top < object_2.top + object_2.height &&
-          object_1.top + object_1.height > object_2.top
+          object_1.top + object_1.height > object_2.top &&
+          !shiedled
         ) {
           gameoverCollide = true;
           return;
@@ -2102,7 +2149,8 @@ function spikeCollide() {
           object_1.left < object_2.left + object_2.width &&
           object_1.left + object_1.width > object_2.left &&
           object_1.top < object_2.top + object_2.height &&
-          object_1.top + object_1.height > object_2.top
+          object_1.top + object_1.height > object_2.top &&
+          !shiedled
         ) {
           gameoverCollide = true;
           return;
@@ -2294,6 +2342,19 @@ function gameLoop() {
       ele.style.width = `${pixelSize}px`;
       ele.dataset.x = snake[snake.length - 1].dataset.x;
       ele.dataset.y = snake[snake.length - 1].dataset.y;
+      if (shiedled) {
+        // snake.forEach((e) => {
+        //   e.style.animation = "none";
+        //   e.offsetHeight;
+        //   e.style.animation = null;
+        // });
+        // oldSnake.forEach((e) => {
+        //   e.style.animation = "none";
+        //   e.offsetHeight;
+        //   e.style.animation = null;
+        // });
+        ele.classList.add("phaser");
+      }
       ele.style.top = clone[0];
       ele.style.left = clone[1];
       ele.classList.add("snake-body");
@@ -2319,6 +2380,15 @@ function gameLoop() {
       ele.style.width = `${pixelSize}px`;
       ele.dataset.x = snake2[snake2.length - 1].dataset.x;
       ele.dataset.y = snake2[snake2.length - 1].dataset.y;
+      if (shiedled) {
+        // snake2.forEach((e) => {
+        //   e.style.animationPlayState = "revert";
+        // });
+        // oldSnake2.forEach((e) => {
+        //   e.style.animation = "none";
+        // });
+        ele.classList.add("phaser");
+      }
       ele.style.top = clone[0];
       ele.style.left = clone[1];
       ele.classList.add("snake-body2");
@@ -2366,6 +2436,14 @@ function gameLoop() {
         snake.splice(0, 1);
         let ele = document.createElement("div");
         ele.classList.add("snake");
+        if (shiedled) {
+          // oldSnake.forEach((e) => {
+          //   e.style.animation = "none";
+          //   e.offsetHeight;
+          //   e.style.animation = null;
+          // });
+          ele.classList.add("phaser");
+        }
         // ele.classList.add("snakeMove");
         ele.style.height = `${pixelSize}px`;
         ele.style.width = `${pixelSize}px`;
@@ -2431,6 +2509,14 @@ function gameLoop() {
         snake2.splice(0, 1);
         let ele = document.createElement("div");
         ele.classList.add("snake2");
+        if (shiedled) {
+          // oldSnake2.forEach((e) => {
+          //   e.style.animation = "none";
+          //   e.offsetHeight;
+          //   e.style.animation = null;
+          // });
+          ele.classList.add("phaser");
+        }
         // ele.classList.add("snakeMove");
         ele.style.height = `${pixelSize}px`;
         ele.style.width = `${pixelSize}px`;
