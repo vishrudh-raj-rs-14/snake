@@ -149,8 +149,11 @@ const powerUp = [
     name: "speedDecrease",
     color: "#32de84",
     do: (n = 0) => {
-      if (DIMENSIONS == 20) speed -= 1;
-      else speed -= 1;
+      if (speed >= 8) {
+        speed -= 1;
+      } else {
+        speed = 7;
+      }
     },
     img: "./assets/turtle.png",
   },
