@@ -1642,7 +1642,7 @@ function reset(
   }
   powers = [];
   //   save.classList.add("disabled");
-  speed = SPEED;
+  speed = state.speed;
   document
     .querySelector(":root")
     .style.setProperty(
