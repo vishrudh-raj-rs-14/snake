@@ -387,7 +387,7 @@ body {
 .moving-obstacle {
   position: absolute;
   background-color: transparent;
-  transition: all 100ms linear;
+  transition: all 150ms linear;
 }
 .moving-obstacle img {
   height: 100%;
@@ -666,7 +666,7 @@ body {
   background-color: rgb(37, 78, 225);
 }
 .snake-body2 {
-  background-color: rgb(50, 93, 247);
+  background-color: rgb(81, 132, 251);
   border-radius: 30%;
   position: absolute;
   transition: all var(--transition) linear;

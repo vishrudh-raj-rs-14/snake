@@ -2,6 +2,7 @@ let DIMENSIONS = 30;
 const LIVES = 3;
 
 const SPEED = 7;
+let canMoveSpike = true;
 let gameState = (state = {
   dimension: DIMENSIONS,
   snake: [],
@@ -491,6 +492,7 @@ window.addEventListener("touchmove", (e) => {
           },
           coopPlay
         );
+        moveSpike();
         gameLoop();
       }
       if (
@@ -600,6 +602,7 @@ document.querySelector(".mob").addEventListener("click", () => {
       },
       coopPlay
     );
+    moveSpike();
     gameLoop();
   }
 });
@@ -665,6 +668,7 @@ window.addEventListener("keydown", (e) => {
         },
         coopPlay
       );
+      moveSpike();
       gameLoop();
     }
     if (
@@ -781,6 +785,7 @@ window.addEventListener("keydown", (e) => {
           },
           coopPlay
         );
+        moveSpike();
         gameLoop();
       }
       // console.log(e.key, moved);
@@ -875,6 +880,7 @@ window.addEventListener("keydown", (e) => {
           },
           coopPlay
         );
+        moveSpike();
         gameLoop();
       }
 
@@ -1554,6 +1560,7 @@ function reset(
     delayed = true;
   }, 500);
   paused = false;
+  canMoveSpike = true;
   pixelSize = gameBg.getBoundingClientRect().height / DIMENSIONS;
   letters = [];
   wordCreated = false;
@@ -2103,6 +2110,52 @@ function spikeCollide() {
   window.requestAnimationFrame(spikeCollide);
 }
 
+function moveSpike() {
+  for (let i = 0; i < movingObstacle.length; i++) {
+    if (!gameoverCollide) {
+      if (
+        parseInt(movingObstacle[i].dataset.travelled) <=
+        parseInt(movingObstacle[i].dataset.blocks)
+      ) {
+        movingObstacle[i].style.top = `${
+          parseInt(movingObstacle[i].style.top) +
+          (parseInt(movingObstacle[i].dataset.dir) == 0 ? 1 : 0) *
+            1 *
+            parseInt(movingObstacle[i].dataset.movDir) *
+            pixelSize
+        }px`;
+        movingObstacle[i].style.left = `${
+          parseInt(movingObstacle[i].style.left) +
+          (parseInt(movingObstacle[i].dataset.dir) == 0 ? 0 : 1) *
+            1 *
+            parseInt(movingObstacle[i].dataset.movDir) *
+            pixelSize
+        }px`;
+        movingObstacle[i].dataset.y = `${
+          parseInt(movingObstacle[i].dataset.y) +
+          (parseInt(movingObstacle[i].dataset.dir) == 0 ? 1 : 0) *
+            1 *
+            parseInt(movingObstacle[i].dataset.movDir)
+        }`;
+        movingObstacle[i].dataset.x = `${
+          parseInt(movingObstacle[i].dataset.x) +
+          (parseInt(movingObstacle[i].dataset.dir) == 0 ? 0 : 1) *
+            1 *
+            parseInt(movingObstacle[i].dataset.movDir)
+        }`;
+        movingObstacle[i].dataset.travelled =
+          parseInt(movingObstacle[i].dataset.travelled) + 1;
+      } else {
+        movingObstacle[i].dataset.movDir =
+          -1 * parseInt(movingObstacle[i].dataset.movDir);
+        movingObstacle[i].dataset.travelled = 0;
+      }
+    }
+  }
+  if (!canMoveSpike) return;
+  setTimeout(() => window.requestAnimationFrame(moveSpike), 150);
+}
+
 function gameLoop() {
   if (!paused) {
     for (let i = 0; i < powers.length; i++) {
@@ -2140,48 +2193,7 @@ function gameLoop() {
     }
     if (movingObstacle.length == 0) {
       createMovingObstacle();
-    } else {
-      for (let i = 0; i < movingObstacle.length; i++) {
-        if (!gameoverCollide) {
-          if (
-            parseInt(movingObstacle[i].dataset.travelled) <=
-            parseInt(movingObstacle[i].dataset.blocks)
-          ) {
-            movingObstacle[i].style.top = `${
-              parseInt(movingObstacle[i].style.top) +
-              (parseInt(movingObstacle[i].dataset.dir) == 0 ? 1 : 0) *
-                1 *
-                parseInt(movingObstacle[i].dataset.movDir) *
-                pixelSize
-            }px`;
-            movingObstacle[i].style.left = `${
-              parseInt(movingObstacle[i].style.left) +
-              (parseInt(movingObstacle[i].dataset.dir) == 0 ? 0 : 1) *
-                1 *
-                parseInt(movingObstacle[i].dataset.movDir) *
-                pixelSize
-            }px`;
-            movingObstacle[i].dataset.y = `${
-              parseInt(movingObstacle[i].dataset.y) +
-              (parseInt(movingObstacle[i].dataset.dir) == 0 ? 1 : 0) *
-                1 *
-                parseInt(movingObstacle[i].dataset.movDir)
-            }`;
-            movingObstacle[i].dataset.x = `${
-              parseInt(movingObstacle[i].dataset.x) +
-              (parseInt(movingObstacle[i].dataset.dir) == 0 ? 0 : 1) *
-                1 *
-                parseInt(movingObstacle[i].dataset.movDir)
-            }`;
-            movingObstacle[i].dataset.travelled =
-              parseInt(movingObstacle[i].dataset.travelled) + 1;
-          } else {
-            movingObstacle[i].dataset.movDir =
-              -1 * parseInt(movingObstacle[i].dataset.movDir);
-            movingObstacle[i].dataset.travelled = 0;
-          }
-        }
-      }
+      console.log("here");
     }
 
     if (!wordCreated) {
@@ -2339,6 +2351,7 @@ function gameLoop() {
             document.querySelector(".go-score-val").textContent = score;
             go.classList.remove("hide");
             waitingToRestart = true;
+            canMoveSpike = false;
             return;
           }
         }
@@ -2403,6 +2416,7 @@ function gameLoop() {
             document.querySelector(".go-score-val").textContent = score;
             go.classList.remove("hide");
             waitingToRestart = true;
+            canMoveSpike = false;
             return;
           }
         }
@@ -2562,6 +2576,7 @@ function gameLoop() {
         document.querySelector(".go-score-val").textContent = score;
         go.classList.remove("hide");
         waitingToRestart = true;
+        canMoveSpike = false;
         return;
       }
     }
@@ -2569,6 +2584,7 @@ function gameLoop() {
   setTimeout(() => window.requestAnimationFrame(gameLoop), 1000 / speed);
 }
 reset(true, gameState);
+moveSpike();
 gameLoop();
 spikeCollide();
 window.onresize = () => {
