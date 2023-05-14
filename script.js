@@ -439,7 +439,7 @@ setting.addEventListener("click", (e) => {
 // });
 
 let downx, downy;
-gameBg.addEventListener("touchstart", (e) => {
+window.addEventListener("touchstart", (e) => {
   let evt = typeof e.originalEvent === "undefined" ? e : e.originalEvent;
   let touch = evt.touches[0] || evt.changedTouches[0];
   downx = touch.pageX;
