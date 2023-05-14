@@ -2989,6 +2989,10 @@ window.addEventListener("mouseenter", (e) => {
   console.log("here");
 });
 
+if (!localStorage.getItem(`state-accident`)) {
+  document.querySelector("#continue").classList.add("disabled-tile");
+}
+
 window.addEventListener("beforeunload", (e) => {
   let gameState = {
     snake: snake.map((ele) => [
@@ -3043,7 +3047,11 @@ window.addEventListener("beforeunload", (e) => {
     oldDirY,
     load: true,
   };
-  if (!coopPlay && lives > 0) {
+  if (
+    !coopPlay &&
+    lives > 0 &&
+    document.querySelector(".bg").classList.contains("hide")
+  ) {
     localStorage.setItem(`state-accident`, JSON.stringify(gameState));
   }
 });
