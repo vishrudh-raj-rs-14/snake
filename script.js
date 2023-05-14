@@ -26,7 +26,7 @@ let gameState = (state = {
 });
 let PercentOfObstacles = 15;
 let coopPlay = false;
-let PercentOfMovingObstacles = 10;
+let PercentOfMovingObstacles = 6;
 const gameBg = document.querySelector(".game-bg");
 const go = document.querySelector(".go");
 gameBg.innerHTML = `<div class="snake"></div><div class="time2">00:00</div>`;
