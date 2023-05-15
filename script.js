@@ -2063,10 +2063,10 @@ function CheckGameOver() {
     }
     if (coopPlay && elementsOverlap(snakeHead2, obstacles[i]) && !shiedled) {
       snakeHead2.style.top = `${
-        parseInt(snakeHead2.style.top) + 1 * dirY * pixelSize
+        parseInt(snakeHead2.style.top) + 1 * dirY2 * pixelSize
       }px`;
       snakeHead2.style.left = `${
-        parseInt(snakeHead2.style.left) + -1 * dirX * pixelSize
+        parseInt(snakeHead2.style.left) + -1 * dirX2 * pixelSize
       }px`;
       dirX = 0;
       dirY = 0;
@@ -2077,30 +2077,90 @@ function CheckGameOver() {
   }
 
   for (let i = 3; i < snake.length; i++) {
-    if (elementsOverlap(snake[i], snakeHead) && !shiedled) return true;
+    if (elementsOverlap(snake[i], snakeHead) && !shiedled) {
+      dirX = 0;
+      dirY = 0;
+      dirX2 = 0;
+      dirY2 = 0;
+      return true;
+    }
   }
   if (coopPlay) {
     for (let i = 3; i < snake2.length; i++) {
-      if (elementsOverlap(snake2[i], snakeHead2) && !shiedled) return true;
+      if (elementsOverlap(snake2[i], snakeHead2) && !shiedled) {
+        snakeHead2.style.top = `${
+          parseInt(snakeHead2.style.top) + 1 * dirY2 * pixelSize
+        }px`;
+        snakeHead2.style.left = `${
+          parseInt(snakeHead2.style.left) + -1 * dirX2 * pixelSize
+        }px`;
+        dirX = 0;
+        dirY = 0;
+        dirX2 = 0;
+        dirY2 = 0;
+        return true;
+      }
     }
     for (let i = 0; i < snake.length; i++) {
       for (let j = 0; j < snake2.length; j++) {
-        if (elementsOverlap(snake[i], snake2[j]) && !shiedled) return true;
+        if (elementsOverlap(snake[i], snake2[j]) && !shiedled) {
+          snakeHead2.style.top = `${
+            parseInt(snakeHead2.style.top) + 1 * dirY2 * pixelSize
+          }px`;
+          snakeHead2.style.left = `${
+            parseInt(snakeHead2.style.left) + -1 * dirX2 * pixelSize
+          }px`;
+          snakeHead.style.top = `${
+            parseInt(snakeHead.style.top) + 1 * dirY * pixelSize
+          }px`;
+          snakeHead.style.left = `${
+            parseInt(snakeHead.style.left) + -1 * dirX * pixelSize
+          }px`;
+          dirX = 0;
+          dirY = 0;
+          dirX2 = 0;
+          dirY2 = 0;
+          return true;
+        }
       }
     }
   }
   for (let i = 0; i < oldSnake.length; i++) {
-    if (elementsOverlap(snakeHead, oldSnake[i]) && !shiedled) return true;
+    if (elementsOverlap(snakeHead, oldSnake[i]) && !shiedled) {
+      dirX = 0;
+      dirY = 0;
+      dirX2 = 0;
+      dirY2 = 0;
+      return true;
+    }
   }
   if (coopPlay) {
     for (let i = 0; i < oldSnake2.length; i++) {
-      if (elementsOverlap(snakeHead2, oldSnake2[i]) && !shiedled) return true;
+      if (elementsOverlap(snakeHead2, oldSnake2[i]) && !shiedled) {
+        dirX = 0;
+        dirY = 0;
+        dirX2 = 0;
+        dirY2 = 0;
+        return true;
+      }
     }
     for (let i = 0; i < oldSnake2.length; i++) {
-      if (elementsOverlap(snakeHead, oldSnake2[i]) && !shiedled) return true;
+      if (elementsOverlap(snakeHead, oldSnake2[i]) && !shiedled) {
+        dirX = 0;
+        dirY = 0;
+        dirX2 = 0;
+        dirY2 = 0;
+        return true;
+      }
     }
     for (let i = 0; i < oldSnake.length; i++) {
-      if (elementsOverlap(snakeHead2, oldSnake[i]) && !shiedled) return true;
+      if (elementsOverlap(snakeHead2, oldSnake[i]) && !shiedled) {
+        dirX = 0;
+        dirY = 0;
+        dirX2 = 0;
+        dirY2 = 0;
+        return true;
+      }
     }
   }
 
