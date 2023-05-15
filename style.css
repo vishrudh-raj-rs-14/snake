@@ -1159,6 +1159,7 @@ body {
   }
   .game {
     /* height: 95vh; */
+    padding-bottom: 25px;
     justify-content: center;
   }
   .menu-main {
