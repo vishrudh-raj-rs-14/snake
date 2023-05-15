@@ -703,6 +703,7 @@ window.addEventListener("keydown", (e) => {
       moveSpike();
       gameLoop();
     }
+    e.preventDefault();
     if (
       (e.key == "w" || e.key == "ArrowUp") &&
       !coopPlay &&
@@ -923,7 +924,7 @@ window.addEventListener("keydown", (e) => {
         moveSpike();
         gameLoop();
       }
-
+      e.preventDefault();
       if (e.key == "ArrowUp" && dirY2 != -1 && moved2 && delayed) {
         moved2 = false;
         started = true;

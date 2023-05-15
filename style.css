@@ -1059,8 +1059,44 @@ body {
 }
 
 @media only screen and (max-height: 820px) {
-  body {
+  /* body {
     overflow: scroll;
+  } */
+
+  .text {
+    width: 480px;
+  }
+
+  .game-bg-holder {
+    height: 480px;
+    width: 480px;
+  }
+  .game-bg {
+    height: 480px;
+    width: 480px;
+  }
+}
+
+@media only screen and (max-height: 630px) {
+  /* body {
+    overflow: scroll;
+  } */
+
+  .text {
+    width: 360px;
+  }
+
+  .word {
+    font-size: 10px !important;
+  }
+
+  .game-bg-holder {
+    height: 360px;
+    width: 360px;
+  }
+  .game-bg {
+    height: 360px;
+    width: 360px;
   }
 }
 
