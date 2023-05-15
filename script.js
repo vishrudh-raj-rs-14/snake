@@ -119,12 +119,18 @@ let score = 0;
 let highScore = localStorage.getItem("highScore")
   ? localStorage.getItem("highScore")
   : 0;
+let chighScore = localStorage.getItem("chighScore")
+  ? localStorage.getItem("chighScore")
+  : 0;
 let scoreEle = document.querySelector(".score-text-val");
 let interval;
 let gameTime = 1;
 let highScoreEle = document.querySelector(".highscore-text-val");
 scoreEle.textContent = score;
 highScoreEle.textContent = highScore;
+if (coopPlay) {
+  highScoreEle.textContent = chighScore;
+}
 let wordCreated = false;
 let currentWord;
 let index = 0;
@@ -1782,6 +1788,10 @@ function reset(
   if (all) {
     score = state.score;
     scoreEle.textContent = score;
+    highScoreEle.textContent = highScore;
+    if (coopPlay) {
+      highScoreEle.textContent = chighScore;
+    }
     // save.classList.add("disabled");
     lives = state.lives;
     snakeHead.style.height = `${pixelSize}px`;
@@ -2407,10 +2417,17 @@ function gameLoop() {
       if (elementsOverlap(snakeHead, portals[i])) {
         if (oldSnake.length != 0) {
           console.log("this");
-          if (score > highScore) {
+          if (score > highScore && lives <= 1) {
             highScore = score;
             highScoreEle.textContent = highScore;
             localStorage.setItem("highScore", highScore);
+          }
+          if (coopPlay) {
+            if (score > chighScore && lives <= 1) {
+              chighScore = score;
+              highScoreEle.textContent = chighScore;
+              localStorage.setItem("chighScore", chighScore);
+            }
           }
           // started = false;
           time.textContent = `00:00`;
@@ -2480,10 +2497,17 @@ function gameLoop() {
       }
       if (coopPlay && elementsOverlap(snakeHead2, portals[i])) {
         if (oldSnake2.length != 0) {
-          if (score > highScore) {
+          if (score > highScore && lives <= 1) {
             highScore = score;
             highScoreEle.textContent = highScore;
             localStorage.setItem("highScore", highScore);
+          }
+          if (coopPlay) {
+            if (score > chighScore && lives <= 1) {
+              chighScore = score;
+              highScoreEle.textContent = chighScore;
+              localStorage.setItem("chighScore", chighScore);
+            }
           }
           // started = false;
           time.textContent = `00:00`;
@@ -2624,10 +2648,17 @@ function gameLoop() {
     moved2 = true;
     if (CheckGameOver()) {
       curTime = 0;
-      if (score > highScore) {
+      if (score > highScore && lives <= 1) {
         highScore = score;
         highScoreEle.textContent = highScore;
         localStorage.setItem("highScore", highScore);
+      }
+      if (coopPlay) {
+        if (score > chighScore && lives <= 1) {
+          chighScore = score;
+          highScoreEle.textContent = chighScore;
+          localStorage.setItem("chighScore", chighScore);
+        }
       }
       // started = false;
       time.textContent = `00:00`;
