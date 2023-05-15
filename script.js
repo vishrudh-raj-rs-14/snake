@@ -121,6 +121,7 @@ let highScore = localStorage.getItem("highScore")
   : 0;
 let scoreEle = document.querySelector(".score-text-val");
 let interval;
+let gameTime = 1;
 let highScoreEle = document.querySelector(".highscore-text-val");
 scoreEle.textContent = score;
 highScoreEle.textContent = highScore;
@@ -464,10 +465,11 @@ window.addEventListener("touchmove", (e) => {
         if (interval) clearInterval(interval);
         interval = setInterval(() => {
           if (!paused) {
+            gameTime += 1;
             curTime += 1;
           }
-          if (curTime % 5 == 0 && !paused) {
-            speed += DIMENSIONS == 30 ? 0.5 : 1;
+          if (gameTime % 5 == 0 && !paused) {
+            speed += 1;
             document
               .querySelector(":root")
               .style.setProperty(
@@ -643,10 +645,11 @@ window.addEventListener("keydown", (e) => {
       if (interval) clearInterval(interval);
       interval = setInterval(() => {
         if (!paused) {
+          gameTime += 1;
           curTime += 1;
         }
-        if (curTime % 5 == 0 && !paused) {
-          speed += DIMENSIONS == 30 ? 0.5 : 1;
+        if (gameTime % 5 == 0 && !paused) {
+          speed += 1;
           document
             .querySelector(":root")
             .style.setProperty(
@@ -763,10 +766,11 @@ window.addEventListener("keydown", (e) => {
         if (interval) clearInterval(interval);
         interval = setInterval(() => {
           if (!paused) {
+            gameTime += 1;
             curTime += 1;
           }
-          if (curTime % 5 == 0 && !paused) {
-            speed += DIMENSIONS == 30 ? 0.5 : 1;
+          if (gameTime % 5 == 0 && !paused) {
+            speed += 1;
             document
               .querySelector(":root")
               .style.setProperty(
@@ -861,10 +865,11 @@ window.addEventListener("keydown", (e) => {
         if (interval) clearInterval(interval);
         interval = setInterval(() => {
           if (!paused) {
+            gameTime += 1;
             curTime += 1;
           }
-          if (curTime % 5 == 0 && !paused) {
-            speed += DIMENSIONS == 30 ? 0.5 : 1;
+          if (gameTime % 5 == 0 && !paused) {
+            speed += 1;
             document
               .querySelector(":root")
               .style.setProperty(
@@ -2162,44 +2167,46 @@ function spikeCollide() {
 }
 
 function moveSpike() {
-  for (let i = 0; i < movingObstacle.length; i++) {
-    if (!gameoverCollide) {
-      if (
-        parseInt(movingObstacle[i].dataset.travelled) <=
-        parseInt(movingObstacle[i].dataset.blocks)
-      ) {
-        movingObstacle[i].style.top = `${
-          parseInt(movingObstacle[i].style.top) +
-          (parseInt(movingObstacle[i].dataset.dir) == 0 ? 1 : 0) *
-            1 *
-            parseInt(movingObstacle[i].dataset.movDir) *
-            pixelSize
-        }px`;
-        movingObstacle[i].style.left = `${
-          parseInt(movingObstacle[i].style.left) +
-          (parseInt(movingObstacle[i].dataset.dir) == 0 ? 0 : 1) *
-            1 *
-            parseInt(movingObstacle[i].dataset.movDir) *
-            pixelSize
-        }px`;
-        movingObstacle[i].dataset.y = `${
-          parseInt(movingObstacle[i].dataset.y) +
-          (parseInt(movingObstacle[i].dataset.dir) == 0 ? 1 : 0) *
-            1 *
-            parseInt(movingObstacle[i].dataset.movDir)
-        }`;
-        movingObstacle[i].dataset.x = `${
-          parseInt(movingObstacle[i].dataset.x) +
-          (parseInt(movingObstacle[i].dataset.dir) == 0 ? 0 : 1) *
-            1 *
-            parseInt(movingObstacle[i].dataset.movDir)
-        }`;
-        movingObstacle[i].dataset.travelled =
-          parseInt(movingObstacle[i].dataset.travelled) + 1;
-      } else {
-        movingObstacle[i].dataset.movDir =
-          -1 * parseInt(movingObstacle[i].dataset.movDir);
-        movingObstacle[i].dataset.travelled = 0;
+  if (!paused) {
+    for (let i = 0; i < movingObstacle.length; i++) {
+      if (!gameoverCollide) {
+        if (
+          parseInt(movingObstacle[i].dataset.travelled) <=
+          parseInt(movingObstacle[i].dataset.blocks)
+        ) {
+          movingObstacle[i].style.top = `${
+            parseInt(movingObstacle[i].style.top) +
+            (parseInt(movingObstacle[i].dataset.dir) == 0 ? 1 : 0) *
+              1 *
+              parseInt(movingObstacle[i].dataset.movDir) *
+              pixelSize
+          }px`;
+          movingObstacle[i].style.left = `${
+            parseInt(movingObstacle[i].style.left) +
+            (parseInt(movingObstacle[i].dataset.dir) == 0 ? 0 : 1) *
+              1 *
+              parseInt(movingObstacle[i].dataset.movDir) *
+              pixelSize
+          }px`;
+          movingObstacle[i].dataset.y = `${
+            parseInt(movingObstacle[i].dataset.y) +
+            (parseInt(movingObstacle[i].dataset.dir) == 0 ? 1 : 0) *
+              1 *
+              parseInt(movingObstacle[i].dataset.movDir)
+          }`;
+          movingObstacle[i].dataset.x = `${
+            parseInt(movingObstacle[i].dataset.x) +
+            (parseInt(movingObstacle[i].dataset.dir) == 0 ? 0 : 1) *
+              1 *
+              parseInt(movingObstacle[i].dataset.movDir)
+          }`;
+          movingObstacle[i].dataset.travelled =
+            parseInt(movingObstacle[i].dataset.travelled) + 1;
+        } else {
+          movingObstacle[i].dataset.movDir =
+            -1 * parseInt(movingObstacle[i].dataset.movDir);
+          movingObstacle[i].dataset.travelled = 0;
+        }
       }
     }
   }
