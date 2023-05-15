@@ -10,6 +10,8 @@
   --toX2: 0px;
   --toY2: 0px;
 
+  --animation-time: 100ms;
+
   --transition: 100ms;
 
   --background: url(https://cdn.pixabay.com/photo/2020/12/20/21/17/city-5848267_1280.jpg);
@@ -698,10 +700,10 @@ body {
 }
 
 .moveSnake {
-  animation: snakeStart 100ms linear;
+  animation: snakeStart var(--animation-time) linear;
 }
 .moveSnake2 {
-  animation: snakeStart2 100ms linear;
+  animation: snakeStart2 var(--animation-time) linear;
 }
 @keyframes snakeStart2 {
   0% {

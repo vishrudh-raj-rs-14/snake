@@ -2326,7 +2326,7 @@ function gameLoop() {
       wordCreated = false;
       let word = wordList[Math.floor(Math.random() * wordList.length)];
       currentWord = word;
-      curTime -= 15;
+      curTime -= 8;
       text.innerHTML = currentWord.toUpperCase();
       index = 0;
       createWord(word.toUpperCase());
@@ -2406,6 +2406,7 @@ function gameLoop() {
     for (let i = 0; i < portals.length; i++) {
       if (elementsOverlap(snakeHead, portals[i])) {
         if (oldSnake.length != 0) {
+          console.log("this");
           if (score > highScore) {
             highScore = score;
             highScoreEle.textContent = highScore;
@@ -2586,12 +2587,14 @@ function gameLoop() {
       );
     }
     if (portaled) {
+      root.style.setProperty("--animation-time", `${1000 / speed - 10}ms`);
       snakeHead.classList.add("moveSnake");
       portaled = false;
     } else {
       //   snakeHead.classList.remove("snakeMove");
     }
     if (portaled2 && coopPlay) {
+      root.style.setProperty("--animation-time", `${1000 / speed - 10}ms`);
       snakeHead2.classList.add("moveSnake2");
       portaled2 = false;
     } else {
