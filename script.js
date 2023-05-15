@@ -2990,6 +2990,7 @@ coop.addEventListener("click", () => {
     true
   );
   click.play();
+  deleteStars();
   document.querySelector(".second").classList.add("hide");
   mainAudio.pause();
   document.querySelector(".bg").classList.add("hide");
