@@ -1157,7 +1157,7 @@ function createPower() {
           power.getBoundingClientRect().x != 0 &&
           power.getBoundingClientRect().y != 0
         ) {
-          powers[index][0].parentNode.removeChild(powers[index][0]);
+          power.parentNode.removeChild(power);
           powers.splice(index, 1);
         }
       },
@@ -2188,10 +2188,10 @@ function spikeCollide() {
         let object_1 = snake[i].getBoundingClientRect();
         let object_2 = movingObstacle[j].getBoundingClientRect();
         if (
-          object_1.left < object_2.left + object_2.width &&
-          object_1.left + object_1.width > object_2.left &&
-          object_1.top < object_2.top + object_2.height &&
-          object_1.top + object_1.height > object_2.top &&
+          object_1.left + 5 < object_2.left + object_2.width &&
+          object_1.left + object_1.width > object_2.left + 5 &&
+          object_1.top + 5 < object_2.top + object_2.height &&
+          object_1.top + object_1.height > object_2.top + 5 &&
           !shiedled
         ) {
           score1 -= 40;
@@ -2207,10 +2207,10 @@ function spikeCollide() {
         let object_1 = oldSnake[i].getBoundingClientRect();
         let object_2 = movingObstacle[j].getBoundingClientRect();
         if (
-          object_1.left < object_2.left + object_2.width &&
-          object_1.left + object_1.width > object_2.left &&
-          object_1.top < object_2.top + object_2.height &&
-          object_1.top + object_1.height > object_2.top &&
+          object_1.left + 5 < object_2.left + object_2.width &&
+          object_1.left + object_1.width > object_2.left + 5 &&
+          object_1.top + 5 < object_2.top + object_2.height &&
+          object_1.top + object_1.height > object_2.top + 5 &&
           !shiedled
         ) {
           score1 -= 40;
@@ -2227,13 +2227,12 @@ function spikeCollide() {
           let object_1 = snake2[i].getBoundingClientRect();
           let object_2 = movingObstacle[j].getBoundingClientRect();
           if (
-            object_1.left < object_2.left + object_2.width &&
-            object_1.left + object_1.width > object_2.left &&
-            object_1.top < object_2.top + object_2.height &&
-            object_1.top + object_1.height > object_2.top &&
+            object_1.left + 5 < object_2.left + object_2.width &&
+            object_1.left + object_1.width > object_2.left + 5 &&
+            object_1.top + 5 < object_2.top + object_2.height &&
+            object_1.top + object_1.height > object_2.top + 5 &&
             !shiedled
           ) {
-            console.log("here");
             score2 -= 40;
             scoreEle1.textContent = score1;
             scoreEle2.textContent = score2;
@@ -2247,10 +2246,10 @@ function spikeCollide() {
           let object_1 = oldSnake2[i].getBoundingClientRect();
           let object_2 = movingObstacle[j].getBoundingClientRect();
           if (
-            object_1.left < object_2.left + object_2.width &&
-            object_1.left + object_1.width > object_2.left &&
-            object_1.top < object_2.top + object_2.height &&
-            object_1.top + object_1.height > object_2.top &&
+            object_1.left + 5 < object_2.left + object_2.width &&
+            object_1.left + object_1.width > object_2.left + 5 &&
+            object_1.top + 5 < object_2.top + object_2.height &&
+            object_1.top + object_1.height > object_2.top + 5 &&
             !shiedled
           ) {
             score2 -= 40;
@@ -2362,6 +2361,7 @@ function gameLoop() {
     } else {
       for (let i = 0; i < letters.length; i++) {
         if (letters[i] && elementsOverlap(letters[i], snakeHead)) {
+          console.log("here");
           if (letters[i].textContent == currentWord[index].toUpperCase()) {
             letters[i].parentNode.removeChild(letters[i]);
             text.innerHTML = `<span class="colorTextGreen">${currentWord
@@ -2850,6 +2850,7 @@ window.onresize = () => {
   let dirYc = dirY;
   let dirY2c = dirY2;
   let fightc = fight;
+  let pausec = paused;
   if (coopPlay) {
     reset(
       true,
@@ -2989,6 +2990,7 @@ window.onresize = () => {
     resetFight();
   }
   dirX = dirXc;
+  paused = pausec;
   dirX2 = dirX2c;
   dirY = dirYc;
   dirY2 = dirY2c;
