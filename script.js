@@ -68,6 +68,7 @@ let eat = new Audio("./assets/eat.mp3");
 let power = new Audio("./assets/power.mp3");
 let goAudio = new Audio("./assets/go.mp3");
 let gameBgm = new Audio("./assets/bgm.mp3");
+let fight = false;
 gameBgm.loop = true;
 gameBgm.volume = 0.25;
 let click = new Audio("./assets/click.mp3");
@@ -116,6 +117,8 @@ time2.textContent = `${String(Math.floor(maxTime / 60)).padStart(
 )}:${String(Math.floor(maxTime % 60)).padStart(2, "0")}`;
 let started = false;
 let score = 0;
+let score1 = 0;
+let score2 = 0;
 let highScore = localStorage.getItem("highScore")
   ? localStorage.getItem("highScore")
   : 0;
@@ -123,12 +126,18 @@ let chighScore = localStorage.getItem("chighScore")
   ? localStorage.getItem("chighScore")
   : 0;
 let scoreEle = document.querySelector(".score-text-val");
+let scoreEle1 = document.querySelector(".player1 .fight-score-val");
+let scoreEle2 = document.querySelector(".player2 .fight-score-val");
+
 let interval;
 let gameTime = 1;
 let highScoreEle = document.querySelector(".highscore-text-val");
 scoreEle.textContent = score;
+scoreEle1.textContent = score1;
+scoreEle2.textContent = score2;
+
 highScoreEle.textContent = highScore;
-if (coopPlay) {
+if (coopPlay && !fight) {
   highScoreEle.textContent = chighScore;
 }
 let wordCreated = false;
@@ -681,6 +690,7 @@ window.addEventListener("keydown", (e) => {
     if (e.key == "r" && waitingToRestart) {
       waitingToRestart = false;
       curTime = 0;
+      let fightc = fight;
       reset(
         true,
         {
@@ -706,6 +716,9 @@ window.addEventListener("keydown", (e) => {
         },
         coopPlay
       );
+      if (fightc) {
+        resetFight();
+      }
       moveSpike();
       gameLoop();
     }
@@ -803,6 +816,7 @@ window.addEventListener("keydown", (e) => {
       if (e.key == "r" && waitingToRestart) {
         waitingToRestart = false;
         curTime = 0;
+        let fightc = fight;
         reset(
           true,
           {
@@ -828,6 +842,9 @@ window.addEventListener("keydown", (e) => {
           },
           coopPlay
         );
+        if (fightc) {
+          resetFight();
+        }
         moveSpike();
         gameLoop();
       }
@@ -902,6 +919,7 @@ window.addEventListener("keydown", (e) => {
       if (e.key == "r" && waitingToRestart) {
         waitingToRestart = false;
         curTime = 0;
+        let fightc = fight;
         reset(
           true,
           {
@@ -927,6 +945,9 @@ window.addEventListener("keydown", (e) => {
           },
           coopPlay
         );
+        if (fightc) {
+          resetFight();
+        }
         moveSpike();
         gameLoop();
       }
@@ -959,143 +980,6 @@ window.addEventListener("keydown", (e) => {
     }
   }
 });
-
-// document.querySelector(".top").addEventListener("click", (e) => {
-//   if (!paused) {
-//     if (!started) {
-//       startTime = Date.now();
-//       interval = setInterval(() => {
-//         if (!paused) {
-//           curTime += 1;
-//         }
-//         if (curTime % 5 == 0 && !paused) {
-//           speed += DIMENSIONS == 30 ? 0.5 : 1;
-//         }
-//         if (curTime % 15 == 0 && !paused) {
-//           createPower();
-//         }
-//         time.textContent = `${String(
-//           Math.floor((maxTime - curTime) / 60)
-//         ).padStart(2, "0")}:${String(
-//           Math.floor((maxTime - curTime) % 60)
-//         ).padStart(2, "0")}`;
-//         time2.textContent = `${String(
-//           Math.floor((maxTime - curTime) / 60)
-//         ).padStart(2, "0")}:${String(
-//           Math.floor((maxTime - curTime) % 60)
-//         ).padStart(2, "0")}`;
-//       }, 1000);
-//       started = true;
-//     }
-//     if (dirY != -1 && moved && delayed) {
-//       moved = false;
-//       dirX = 0;
-//       dirY = 1;
-//     }
-//   }
-// });
-// document.querySelector(".left").addEventListener("click", (e) => {
-//   if (!paused) {
-//     if (!started) {
-//       startTime = Date.now();
-//       interval = setInterval(() => {
-//         if (!paused) {
-//           curTime += 1;
-//         }
-//         if (curTime % 5 == 0 && !paused) {
-//           speed += DIMENSIONS == 30 ? 0.5 : 1;
-//         }
-//         if (curTime % 15 == 0 && !paused) {
-//           createPower();
-//         }
-//         time.textContent = `${String(
-//           Math.floor((maxTime - curTime) / 60)
-//         ).padStart(2, "0")}:${String(
-//           Math.floor((maxTime - curTime) % 60)
-//         ).padStart(2, "0")}`;
-//         time2.textContent = `${String(
-//           Math.floor((maxTime - curTime) / 60)
-//         ).padStart(2, "0")}:${String(
-//           Math.floor((maxTime - curTime) % 60)
-//         ).padStart(2, "0")}`;
-//       }, 1000);
-//       started = true;
-//     }
-//     if (dirX != 1 && moved && delayed) {
-//       moved = false;
-//       dirX = -1;
-//       dirY = 0;
-//     }
-//   }
-// });
-// document.querySelector(".right").addEventListener("click", (e) => {
-//   if (!paused) {
-//     if (!started) {
-//       startTime = Date.now();
-//       interval = setInterval(() => {
-//         if (!paused) {
-//           curTime += 1;
-//         }
-//         if (curTime % 5 == 0 && !paused) {
-//           speed += DIMENSIONS == 30 ? 0.5 : 1;
-//         }
-//         if (curTime % 15 == 0 && !paused) {
-//           createPower();
-//         }
-//         time.textContent = `${String(
-//           Math.floor((maxTime - curTime) / 60)
-//         ).padStart(2, "0")}:${String(
-//           Math.floor((maxTime - curTime) % 60)
-//         ).padStart(2, "0")}`;
-//         time2.textContent = `${String(
-//           Math.floor((maxTime - curTime) / 60)
-//         ).padStart(2, "0")}:${String(
-//           Math.floor((maxTime - curTime) % 60)
-//         ).padStart(2, "0")}`;
-//       }, 1000);
-//       started = true;
-//     }
-//     if (dirX != -1 && moved && delayed) {
-//       moved = false;
-//       dirX = 1;
-//       dirY = 0;
-//     }
-//   }
-// });
-// document.querySelector(".bottom").addEventListener("click", (e) => {
-//   if (!paused) {
-//     if (!started) {
-//       startTime = Date.now();
-//       interval = setInterval(() => {
-//         if (!paused) {
-//           curTime += 1;
-//         }
-//         if (curTime % 5 == 0 && !paused) {
-//           speed += DIMENSIONS == 30 ? 0.5 : 1;
-//         }
-//         if (curTime % 15 == 0 && !paused) {
-//           createPower();
-//         }
-//         time.textContent = `${String(
-//           Math.floor((maxTime - curTime) / 60)
-//         ).padStart(2, "0")}:${String(
-//           Math.floor((maxTime - curTime) % 60)
-//         ).padStart(2, "0")}`;
-//         time2.textContent = `${String(
-//           Math.floor((maxTime - curTime) / 60)
-//         ).padStart(2, "0")}:${String(
-//           Math.floor((maxTime - curTime) % 60)
-//         ).padStart(2, "0")}`;
-//       }, 1000);
-//       started = true;
-//     }
-//     if (dirY != 1 && moved && delayed) {
-//       moved = false;
-//       dirX = 0;
-//       dirY = -1;
-//     }
-//   }
-// });
 
 function createWord(word) {
   wordCreated = true;
@@ -1600,7 +1484,7 @@ function reset(
     load: false,
   },
   coop = false,
-  resize
+  resize = false
 ) {
   DIMENSIONS = state.dimension;
   go.classList.add("hide");
@@ -1695,6 +1579,12 @@ function reset(
   snakeHead = document.querySelector(".snake");
   snakeHead.style.height = `${pixelSize}px`;
   snakeHead.style.width = `${pixelSize}px`;
+
+  Array.from(document.querySelectorAll(".scoreboard")).forEach((ele) =>
+    ele.classList.add("hide")
+  );
+  highScoreEle.classList.remove("hide");
+  document.querySelector(".hs").classList.remove("hide");
   if (coop) {
     snakeHead2 = document.querySelector(".snake2");
     snakeHead2.style.height = `${pixelSize}px`;
@@ -1704,6 +1594,7 @@ function reset(
   started = false;
   moved = false;
   moved2 = false;
+  fight = false;
   portals.splice(0, portals.length);
   for (let i = 0; i < movingObstacle.length; i++) {
     if (movingObstacle[i].parentNode)
@@ -1793,9 +1684,15 @@ function reset(
   spikeCollide();
   if (all) {
     score = state.score;
+    score1 = 0;
+    score2 = 0;
     scoreEle.textContent = score;
-    highScoreEle.textContent = highScore;
-    if (coopPlay) {
+    scoreEle1.textContent = score1;
+    scoreEle2.textContent = score2;
+    if (!coopPlay) {
+      highScoreEle.textContent = highScore;
+    }
+    if (coopPlay && !fight) {
       highScoreEle.textContent = chighScore;
     }
     // save.classList.add("disabled");
@@ -1824,6 +1721,12 @@ resume.addEventListener("click", (e) => {
     setting.querySelector("img").classList.remove("onclick");
     menu.classList.add("hide");
   }
+});
+
+document.querySelector("#multi").addEventListener("click", (e) => {
+  click.play();
+  document.querySelector(".menu-main2").classList.add("hide");
+  document.querySelector(".multi").classList.remove("hide");
 });
 
 save.addEventListener("click", (e) => {
@@ -1988,6 +1891,7 @@ restart.addEventListener("click", (e) => {
   menu.classList.add("hide");
   resume.classList.remove("disabled");
   setting.querySelector("img").classList.remove("onclick");
+  let fightc = fight;
   reset(
     true,
     {
@@ -2013,6 +1917,9 @@ restart.addEventListener("click", (e) => {
     },
     coopPlay
   );
+  if (fightc) {
+    resetFight();
+  }
 });
 
 function CheckGameOver() {
@@ -2021,6 +1928,11 @@ function CheckGameOver() {
   if (top < 0) {
     snakeHead.style.top = 0;
     snakeHead.dataset.y = parseInt(snakeHead.dataset.y) + 1;
+    if (fight) {
+      score1 -= 40;
+      scoreEle1.textContent = score1;
+      scoreEle2.textContent = score2;
+    }
     return true;
   } else if (top >= DIMENSIONS) {
     snakeHead.style.top = `${
@@ -2028,11 +1940,21 @@ function CheckGameOver() {
       gameBg.getBoundingClientRect().height / DIMENSIONS
     }px`;
     snakeHead.dataset.y = parseInt(snakeHead.dataset.y) - 1;
+    if (fight) {
+      score1 -= 40;
+      scoreEle1.textContent = score1;
+      scoreEle2.textContent = score2;
+    }
     return true;
   }
   if (left < 0) {
     snakeHead.style.left = 0;
     snakeHead.dataset.x = parseInt(snakeHead.dataset.x) + 1;
+    if (fight) {
+      score1 -= 40;
+      scoreEle1.textContent = score1;
+      scoreEle2.textContent = score2;
+    }
     return true;
   } else if (left >= DIMENSIONS) {
     snakeHead.style.left = `${
@@ -2040,6 +1962,11 @@ function CheckGameOver() {
       gameBg.getBoundingClientRect().height / DIMENSIONS
     }px`;
     snakeHead.dataset.x = parseInt(snakeHead.dataset.x) - 1;
+    if (fight) {
+      score1 -= 40;
+      scoreEle1.textContent = score1;
+      scoreEle2.textContent = score2;
+    }
     return true;
   }
   if (coopPlay) {
@@ -2048,6 +1975,11 @@ function CheckGameOver() {
     if (top < 0) {
       snakeHead2.style.top = 0;
       snakeHead2.dataset.y = parseInt(snakeHead2.dataset.y) + 1;
+      if (fight) {
+        score2 -= 40;
+        scoreEle1.textContent = score1;
+        scoreEle2.textContent = score2;
+      }
       return true;
     } else if (top >= DIMENSIONS) {
       snakeHead2.style.top = `${
@@ -2055,11 +1987,21 @@ function CheckGameOver() {
         gameBg.getBoundingClientRect().height / DIMENSIONS
       }px`;
       snakeHead2.dataset.y = parseInt(snakeHead2.dataset.y) - 1;
+      if (fight) {
+        score2 -= 40;
+        scoreEle1.textContent = score1;
+        scoreEle2.textContent = score2;
+      }
       return true;
     }
     if (left < 0) {
       snakeHead2.style.left = 0;
       snakeHead2.dataset.x = parseInt(snakeHead2.dataset.x) + 1;
+      if (fight) {
+        score2 -= 40;
+        scoreEle1.textContent = score1;
+        scoreEle2.textContent = score2;
+      }
       return true;
     } else if (left >= DIMENSIONS) {
       snakeHead2.dataset.x = parseInt(snakeHead2.dataset.x) - 1;
@@ -2067,6 +2009,11 @@ function CheckGameOver() {
         gameBg.getBoundingClientRect().height -
         gameBg.getBoundingClientRect().height / DIMENSIONS
       }px`;
+      if (fight) {
+        score2 -= 40;
+        scoreEle1.textContent = score1;
+        scoreEle2.textContent = score2;
+      }
       return true;
     }
   }
@@ -2081,6 +2028,11 @@ function CheckGameOver() {
       snakeHead.style.left = `${
         parseInt(snakeHead.style.left) + -1 * dirX * pixelSize
       }px`;
+      if (fight) {
+        score1 -= 40;
+        scoreEle1.textContent = score1;
+        scoreEle2.textContent = score2;
+      }
       dirX = 0;
       dirY = 0;
       dirX2 = 0;
@@ -2094,6 +2046,11 @@ function CheckGameOver() {
       snakeHead2.style.left = `${
         parseInt(snakeHead2.style.left) + -1 * dirX2 * pixelSize
       }px`;
+      if (fight) {
+        score2 -= 40;
+        scoreEle1.textContent = score1;
+        scoreEle2.textContent = score2;
+      }
       dirX = 0;
       dirY = 0;
       dirX2 = 0;
@@ -2104,6 +2061,11 @@ function CheckGameOver() {
 
   for (let i = 3; i < snake.length; i++) {
     if (elementsOverlap(snake[i], snakeHead) && !shiedled) {
+      if (fight) {
+        score1 -= 40;
+        scoreEle1.textContent = score1;
+        scoreEle2.textContent = score2;
+      }
       dirX = 0;
       dirY = 0;
       dirX2 = 0;
@@ -2120,6 +2082,11 @@ function CheckGameOver() {
         snakeHead2.style.left = `${
           parseInt(snakeHead2.style.left) + -1 * dirX2 * pixelSize
         }px`;
+        if (fight) {
+          score2 -= 40;
+          scoreEle1.textContent = score1;
+          scoreEle2.textContent = score2;
+        }
         dirX = 0;
         dirY = 0;
         dirX2 = 0;
@@ -2127,26 +2094,28 @@ function CheckGameOver() {
         return true;
       }
     }
-    for (let i = 0; i < snake.length; i++) {
-      for (let j = 0; j < snake2.length; j++) {
-        if (elementsOverlap(snake[i], snake2[j]) && !shiedled) {
-          snakeHead2.style.top = `${
-            parseInt(snakeHead2.style.top) + 1 * dirY2 * pixelSize
-          }px`;
-          snakeHead2.style.left = `${
-            parseInt(snakeHead2.style.left) + -1 * dirX2 * pixelSize
-          }px`;
-          snakeHead.style.top = `${
-            parseInt(snakeHead.style.top) + 1 * dirY * pixelSize
-          }px`;
-          snakeHead.style.left = `${
-            parseInt(snakeHead.style.left) + -1 * dirX * pixelSize
-          }px`;
-          dirX = 0;
-          dirY = 0;
-          dirX2 = 0;
-          dirY2 = 0;
-          return true;
+    if (!fight) {
+      for (let i = 0; i < snake.length; i++) {
+        for (let j = 0; j < snake2.length; j++) {
+          if (elementsOverlap(snake[i], snake2[j]) && !shiedled) {
+            snakeHead2.style.top = `${
+              parseInt(snakeHead2.style.top) + 1 * dirY2 * pixelSize
+            }px`;
+            snakeHead2.style.left = `${
+              parseInt(snakeHead2.style.left) + -1 * dirX2 * pixelSize
+            }px`;
+            snakeHead.style.top = `${
+              parseInt(snakeHead.style.top) + 1 * dirY * pixelSize
+            }px`;
+            snakeHead.style.left = `${
+              parseInt(snakeHead.style.left) + -1 * dirX * pixelSize
+            }px`;
+            dirX = 0;
+            dirY = 0;
+            dirX2 = 0;
+            dirY2 = 0;
+            return true;
+          }
         }
       }
     }
@@ -2157,6 +2126,11 @@ function CheckGameOver() {
       dirY = 0;
       dirX2 = 0;
       dirY2 = 0;
+      if (fight) {
+        score1 -= 40;
+        scoreEle1.textContent = score1;
+        scoreEle2.textContent = score2;
+      }
       return true;
     }
   }
@@ -2167,25 +2141,32 @@ function CheckGameOver() {
         dirY = 0;
         dirX2 = 0;
         dirY2 = 0;
+        if (fight) {
+          score2 -= 40;
+          scoreEle1.textContent = score1;
+          scoreEle2.textContent = score2;
+        }
         return true;
       }
     }
-    for (let i = 0; i < oldSnake2.length; i++) {
-      if (elementsOverlap(snakeHead, oldSnake2[i]) && !shiedled) {
-        dirX = 0;
-        dirY = 0;
-        dirX2 = 0;
-        dirY2 = 0;
-        return true;
+    if (!fight) {
+      for (let i = 0; i < oldSnake2.length; i++) {
+        if (elementsOverlap(snakeHead, oldSnake2[i]) && !shiedled) {
+          dirX = 0;
+          dirY = 0;
+          dirX2 = 0;
+          dirY2 = 0;
+          return true;
+        }
       }
-    }
-    for (let i = 0; i < oldSnake.length; i++) {
-      if (elementsOverlap(snakeHead2, oldSnake[i]) && !shiedled) {
-        dirX = 0;
-        dirY = 0;
-        dirX2 = 0;
-        dirY2 = 0;
-        return true;
+      for (let i = 0; i < oldSnake.length; i++) {
+        if (elementsOverlap(snakeHead2, oldSnake[i]) && !shiedled) {
+          dirX = 0;
+          dirY = 0;
+          dirX2 = 0;
+          dirY2 = 0;
+          return true;
+        }
       }
     }
   }
@@ -2205,6 +2186,9 @@ function spikeCollide() {
         object_1.top + object_1.height > object_2.top &&
         !shiedled
       ) {
+        score1 -= 40;
+        scoreEle1.textContent = score1;
+        scoreEle2.textContent = score2;
         gameoverCollide = true;
         return;
       }
@@ -2221,6 +2205,9 @@ function spikeCollide() {
         object_1.top + object_1.height > object_2.top &&
         !shiedled
       ) {
+        score1 -= 40;
+        scoreEle1.textContent = score1;
+        scoreEle2.textContent = score2;
         gameoverCollide = true;
         return;
       }
@@ -2238,6 +2225,9 @@ function spikeCollide() {
           object_1.top + object_1.height > object_2.top &&
           !shiedled
         ) {
+          score2 -= 40;
+          scoreEle1.textContent = score1;
+          scoreEle2.textContent = score2;
           gameoverCollide = true;
           return;
         }
@@ -2254,6 +2244,9 @@ function spikeCollide() {
           object_1.top + object_1.height > object_2.top &&
           !shiedled
         ) {
+          score2 -= 40;
+          scoreEle1.textContent = score1;
+          scoreEle2.textContent = score2;
           gameoverCollide = true;
           return;
         }
@@ -2368,6 +2361,7 @@ function gameLoop() {
               .slice(index + 1, currentWord.length)}`;
             letters.splice(i, 1);
             score += 10;
+            score1 += 10;
             eat.play();
             increaseSnakeSize();
             index++;
@@ -2383,8 +2377,11 @@ function gameLoop() {
             increaseSnakeSize(2);
             curTime += 3;
             score -= 5;
+            score1 -= 5;
           }
           scoreEle.textContent = score;
+          scoreEle1.textContent = score1;
+          scoreEle2.textContent = score2;
         }
         if (coopPlay && letters[i] && elementsOverlap(letters[i], snakeHead2)) {
           if (letters[i].textContent == currentWord[index].toUpperCase()) {
@@ -2396,6 +2393,7 @@ function gameLoop() {
               .slice(index + 1, currentWord.length)}`;
             letters.splice(i, 1);
             score += 10;
+            score2 += 10;
             eat.play();
             increaseSnakeSize2();
             index++;
@@ -2411,8 +2409,11 @@ function gameLoop() {
             increaseSnakeSize2(2);
             curTime += 3;
             score -= 5;
+            score2 -= 5;
           }
           scoreEle.textContent = score;
+          scoreEle1.textContent = score1;
+          scoreEle2.textContent = score2;
         }
       }
     }
@@ -2501,12 +2502,15 @@ function gameLoop() {
     for (let i = 0; i < portals.length; i++) {
       if (elementsOverlap(snakeHead, portals[i])) {
         if (oldSnake.length != 0) {
-          if (score > highScore && lives <= 1) {
+          score1 -= 40;
+          scoreEle1.textContent = score1;
+          scoreEle2.textContent = score2;
+          if (score > highScore && lives <= 1 && !coopPlay) {
             highScore = score;
             highScoreEle.textContent = highScore;
             localStorage.setItem("highScore", highScore);
           }
-          if (coopPlay) {
+          if (coopPlay && !fight) {
             if (score > chighScore && lives <= 1) {
               chighScore = score;
               highScoreEle.textContent = chighScore;
@@ -2581,12 +2585,16 @@ function gameLoop() {
       }
       if (coopPlay && elementsOverlap(snakeHead2, portals[i])) {
         if (oldSnake2.length != 0) {
-          if (score > highScore && lives <= 1) {
+          score2 -= 40;
+          scoreEle1.textContent = score1;
+          scoreEle2.textContent = score2;
+
+          if (score > highScore && lives <= 1 && !coopPlay) {
             highScore = score;
             highScoreEle.textContent = highScore;
             localStorage.setItem("highScore", highScore);
           }
-          if (coopPlay) {
+          if (coopPlay && !fight) {
             if (score > chighScore && lives <= 1) {
               chighScore = score;
               highScoreEle.textContent = chighScore;
@@ -2732,12 +2740,12 @@ function gameLoop() {
     moved2 = true;
     if (CheckGameOver()) {
       curTime = 0;
-      if (score > highScore && lives <= 1) {
+      if (score > highScore && lives <= 1 && !coopPlay) {
         highScore = score;
         highScoreEle.textContent = highScore;
         localStorage.setItem("highScore", highScore);
       }
-      if (coopPlay) {
+      if (coopPlay && !fight) {
         if (score > chighScore && lives <= 1) {
           chighScore = score;
           highScoreEle.textContent = chighScore;
@@ -2757,6 +2765,7 @@ function gameLoop() {
         paused = true;
         setTimeout(() => {
           paused = false;
+          let fightc = fight;
           reset(
             false,
             {
@@ -2782,6 +2791,9 @@ function gameLoop() {
             },
             coopPlay
           );
+          if (fightc) {
+            resetFight();
+          }
         }, 300);
       } else {
         gameBgm.pause();
@@ -2789,6 +2801,15 @@ function gameLoop() {
         gameBgm.currentTime = 0;
         goAudio.play();
         document.querySelector(".go-score-val").textContent = score;
+        if (fight) {
+          if (score1 > score2) {
+            document.querySelector(".fight-val").textContent = `Player 1 Wins`;
+          } else if (score1 < score2) {
+            document.querySelector(".fight-val").textContent = `Player 2 Wins`;
+          } else {
+            document.querySelector(".fight-val").textContent = `Its a Draw`;
+          }
+        }
         go.classList.remove("hide");
         waitingToRestart = true;
         canMoveSpike = false;
@@ -2807,7 +2828,7 @@ window.onresize = () => {
   let dirX2c = dirX2;
   let dirYc = dirY;
   let dirY2c = dirY2;
-
+  let fightc = fight;
   if (coopPlay) {
     reset(
       true,
@@ -2942,6 +2963,9 @@ window.onresize = () => {
       false,
       true
     );
+  }
+  if (fightc) {
+    resetFight();
   }
   dirX = dirXc;
   dirX2 = dirX2c;
@@ -3125,6 +3149,55 @@ coop.addEventListener("click", () => {
   mainAudio.pause();
   document.querySelector(".bg").classList.add("hide");
 });
+
+document.querySelector("#fight").addEventListener("click", () => {
+  reset(
+    true,
+    {
+      dimension: DIMENSIONS,
+      snake: [],
+      oldSnake: [],
+      dirX: 0,
+      dirY: 0,
+      obstacles: [],
+      letters: [],
+      speed: SPEED,
+      curTime: 0,
+      portals: [],
+      score: 0,
+      index: 0,
+      curPosX: Math.floor(Math.random() * DIMENSIONS),
+      curPosY: Math.floor(Math.random() * DIMENSIONS),
+      snakeHead: undefined,
+      lives: LIVES,
+      oldDirX: 0,
+      oldDirY: 0,
+      load: false,
+    },
+    true
+  );
+  click.play();
+  fight = true;
+  Array.from(document.querySelectorAll(".scoreboard")).forEach((ele) =>
+    ele.classList.remove("hide")
+  );
+  highScoreEle.classList.add("hide");
+  document.querySelector(".hs").classList.add("hide");
+  deleteStars();
+  document.querySelector(".second").classList.add("hide");
+  mainAudio.pause();
+  document.querySelector(".bg").classList.add("hide");
+});
+
+function resetFight() {
+  fight = true;
+  Array.from(document.querySelectorAll(".scoreboard")).forEach((ele) =>
+    ele.classList.remove("hide")
+  );
+  highScoreEle.classList.add("hide");
+  document.querySelector(".hs").classList.add("hide");
+}
+
 let blob = document.querySelector(".blob");
 
 if (!localStorage.getItem(`state-accident`)) {
@@ -3276,3 +3349,10 @@ document.querySelector("#scifi").addEventListener("click", (e) => {
   document.querySelector(".menu-main2").classList.remove("hide");
   document.querySelector(".third").classList.add("hide");
 });
+
+Array.from(document.querySelectorAll(".back")).forEach((ele) =>
+  ele.addEventListener("click", () => {
+    ele.parentElement.classList.add("hide");
+    document.querySelector(".menu-main2").classList.remove("hide");
+  })
+);

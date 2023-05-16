@@ -31,6 +31,7 @@
       <div class="go-modal">
         <div class="go-text"><span>GAME</span> <span>OVER</span></div>
         <div class="go-score">Score <span class="go-score-val"></span></div>
+        <div class="go-options fight-val"></div>
         <div class="go-options pc">Press <span>R</span> to Restart</div>
         <div class="go-options mob">
           <i class="fa-solid fa-arrow-rotate-left icon"></i>
@@ -48,16 +49,16 @@
           <img src="./assets/theme.png" />
           <div class="tile-text">Themes</div>
         </div>
-        <div class="tile mob2">
-          <img src="./assets/coop.png" id="coop" />
-          <div class="tile-text">Co-Op</div>
+        <div class="tile mob2" id="multi">
+          <img src="./assets/coop.png" />
+          <div class="tile-text">Multiplayer</div>
         </div>
-        <div class="tile">
-          <img src="./assets/load.png" id="load" />
+        <div class="tile" id="load">
+          <img src="./assets/load.png" />
           <div class="tile-text">Load</div>
         </div>
-        <div class="tile">
-          <img src="./assets/restart.png" id="new" />
+        <div class="tile" id="new">
+          <img src="./assets/restart.png" />
           <div class="tile-text">New Game</div>
         </div>
       </div>
@@ -74,8 +75,10 @@
           <img src="./assets/load_img.png" />
           <div class="tile-text">Slot 3</div>
         </div>
+        <div class="back"><img src="./assets/back.png" /></div>
       </div>
       <div class="menu-main2 third hide">
+        <div class="back"><img src="./assets/back.png" /></div>
         <div class="themes-head">Themes</div>
         <div class="theme-card-container">
           <div class="theme-card" id="alien">
@@ -105,6 +108,17 @@
             <div class="overlay"></div>
             <div class="theme-card-name">Sci-Fi City</div>
           </div>
+        </div>
+      </div>
+      <div class="menu-main2 multi hide">
+        <div class="back"><img src="./assets/back.png" /></div>
+        <div class="tile tile2" id="coop">
+          <img src="./assets/team.png" />
+          <div class="tile-text">Co-Op</div>
+        </div>
+        <div class="tile tile2" id="fight">
+          <img src="./assets/fight.png" />
+          <div class="tile-text">1V1</div>
         </div>
       </div>
       <div class="blob"></div>
@@ -192,8 +206,10 @@
     </div>
     <div class="scores">
       <div class="score-text">
-        <span>Score &nbsp;<span class="score-text-val"></span></span><br />High
-        Score &nbsp;
+        <span>Score &nbsp;<span class="score-text-val"></span></span><br /><span
+          class="hs"
+          >High Score </span
+        >&nbsp;
         <span class="highscore-text-val"></span>
       </div>
       <div class="time">00:00</div>
@@ -205,6 +221,14 @@
           <div class="time2">00:00</div>
           <div class="snake"></div>
           <div class="food"></div>
+        </div>
+        <div class="scoreboard player1">
+          <div>Player 1</div>
+          <div class="fight-score-val">120</div>
+        </div>
+        <div class="scoreboard player2">
+          <div>Player 2</div>
+          <div class="fight-score-val">160</div>
         </div>
       </div>
       <div class="text">

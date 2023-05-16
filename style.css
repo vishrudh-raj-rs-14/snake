@@ -243,7 +243,8 @@ body {
   width: 30vw;
   color: white;
   font-family: "Orbitron";
-  height: 30vh;
+  min-height: 30vh;
+  padding: 10px 15px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -264,6 +265,54 @@ body {
 
 .go-options span {
   color: #f40009;
+}
+
+.scoreboard {
+  background-color: rgba(0, 0, 0, 0.732);
+  min-height: 50px;
+  padding: 10px 15px;
+  position: absolute;
+  top: 30%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.player1 {
+  color: #24b515;
+  font-family: "Orbitron";
+  font-size: 30px;
+  left: -90px;
+}
+
+.player2 {
+  color: #348ce4;
+  font-family: "Orbitron";
+  font-size: 28px;
+  right: -270px;
+}
+
+.back {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  height: 35px;
+  width: 35px;
+}
+
+.back:hover {
+  scale: 1.2;
+}
+
+.back img {
+  height: 100%;
+}
+
+.fight-score-val {
+  margin-top: 10px;
+  font-size: 20px;
 }
 
 .food {
@@ -630,6 +679,19 @@ body {
 .menu-main2 .tile:nth-child(5) {
   /* top: calc(50% + 130px); */
   left: calc(50% + 140px);
+}
+
+.tile2 img {
+  scale: 1.2;
+}
+
+.menu-main2 .tile2:nth-child(2) {
+  top: 50% !important;
+  left: calc(50% - 75px) !important;
+}
+.menu-main2 .tile2:nth-child(3) {
+  top: 50% !important;
+  left: calc(50% + 75px) !important;
 }
 
 @keyframes blob {
