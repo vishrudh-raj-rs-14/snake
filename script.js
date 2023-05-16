@@ -1583,7 +1583,7 @@ function reset(
   Array.from(document.querySelectorAll(".scoreboard")).forEach((ele) =>
     ele.classList.add("hide")
   );
-  highScoreEle.classList.remove("hide");
+  document.querySelector(".score-text").classList.remove("hide");
   document.querySelector(".hs").classList.remove("hide");
   if (coop) {
     snakeHead2 = document.querySelector(".snake2");
@@ -2175,48 +2175,10 @@ function CheckGameOver() {
 }
 
 function spikeCollide() {
-  for (let i = 0; i < snake.length; i++) {
-    for (let j = 0; j < movingObstacle.length; j++) {
-      let object_1 = snake[i].getBoundingClientRect();
-      let object_2 = movingObstacle[j].getBoundingClientRect();
-      if (
-        object_1.left < object_2.left + object_2.width &&
-        object_1.left + object_1.width > object_2.left &&
-        object_1.top < object_2.top + object_2.height &&
-        object_1.top + object_1.height > object_2.top &&
-        !shiedled
-      ) {
-        score1 -= 40;
-        scoreEle1.textContent = score1;
-        scoreEle2.textContent = score2;
-        gameoverCollide = true;
-        return;
-      }
-    }
-  }
-  for (let i = 0; i < oldSnake.length; i++) {
-    for (let j = 0; j < movingObstacle.length; j++) {
-      let object_1 = oldSnake[i].getBoundingClientRect();
-      let object_2 = movingObstacle[j].getBoundingClientRect();
-      if (
-        object_1.left < object_2.left + object_2.width &&
-        object_1.left + object_1.width > object_2.left &&
-        object_1.top < object_2.top + object_2.height &&
-        object_1.top + object_1.height > object_2.top &&
-        !shiedled
-      ) {
-        score1 -= 40;
-        scoreEle1.textContent = score1;
-        scoreEle2.textContent = score2;
-        gameoverCollide = true;
-        return;
-      }
-    }
-  }
-  if (coopPlay) {
-    for (let i = 0; i < snake2.length; i++) {
+  if (!gameoverCollide) {
+    for (let i = 0; i < snake.length; i++) {
       for (let j = 0; j < movingObstacle.length; j++) {
-        let object_1 = snake2[i].getBoundingClientRect();
+        let object_1 = snake[i].getBoundingClientRect();
         let object_2 = movingObstacle[j].getBoundingClientRect();
         if (
           object_1.left < object_2.left + object_2.width &&
@@ -2225,7 +2187,7 @@ function spikeCollide() {
           object_1.top + object_1.height > object_2.top &&
           !shiedled
         ) {
-          score2 -= 40;
+          score1 -= 40;
           scoreEle1.textContent = score1;
           scoreEle2.textContent = score2;
           gameoverCollide = true;
@@ -2233,9 +2195,9 @@ function spikeCollide() {
         }
       }
     }
-    for (let i = 0; i < oldSnake2.length; i++) {
+    for (let i = 0; i < oldSnake.length; i++) {
       for (let j = 0; j < movingObstacle.length; j++) {
-        let object_1 = oldSnake2[i].getBoundingClientRect();
+        let object_1 = oldSnake[i].getBoundingClientRect();
         let object_2 = movingObstacle[j].getBoundingClientRect();
         if (
           object_1.left < object_2.left + object_2.width &&
@@ -2244,7 +2206,7 @@ function spikeCollide() {
           object_1.top + object_1.height > object_2.top &&
           !shiedled
         ) {
-          score2 -= 40;
+          score1 -= 40;
           scoreEle1.textContent = score1;
           scoreEle2.textContent = score2;
           gameoverCollide = true;
@@ -2252,8 +2214,49 @@ function spikeCollide() {
         }
       }
     }
+    if (coopPlay) {
+      for (let i = 0; i < snake2.length; i++) {
+        for (let j = 0; j < movingObstacle.length; j++) {
+          let object_1 = snake2[i].getBoundingClientRect();
+          let object_2 = movingObstacle[j].getBoundingClientRect();
+          if (
+            object_1.left < object_2.left + object_2.width &&
+            object_1.left + object_1.width > object_2.left &&
+            object_1.top < object_2.top + object_2.height &&
+            object_1.top + object_1.height > object_2.top &&
+            !shiedled
+          ) {
+            console.log("here");
+            score2 -= 40;
+            scoreEle1.textContent = score1;
+            scoreEle2.textContent = score2;
+            gameoverCollide = true;
+            return;
+          }
+        }
+      }
+      for (let i = 0; i < oldSnake2.length; i++) {
+        for (let j = 0; j < movingObstacle.length; j++) {
+          let object_1 = oldSnake2[i].getBoundingClientRect();
+          let object_2 = movingObstacle[j].getBoundingClientRect();
+          if (
+            object_1.left < object_2.left + object_2.width &&
+            object_1.left + object_1.width > object_2.left &&
+            object_1.top < object_2.top + object_2.height &&
+            object_1.top + object_1.height > object_2.top &&
+            !shiedled
+          ) {
+            score2 -= 40;
+            scoreEle1.textContent = score1;
+            scoreEle2.textContent = score2;
+            gameoverCollide = true;
+            return;
+          }
+        }
+      }
+    }
+    window.requestAnimationFrame(spikeCollide);
   }
-  window.requestAnimationFrame(spikeCollide);
 }
 
 function moveSpike() {
@@ -2800,8 +2803,12 @@ function gameLoop() {
         gameoverCollide = false;
         gameBgm.currentTime = 0;
         goAudio.play();
-        document.querySelector(".go-score-val").textContent = score;
         if (fight) {
+          document.querySelector(
+            ".go-score"
+          ).innerHTML = `<div class="players-con"><div class="scores-fighting">Player 1 :${score1}</div>|
+          <div class="scores-fighting">Player 2: ${score2}</div>
+          </div>`;
           if (score1 > score2) {
             document.querySelector(".fight-val").textContent = `Player 1 Wins`;
           } else if (score1 < score2) {
@@ -2809,7 +2816,14 @@ function gameLoop() {
           } else {
             document.querySelector(".fight-val").textContent = `Its a Draw`;
           }
+        } else {
+          document.querySelector(".fight-val").textContent = ``;
+          document.querySelector(
+            ".go-score"
+          ).innerHTML = `Score <span class="go-score-val"></span>`;
+          document.querySelector(".go-score-val").textContent = score;
         }
+
         go.classList.remove("hide");
         waitingToRestart = true;
         canMoveSpike = false;
@@ -3181,7 +3195,7 @@ document.querySelector("#fight").addEventListener("click", () => {
   Array.from(document.querySelectorAll(".scoreboard")).forEach((ele) =>
     ele.classList.remove("hide")
   );
-  highScoreEle.classList.add("hide");
+  document.querySelector(".score-text").classList.add("hide");
   document.querySelector(".hs").classList.add("hide");
   deleteStars();
   document.querySelector(".second").classList.add("hide");
@@ -3194,7 +3208,7 @@ function resetFight() {
   Array.from(document.querySelectorAll(".scoreboard")).forEach((ele) =>
     ele.classList.remove("hide")
   );
-  highScoreEle.classList.add("hide");
+  document.querySelector(".score-text").classList.add("hide");
   document.querySelector(".hs").classList.add("hide");
 }
 

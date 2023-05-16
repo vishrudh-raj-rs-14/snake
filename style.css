@@ -90,6 +90,8 @@ body {
 }
 
 .go-score {
+  text-align: center;
+  width: 80%;
   margin: 5px;
 }
 
@@ -240,7 +242,7 @@ body {
 }
 
 .go-modal {
-  width: 30vw;
+  width: 35vw;
   color: white;
   font-family: "Orbitron";
   min-height: 30vh;
@@ -679,6 +681,25 @@ body {
 .menu-main2 .tile:nth-child(5) {
   /* top: calc(50% + 130px); */
   left: calc(50% + 140px);
+}
+
+.players-con {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.scores-fighting {
+  text-align: center;
+}
+
+.players-con .scores-fighting:nth-child(1) {
+  color: #24b515;
+}
+
+.players-con .scores-fighting:nth-child(2) {
+  color: #318ce7;
 }
 
 .tile2 img {
