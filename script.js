@@ -2020,22 +2020,26 @@ function CheckGameOver() {
   let left = parseInt(snakeHead.dataset.x);
   if (top < 0) {
     snakeHead.style.top = 0;
+    snakeHead.dataset.y = parseInt(snakeHead.dataset.y) + 1;
     return true;
   } else if (top >= DIMENSIONS) {
     snakeHead.style.top = `${
       gameBg.getBoundingClientRect().height -
       gameBg.getBoundingClientRect().height / DIMENSIONS
     }px`;
+    snakeHead.dataset.y = parseInt(snakeHead.dataset.y) - 1;
     return true;
   }
   if (left < 0) {
     snakeHead.style.left = 0;
+    snakeHead.dataset.x = parseInt(snakeHead.dataset.x) + 1;
     return true;
   } else if (left >= DIMENSIONS) {
     snakeHead.style.left = `${
       gameBg.getBoundingClientRect().height -
       gameBg.getBoundingClientRect().height / DIMENSIONS
     }px`;
+    snakeHead.dataset.x = parseInt(snakeHead.dataset.x) - 1;
     return true;
   }
   if (coopPlay) {
@@ -2043,18 +2047,22 @@ function CheckGameOver() {
     let left = parseInt(snakeHead2.dataset.x);
     if (top < 0) {
       snakeHead2.style.top = 0;
+      snakeHead2.dataset.y = parseInt(snakeHead2.dataset.y) + 1;
       return true;
     } else if (top >= DIMENSIONS) {
       snakeHead2.style.top = `${
         gameBg.getBoundingClientRect().height -
         gameBg.getBoundingClientRect().height / DIMENSIONS
       }px`;
+      snakeHead2.dataset.y = parseInt(snakeHead2.dataset.y) - 1;
       return true;
     }
     if (left < 0) {
       snakeHead2.style.left = 0;
+      snakeHead2.dataset.x = parseInt(snakeHead2.dataset.x) + 1;
       return true;
     } else if (left >= DIMENSIONS) {
+      snakeHead2.dataset.x = parseInt(snakeHead2.dataset.x) - 1;
       snakeHead2.style.left = `${
         gameBg.getBoundingClientRect().height -
         gameBg.getBoundingClientRect().height / DIMENSIONS
@@ -2940,6 +2948,9 @@ window.onresize = () => {
   dirY = dirYc;
   dirY2 = dirY2c;
   started = true;
+  if (waitingToRestart) {
+    go.classList.remove("hide");
+  }
 };
 
 document.querySelector("#exit").addEventListener("click", () => {
