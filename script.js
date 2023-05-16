@@ -1599,7 +1599,8 @@ function reset(
     oldDirY: 0,
     load: false,
   },
-  coop = false
+  coop = false,
+  resize
 ) {
   DIMENSIONS = state.dimension;
   go.classList.add("hide");
@@ -1611,9 +1612,13 @@ function reset(
     coopPlay = false;
     gameBg.innerHTML = `<div class="snake"></div><div class="time2">00:00</div>`;
   }
-  setTimeout(() => {
+  if (!resize) {
+    setTimeout(() => {
+      delayed = true;
+    }, 500);
+  } else {
     delayed = true;
-  }, 500);
+  }
   paused = false;
   canMoveSpike = true;
   pixelSize = gameBg.getBoundingClientRect().height / DIMENSIONS;
@@ -1763,8 +1768,9 @@ function reset(
     createPortal();
     createMovingObstacle();
   }
-
-  clearInterval(interval);
+  if (!resize) {
+    clearInterval(interval);
+  }
   curTime = state.curTime;
   time.textContent = `${String(
     Math.floor((maxTime - state.curTime) / 60)
@@ -2016,14 +2022,20 @@ function CheckGameOver() {
     snakeHead.style.top = 0;
     return true;
   } else if (top >= DIMENSIONS) {
-    snakeHead.style.top = `${height - height / DIMENSIONS}px`;
+    snakeHead.style.top = `${
+      gameBg.getBoundingClientRect().height -
+      gameBg.getBoundingClientRect().height / DIMENSIONS
+    }px`;
     return true;
   }
   if (left < 0) {
     snakeHead.style.left = 0;
     return true;
   } else if (left >= DIMENSIONS) {
-    snakeHead.style.left = `${height - height / DIMENSIONS}px`;
+    snakeHead.style.left = `${
+      gameBg.getBoundingClientRect().height -
+      gameBg.getBoundingClientRect().height / DIMENSIONS
+    }px`;
     return true;
   }
   if (coopPlay) {
@@ -2033,14 +2045,20 @@ function CheckGameOver() {
       snakeHead2.style.top = 0;
       return true;
     } else if (top >= DIMENSIONS) {
-      snakeHead2.style.top = `${height - height / DIMENSIONS}px`;
+      snakeHead2.style.top = `${
+        gameBg.getBoundingClientRect().height -
+        gameBg.getBoundingClientRect().height / DIMENSIONS
+      }px`;
       return true;
     }
     if (left < 0) {
       snakeHead2.style.left = 0;
       return true;
     } else if (left >= DIMENSIONS) {
-      snakeHead2.style.left = `${height - height / DIMENSIONS}px`;
+      snakeHead2.style.left = `${
+        gameBg.getBoundingClientRect().height -
+        gameBg.getBoundingClientRect().height / DIMENSIONS
+      }px`;
       return true;
     }
   }
@@ -2322,7 +2340,6 @@ function gameLoop() {
     }
     if (movingObstacle.length == 0) {
       createMovingObstacle();
-      console.log("here");
     }
 
     if (!wordCreated) {
@@ -2476,7 +2493,6 @@ function gameLoop() {
     for (let i = 0; i < portals.length; i++) {
       if (elementsOverlap(snakeHead, portals[i])) {
         if (oldSnake.length != 0) {
-          console.log("this");
           if (score > highScore && lives <= 1) {
             highScore = score;
             highScoreEle.textContent = highScore;
@@ -2779,6 +2795,11 @@ moveSpike();
 gameLoop();
 spikeCollide();
 window.onresize = () => {
+  let dirXc = dirX;
+  let dirX2c = dirX2;
+  let dirYc = dirY;
+  let dirY2c = dirY2;
+
   if (coopPlay) {
     reset(
       true,
@@ -2848,7 +2869,8 @@ window.onresize = () => {
         oldDirY,
         load: true,
       },
-      coopPlay
+      coopPlay,
+      true
     );
   } else {
     reset(
@@ -2909,9 +2931,15 @@ window.onresize = () => {
         oldDirY,
         load: true,
       },
-      false
+      false,
+      true
     );
   }
+  dirX = dirXc;
+  dirX2 = dirX2c;
+  dirY = dirYc;
+  dirY2 = dirY2c;
+  started = true;
 };
 
 document.querySelector("#exit").addEventListener("click", () => {
@@ -3088,10 +3116,6 @@ coop.addEventListener("click", () => {
 });
 let blob = document.querySelector(".blob");
 
-window.addEventListener("mouseenter", (e) => {
-  console.log("here");
-});
-
 if (!localStorage.getItem(`state-accident`)) {
   document.querySelector("#continue").classList.add("disabled-tile");
 }
@@ -3171,6 +3195,19 @@ if (localStorage.getItem("state-accident")) {
     deleteStars();
   });
 }
+
+document.addEventListener("visibilitychange", (e) => {
+  if (
+    document.visibilityState != "visible" &&
+    document.querySelector(".bg").classList.contains("hide")
+  ) {
+    gameBgm.pause();
+    let gear = setting.querySelector("img");
+    paused = true;
+    gear.classList.add("onclick");
+    menu.classList.remove("hide");
+  }
+});
 
 function deleteStars() {
   document.querySelectorAll(".star").forEach((ele) => {
