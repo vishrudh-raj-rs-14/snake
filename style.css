@@ -202,6 +202,12 @@ body {
   background-color: rgb(212, 72, 72) !important;
 }
 
+.disabled {
+  pointer-events: none;
+  user-select: none;
+  cursor: not-allowed;
+}
+
 .disabled button {
   pointer-events: none;
   user-select: none;

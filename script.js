@@ -1682,6 +1682,13 @@ function reset(
 
   gameoverCollide = false;
   spikeCollide();
+  if (coop) {
+    document.querySelector("#save").classList.add("disabled");
+    document.querySelector("#load2").classList.add("disabled");
+  } else {
+    document.querySelector("#save").classList.remove("disabled");
+    document.querySelector("#load2").classList.remove("disabled");
+  }
   if (all) {
     score = state.score;
     score1 = 0;
