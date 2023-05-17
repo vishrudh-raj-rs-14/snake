@@ -435,7 +435,7 @@ body {
   display: none;
 }
 .snake-body {
-  background-color: rgba(52, 238, 126, 0.803);
+  background-color: rgb(44, 217, 113);
   border-radius: 30%;
   position: absolute;
   transition: all var(--transition) linear;

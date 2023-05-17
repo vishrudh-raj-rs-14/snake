@@ -210,7 +210,7 @@ const powerUp = [
         .querySelector(":root")
         .style.setProperty(
           "--transition",
-          `${1000 / speed <= 100 ? 100 : 1000 / speed}ms`
+          `${1000 / speed <= 60 ? 60 : 1000 / speed}ms`
         );
     },
     img: "./assets/lightning.png",
@@ -489,7 +489,7 @@ window.addEventListener("touchmove", (e) => {
               .querySelector(":root")
               .style.setProperty(
                 "--transition",
-                `${1000 / speed <= 100 ? 100 : 1000 / speed}ms`
+                `${1000 / speed <= 60 ? 60 : 1000 / speed}ms`
               );
           }
           if (curTime % 15 == 0 && !paused) {
@@ -669,7 +669,7 @@ window.addEventListener("keydown", (e) => {
             .querySelector(":root")
             .style.setProperty(
               "--transition",
-              `${1000 / speed <= 100 ? 100 : 1000 / speed}ms`
+              `${1000 / speed <= 60 ? 60 : 1000 / speed}ms`
             );
         }
         if (curTime % 15 == 0 && !paused) {
@@ -795,7 +795,7 @@ window.addEventListener("keydown", (e) => {
               .querySelector(":root")
               .style.setProperty(
                 "--transition",
-                `${1000 / speed <= 100 ? 100 : 1000 / speed}ms`
+                `${1000 / speed <= 60 ? 60 : 1000 / speed}ms`
               );
           }
           if (curTime % 15 == 0 && !paused) {
@@ -898,7 +898,7 @@ window.addEventListener("keydown", (e) => {
               .querySelector(":root")
               .style.setProperty(
                 "--transition",
-                `${1000 / speed <= 100 ? 100 : 1000 / speed}ms`
+                `${1000 / speed <= 60 ? 60 : 1000 / speed}ms`
               );
           }
           if (curTime % 15 == 0 && !paused) {
@@ -1548,7 +1548,7 @@ function reset(
     .querySelector(":root")
     .style.setProperty(
       "--transition",
-      `${1000 / speed <= 100 ? 100 : 1000 / speed}ms`
+      `${1000 / speed <= 60 ? 60 : 1000 / speed}ms`
     );
   dirX = state.dirX;
   dirY = state.dirY;
@@ -2314,6 +2314,7 @@ function moveSpike() {
 }
 
 function gameLoop() {
+  speed = Math.min(30, speed);
   if (!paused) {
     for (let i = 0; i < powers.length; i++) {
       if (elementsOverlap(snakeHead, powers[i][0])) {
@@ -2361,7 +2362,6 @@ function gameLoop() {
     } else {
       for (let i = 0; i < letters.length; i++) {
         if (letters[i] && elementsOverlap(letters[i], snakeHead)) {
-          console.log("here");
           if (letters[i].textContent == currentWord[index].toUpperCase()) {
             letters[i].parentNode.removeChild(letters[i]);
             text.innerHTML = `<span class="colorTextGreen">${currentWord
