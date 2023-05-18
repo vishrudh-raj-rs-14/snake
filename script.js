@@ -297,7 +297,7 @@ optionSelect.forEach((ele) => {
 });
 document.addEventListener("keydown", (e) => {
   if (document.querySelector(".bg").classList.contains("hide")) {
-    if (e.key == "Escape") {
+    if (e.key == "Escape" && go.classList.contains("hide")) {
       click.play();
       gameBgm.pause();
       let gear = setting.querySelector("img");
@@ -1936,7 +1936,7 @@ function CheckGameOver() {
     snakeHead.style.top = 0;
     snakeHead.dataset.y = parseInt(snakeHead.dataset.y) + 1;
     if (fight) {
-      score1 -= 40;
+      score1 -= 20;
       scoreEle1.textContent = score1;
       scoreEle2.textContent = score2;
     }
@@ -1948,7 +1948,7 @@ function CheckGameOver() {
     }px`;
     snakeHead.dataset.y = parseInt(snakeHead.dataset.y) - 1;
     if (fight) {
-      score1 -= 40;
+      score1 -= 20;
       scoreEle1.textContent = score1;
       scoreEle2.textContent = score2;
     }
@@ -1958,7 +1958,7 @@ function CheckGameOver() {
     snakeHead.style.left = 0;
     snakeHead.dataset.x = parseInt(snakeHead.dataset.x) + 1;
     if (fight) {
-      score1 -= 40;
+      score1 -= 20;
       scoreEle1.textContent = score1;
       scoreEle2.textContent = score2;
     }
@@ -1970,7 +1970,7 @@ function CheckGameOver() {
     }px`;
     snakeHead.dataset.x = parseInt(snakeHead.dataset.x) - 1;
     if (fight) {
-      score1 -= 40;
+      score1 -= 20;
       scoreEle1.textContent = score1;
       scoreEle2.textContent = score2;
     }
@@ -1983,7 +1983,7 @@ function CheckGameOver() {
       snakeHead2.style.top = 0;
       snakeHead2.dataset.y = parseInt(snakeHead2.dataset.y) + 1;
       if (fight) {
-        score2 -= 40;
+        score2 -= 20;
         scoreEle1.textContent = score1;
         scoreEle2.textContent = score2;
       }
@@ -1995,7 +1995,7 @@ function CheckGameOver() {
       }px`;
       snakeHead2.dataset.y = parseInt(snakeHead2.dataset.y) - 1;
       if (fight) {
-        score2 -= 40;
+        score2 -= 20;
         scoreEle1.textContent = score1;
         scoreEle2.textContent = score2;
       }
@@ -2005,7 +2005,7 @@ function CheckGameOver() {
       snakeHead2.style.left = 0;
       snakeHead2.dataset.x = parseInt(snakeHead2.dataset.x) + 1;
       if (fight) {
-        score2 -= 40;
+        score2 -= 20;
         scoreEle1.textContent = score1;
         scoreEle2.textContent = score2;
       }
@@ -2017,7 +2017,7 @@ function CheckGameOver() {
         gameBg.getBoundingClientRect().height / DIMENSIONS
       }px`;
       if (fight) {
-        score2 -= 40;
+        score2 -= 20;
         scoreEle1.textContent = score1;
         scoreEle2.textContent = score2;
       }
@@ -2036,7 +2036,7 @@ function CheckGameOver() {
         parseInt(snakeHead.style.left) + -1 * dirX * pixelSize
       }px`;
       if (fight) {
-        score1 -= 40;
+        score1 -= 20;
         scoreEle1.textContent = score1;
         scoreEle2.textContent = score2;
       }
@@ -2054,7 +2054,7 @@ function CheckGameOver() {
         parseInt(snakeHead2.style.left) + -1 * dirX2 * pixelSize
       }px`;
       if (fight) {
-        score2 -= 40;
+        score2 -= 20;
         scoreEle1.textContent = score1;
         scoreEle2.textContent = score2;
       }
@@ -2069,7 +2069,7 @@ function CheckGameOver() {
   for (let i = 3; i < snake.length; i++) {
     if (elementsOverlap(snake[i], snakeHead) && !shiedled) {
       if (fight) {
-        score1 -= 40;
+        score1 -= 20;
         scoreEle1.textContent = score1;
         scoreEle2.textContent = score2;
       }
@@ -2090,7 +2090,7 @@ function CheckGameOver() {
           parseInt(snakeHead2.style.left) + -1 * dirX2 * pixelSize
         }px`;
         if (fight) {
-          score2 -= 40;
+          score2 -= 20;
           scoreEle1.textContent = score1;
           scoreEle2.textContent = score2;
         }
@@ -2134,7 +2134,7 @@ function CheckGameOver() {
       dirX2 = 0;
       dirY2 = 0;
       if (fight) {
-        score1 -= 40;
+        score1 -= 20;
         scoreEle1.textContent = score1;
         scoreEle2.textContent = score2;
       }
@@ -2149,7 +2149,7 @@ function CheckGameOver() {
         dirX2 = 0;
         dirY2 = 0;
         if (fight) {
-          score2 -= 40;
+          score2 -= 20;
           scoreEle1.textContent = score1;
           scoreEle2.textContent = score2;
         }
@@ -2194,7 +2194,7 @@ function spikeCollide() {
           object_1.top + object_1.height > object_2.top + 5 &&
           !shiedled
         ) {
-          score1 -= 40;
+          score1 -= 20;
           scoreEle1.textContent = score1;
           scoreEle2.textContent = score2;
           gameoverCollide = true;
@@ -2213,7 +2213,7 @@ function spikeCollide() {
           object_1.top + object_1.height > object_2.top + 5 &&
           !shiedled
         ) {
-          score1 -= 40;
+          score1 -= 20;
           scoreEle1.textContent = score1;
           scoreEle2.textContent = score2;
           gameoverCollide = true;
@@ -2233,7 +2233,7 @@ function spikeCollide() {
             object_1.top + object_1.height > object_2.top + 5 &&
             !shiedled
           ) {
-            score2 -= 40;
+            score2 -= 20;
             scoreEle1.textContent = score1;
             scoreEle2.textContent = score2;
             gameoverCollide = true;
@@ -2252,7 +2252,7 @@ function spikeCollide() {
             object_1.top + object_1.height > object_2.top + 5 &&
             !shiedled
           ) {
-            score2 -= 40;
+            score2 -= 20;
             scoreEle1.textContent = score1;
             scoreEle2.textContent = score2;
             gameoverCollide = true;
@@ -2512,7 +2512,7 @@ function gameLoop() {
     for (let i = 0; i < portals.length; i++) {
       if (elementsOverlap(snakeHead, portals[i])) {
         if (oldSnake.length != 0) {
-          score1 -= 40;
+          score1 -= 20;
           scoreEle1.textContent = score1;
           scoreEle2.textContent = score2;
           if (score > highScore && lives <= 1 && !coopPlay) {
@@ -2595,7 +2595,7 @@ function gameLoop() {
       }
       if (coopPlay && elementsOverlap(snakeHead2, portals[i])) {
         if (oldSnake2.length != 0) {
-          score2 -= 40;
+          score2 -= 20;
           scoreEle1.textContent = score1;
           scoreEle2.textContent = score2;
 
