@@ -456,11 +456,13 @@ setting.addEventListener("click", (e) => {
 
 let downx, downy;
 window.addEventListener("touchstart", (e) => {
-  let evt = typeof e.originalEvent === "undefined" ? e : e.originalEvent;
-  let touch = evt.touches[0] || evt.changedTouches[0];
-  downx = touch.pageX;
-  downy = touch.pageY;
-  //   ball.transform
+  if (document.querySelector(".bg").classList.contains("hide")) {
+    let evt = typeof e.originalEvent === "undefined" ? e : e.originalEvent;
+    let touch = evt.touches[0] || evt.changedTouches[0];
+    downx = touch.pageX;
+    downy = touch.pageY;
+    //   ball.transform
+  }
 });
 
 window.addEventListener("touchmove", (e) => {
