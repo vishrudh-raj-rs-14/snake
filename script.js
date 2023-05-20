@@ -1036,11 +1036,11 @@ function createWord(word) {
     ele.style.width = `${pixelSize}px`;
     // ele.style.fontSize = `${(16 / 40) * DIMENSIONS}px`;
     if (DIMENSIONS == 40) {
-      ele.style.fontSize = `16px`;
+      ele.style.fontSize = window.innerWidth < 600 ? `11px` : `14px`;
     } else if (DIMENSIONS == 30) {
-      ele.style.fontSize = `17px`;
+      ele.style.fontSize = window.innerWidth < 600 ? `12px` : `16px`;
     } else if (DIMENSIONS == 60) {
-      ele.style.fontSize = `14px`;
+      ele.style.fontSize = window.innerWidth < 600 ? `9px` : `10px`;
     }
     ele.style.left = `${X * pixelSize}px`;
     ele.style.top = `${Y * pixelSize}px`;
@@ -1522,11 +1522,11 @@ function reset(
       ele.style.height = `${pixelSize}px`;
       ele.style.width = `${pixelSize}px`;
       if (DIMENSIONS == 40) {
-        ele.style.fontSize = `16px`;
+        ele.style.fontSize = window.innerWidth < 600 ? `11px` : `14px`;
       } else if (DIMENSIONS == 30) {
-        ele.style.fontSize = `17px`;
+        ele.style.fontSize = window.innerWidth < 600 ? `12px` : `16px`;
       } else if (DIMENSIONS == 60) {
-        ele.style.fontSize = `14px`;
+        ele.style.fontSize = window.innerWidth < 600 ? `9px` : `10px`;
       }
       ele.style.left = `${X * pixelSize}px`;
       ele.style.top = `${Y * pixelSize}px`;
